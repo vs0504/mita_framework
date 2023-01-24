@@ -55,12 +55,12 @@ export class AuthenticationGuard implements CanActivate, CanActivateChild {
         this.user = res.user;
         return true;
       } else {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/onboarding']);
         return false;
       }
     }).catch((err) => {
       console.error(err);
-      this.router.navigate(['/login']);
+      this.router.navigate(['/onboarding']);
       return false;
     });
   }

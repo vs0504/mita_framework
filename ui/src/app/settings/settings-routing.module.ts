@@ -5,7 +5,7 @@ import {AuthenticationGuard} from "../shared/guards/authentication.guard";
 import {ListComponent as PluginsListComponent} from "./components/plugins/list.component";
 import {ListComponent as IosSettingsListComponent} from './components/provisioning_profiles/list.component';
 import {FormComponent as IosSettingsFormComponent} from './components/provisioning_profiles/form.component';
-import { HomeComponent as TestsigmaHomeComponent } from './components/testsigma/home.component';
+//import { HomeComponent as TestsigmaHomeComponent } from './components/testsigma/home.component';
 import {StorageComponent} from "./components/storage/storage.component";
 import {AuthenticationConfigComponent} from "./components/authentication-config/authentication-config.component";
 import {AboutComponent} from "./components/about/about.component";
@@ -40,7 +40,7 @@ const routes: Routes = [
       {
         path: 'testsigma',
         children: [
-          { path: '', component: TestsigmaHomeComponent, data:{ title: 'page_title.testsigma_free_lab'}},
+         // { path: '', component: TestsigmaHomeComponent, data:{ title: 'page_title.testsigma_free_lab'}},
           { path: 'signup', component: IosSettingsListComponent, data:{ title: 'page_title.testsigma_free_lab.email_form'}},
           { path: 'otp', component: IosSettingsListComponent, data:{ title: 'page_title.testsigma_free_lab.activation'}},
         ]

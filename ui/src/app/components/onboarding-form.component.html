@@ -10,10 +10,10 @@
                  @fade *ngIf="!showVerificationForm">
               <span class="rb-light" [translate]="'onboarding.welcome_to'"></span>
             </div>
-            <div class="d-flex justify-content-center text-center my-auto">
+            <!--<div class="d-flex justify-content-center text-center my-auto">
               <span class="login-logo"></span>
-            </div>
-            <div class="d-flex justify-content-center pt-15 text-center position-absolute mt-60 w-100">
+            </div>-->
+            <div class="d-flex justify-content-center pt-15 text-center position-absolute">
               <span class="rb-light fz-20 text-nowrap"
                     [translate]="'onboarding.setup_your_profile'"
                     @fade *ngIf="!showVerificationForm"></span>
@@ -94,7 +94,7 @@
                   <div class="ts-col-10">
                     <mat-checkbox checked = "isCommunityAccess" (click)="toggleCommunityUpdateFlag()"></mat-checkbox>
                   </div>
-                  <div class="ts-col-90 text-wrap justify-content-start">
+                 <div class="ts-col-90 text-wrap justify-content-start">
                     <span class="rb-medium" [translate]="'onboarding.get_community_edition'"></span>
                     <br>
                     <span class="rb-light text-muted">
@@ -111,7 +111,8 @@
                   </div>
                   <div class="ts-col-90 text-muted rb-light" [translate]="'onboarding.subscribe_to_updates'">
                   </div>
-                </div>
+                </div>-->
+
                 <div class="d-flex justify-content-end pt-10">
                   <button
                     [disabled]="requiredFieldsNotFilled()"
@@ -158,7 +159,6 @@
                 <div class="d-flex justify-content-end form-group pb-0">
                   <button
                     class="theme-btn-primary"
-                    [disabled]="!otp"
                     [translate]="'btn.common.submit'"
                     appAsyncBtn
                     [isLoading]="isActivating"

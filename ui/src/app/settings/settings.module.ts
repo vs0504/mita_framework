@@ -18,7 +18,7 @@ import {DetailsComponent as LinearDetailsComponent} from './components/plugins/l
 import {DragDropModule} from "@angular/cdk/drag-drop";
 import {ListComponent} from './components/provisioning_profiles/list.component';
 import {FormComponent as IosSettingsFormComponent} from './components/provisioning_profiles/form.component';
-import {HomeComponent as TestsigmaHomeComponent} from './components/testsigma/home.component';
+//import {HomeComponent as TestsigmaHomeComponent} from './components/testsigma/home.component';
 import { StorageComponent } from './components/storage/storage.component';
 import {DetailsComponent as AzureStorageConfigDetailsComponent} from './components/storage/azure/details.component';
 import {DetailsComponent as AwsStorageConfigDetailsComponent} from './components/storage/aws/details.component';
@@ -66,7 +66,7 @@ import {DetailsComponent as XrayDetailsComponent} from "./components/plugins/xra
     AzureDetailsComponent,
     ListComponent,
     IosSettingsFormComponent,
-    TestsigmaHomeComponent,
+   // TestsigmaHomeComponent,
     SigninComponent,
     StorageComponent,
     AwsStorageConfigCreateComponent,

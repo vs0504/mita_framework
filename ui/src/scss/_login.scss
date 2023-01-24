@@ -1,14 +1,14 @@
 
 :root {
   --header-color: #1A202C;
-  --form-label-color: #4A5568;
-  --primary-btn-color: #04C45C;
-  --google-btn-color: #2D3748;
+  --form-label-color: hwb(218 29% 59%);
+  --primary-btn-color: #10a4d6;
+  --google-btn-color:#10a4d6;
   --left-info-color: #6C7886
 }
 
 .onboarding-container {
-  background-image: url("~assets/color_icons/registeration-bg.svg");
+
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
