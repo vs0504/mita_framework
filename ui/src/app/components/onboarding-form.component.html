@@ -111,7 +111,7 @@
                   </div>
                   <div class="ts-col-90 text-muted rb-light" [translate]="'onboarding.subscribe_to_updates'">
                   </div>
-                </div>-->
+                </div>
 
                 <div class="d-flex justify-content-end pt-10">
                   <button
@@ -119,9 +119,10 @@
                     type="submit" (click)="verifyOrNavigate()"
                     appAsyncBtn
                     [isLoading]="isSaving"
+                    style="background-color: rgb(14, 165, 218)"
                     [message]="'btn.common.please_wait'"
                     class="theme-btn-primary"
-                    [textContent]="(isCommunityAccess ? 'btn.common.next' : 'onboarding.go_to_dashboard') | translate"></button>
+                    [textContent]="(isCommunityAccess ? 'btn.common.next' : 'onboarding.signUp') | translate"></button>
                 </div>
 
               </form>

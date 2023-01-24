@@ -1956,6 +1956,7 @@
   "onboarding.complete_your_registration": "Complete your Registration for <b>Community Edition Cloud.</b>",
   "onboarding.create_your_profile": "Create your Mita profile",
   "onboarding.go_to_dashboard": "Go to Dashboard",
+  "onboarding.signUp":"Sign Up",
   "onboarding.get_community_edition": "Get access to Community Edition Cloud?",
   "onboarding.community_features": "Includes features like Visual testing, Provisioning Profiles (for iOS app testing), TestLab, Add-ons Marketplace, and more.",
   "onboarding.subscribe_to_updates": "Subscribe to product updates and automation insights from the Testsigma Team",
