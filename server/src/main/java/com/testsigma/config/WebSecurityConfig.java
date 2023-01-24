@@ -51,7 +51,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final AuthUserService authUserService;
   private final AuthenticationConfigProperties authenticationConfigProperties;
   private final AdditionalPropertiesConfig additionalPropertiesConfig;
-  @Value("${testsigma.csrf.header:X-C}")
   String headerName;
 
   @Bean

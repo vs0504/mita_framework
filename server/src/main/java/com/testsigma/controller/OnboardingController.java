@@ -39,7 +39,7 @@ public class OnboardingController {
   @PostMapping
   public ResponseEntity<?> post(@RequestBody OnboardingRequest onboardingRequest) throws TestsigmaException {
 
-    //updateUsernameAndPassword(onboardingRequest);
+    updateUsernameAndPassword(onboardingRequest);
 //    if (onboardingRequest.getIsSendUpdates())
 //      osService.createAccount(onboardingRequest);
 //    setOnboardingDone();

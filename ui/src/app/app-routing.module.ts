@@ -62,13 +62,13 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginFormComponent,
-    canActivate: [UnAuthenticationGuardGuard,OnboardingGuard],
+   // canActivate: [UnAuthenticationGuardGuard,OnboardingGuard],
     data: {title: 'page_title.login'}
   },
   {
     path: 'onboarding',
     component: OnboardingFormComponent,
-    canActivate: [UnAuthenticationGuardGuard,OnboardingGuard],
+    //canActivate: [UnAuthenticationGuardGuard,OnboardingGuard],
     data: {title: "Onboarding"}
   },
   {
@@ -84,7 +84,7 @@ const routes: Routes = [
   },
   {
     path: '', canActivate: [AuthenticationGuard],
-    canActivateChild: [AuthenticationGuard, OnboardingGuard],
+   // canActivateChild: [AuthenticationGuard, OnboardingGuard],
     children: [
 
       {path: '', pathMatch: 'full', redirectTo: 'dashboard'},

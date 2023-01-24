@@ -90,7 +90,7 @@
                          id="password" class="form-control ">
                 </div>
 
-                <div class="d-flex justify-content-center pt-10 ts-col-100">
+                <!-- <div class="d-flex justify-content-center pt-10 ts-col-100">
                   <div class="ts-col-10">
                     <mat-checkbox checked = "isCommunityAccess" (click)="toggleCommunityUpdateFlag()"></mat-checkbox>
                   </div>
@@ -104,7 +104,7 @@
                          href="https://testsigma.com/docs/getting-started/testsigma-community-cloud/" [translate]="'test_plan.testsigmalab.learn_more'"></a>.
                 </span>
                   </div>
-                </div>
+                </div> -->
                 <div class="d-flex justify-content-center pt-10 ts-col-100" *ngIf="isCommunityAccess">
                   <div class="ts-col-10">
                     <mat-checkbox checked = "isSendUpdates" (click)="toggleSendUpdatesFlag()" [disabled]="!isCommunityAccess" ></mat-checkbox>
@@ -125,7 +125,7 @@
 
               </form>
             </mat-step>
-            <mat-step>
+            <!-- <mat-step>
               <div class="align-items-center d-flex form-group pb-25 ts-col-100">
                 <a (click)="navigateBack()" class="mr-10">
                   <i class="fa-back-arrow"></i>
@@ -166,7 +166,7 @@
                     (click)="activate()" ></button>
                 </div>
               </form>
-            </mat-step>
+            </mat-step> -->
           </mat-stepper>
         </div>
       </div>

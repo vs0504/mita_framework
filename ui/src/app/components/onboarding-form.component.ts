@@ -26,8 +26,8 @@ export class OnboardingFormComponent extends BaseComponent implements OnInit {
 
   updateForm: FormGroup;
   private server: Server;
-  isCommunityAccess: boolean = true;
-  isSendUpdates : boolean = true;
+  isCommunityAccess: boolean = false;
+  isSendUpdates : boolean = false;
   showVerificationForm: boolean = false;
   private email: string;
   otp: string;
