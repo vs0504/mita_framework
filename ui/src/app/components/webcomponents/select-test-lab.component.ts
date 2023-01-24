@@ -19,7 +19,7 @@ import {TestLabFormControls} from "../../enums/test-lab-form-controls";
         class="fz-14 rb-medium pb-18">
         <span
           [translate]="'test_plan.environment.lab.title'"></span>
-        <div
+       <!-- <div
           class="dropdown mouse-over d-inline-block">
           <div class="btn-group pointer">
             <i class="fa-question-circle-solid text-t-secondary pl-7"></i>
@@ -37,13 +37,13 @@ import {TestLabFormControls} from "../../enums/test-lab-form-controls";
               </ul>
             </div>
           </div>
-        </div>
+        </div>-->
       </div>
       <div class="test-lab-container">
         <mat-radio-group
           aria-labelledby="example-radio-group-label"
           class="example-radio-group d-flex" formControlName="testPlanLabType">
-          <mat-radio-button
+       <!--   <mat-radio-button
             (change)="setTargetMachineAsMandatory(false)"
             *ngIf="((testPlan?.id && testPlan.isTestsigmaLab) || !testPlan?.id) && applications && !isRest"
             [value]="'TestsigmaLab'">
@@ -52,7 +52,7 @@ import {TestLabFormControls} from "../../enums/test-lab-form-controls";
               <span style="font-style: normal;font-size: 14px;font-weight: 500;line-height: 26px;"
                     [translate]="'execution.lab_type.TestsigmaLab'"></span>
             </div>
-          </mat-radio-button>
+          </mat-radio-button>-->
           <mat-radio-button
             (change)="setTargetMachineAsMandatory(true)"
             *ngIf="((testPlan?.id && testPlan.isHybrid) || !testPlan?.id )"
@@ -127,16 +127,16 @@ export class SelectTestLabComponent implements OnInit {
   ngOnInit(): void {
     this.integrationsService.findAll().subscribe(res => {
       this.applications = res;
-      if(this.isNewTestPlan) {
-        let labType = TestPlanLabType.Hybrid
-        if(this.executionEnvironment){
-          labType = this.executionEnvironment.testPlanLabType
-        }
-        else if (this.isTestsigmaLabInstalled) {
-          labType = TestPlanLabType.TestsigmaLab
-        }
-        this.selectTestLabForm.controls[TestLabFormControls.TESTPLAN_LABTYPE].setValue(labType)
-      }
+      // if(this.isNewTestPlan) {
+      //   let labType = TestPlanLabType.Hybrid
+      //   if(this.executionEnvironment){
+      //     labType = this.executionEnvironment.testPlanLabType
+      //   }
+      //   else if (this.isTestsigmaLabInstalled) {
+      //     labType = TestPlanLabType.TestsigmaLab
+      //   }
+        this.selectTestLabForm.controls["testPlanLabType"].setValue(TestPlanLabType.TestsigmaLab)
+      // }
     });
   }
   get isNewTestPlan(){

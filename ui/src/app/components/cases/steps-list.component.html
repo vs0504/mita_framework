@@ -118,7 +118,7 @@
       (onSelectedStepType)="onStepType($event)"
     ></app-test-case-action-steps>
     <app-placeholder-loader *ngIf="!templates"></app-placeholder-loader>
-    <div
+   <!-- <div
       [class.show]="isRibbonShowed"
       class="step-help-ribbon">
       <div class="d-flex align-items-center pr-20">
@@ -152,7 +152,7 @@
           [translate]="'common.video_tour'"></a>
       </div>
       <i class="fa-times-circle-regular ml-auto fz-16 pointer" (click)="isRibbonShowed= false"></i>
-    </div>
+    </div>-->
   </div>
   <div
     *ngIf="(!version?.workspace?.isRest  || !isRest || !isForLoop || canDrag || !isHelpWidgetShowed ) && !isReorder"

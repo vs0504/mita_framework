@@ -14,7 +14,7 @@ $theme-bg-main-gradient: linear-gradient(180deg, #4492B9 0%, #2B5468 100%);
 $theme-warning-color: #f2994a;
 $theme-border-selected-color:         #FFBDC6;
 
-$theme-pass-color:                    #1FB47E;
+$theme-pass-color:                    #02c7e4;
 $theme-failed-color:                  #F23D3D;
 $theme-aborted-color:                 #ffa008;
 $theme-not-executed-color:            #7A68BC;
@@ -50,8 +50,8 @@ $theme-result-active-colors: map-merge((0: $theme-pass-active-color, 1: $theme-f
 $brandcolor: $theme-pass-color;
 $default-bgc: #fafafa;
 $grey-light-bgc: #e1e4ea;
-$active-light-color: #0ca940;
-$active-dark-color: #4ac144;
+$active-light-color: #04bdde;
+$active-dark-color: #047ab3;
 $tab-nav-color: #00aa72;
 $orange-label-color: #ffc500;
 $failed-light-bgc: #e71818;

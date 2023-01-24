@@ -85,11 +85,11 @@
             <span
               [translate]="'test_plan.btn.run'"></span>
           </button>
-          <div
+          <!--<div
             *ngIf="(!testCaseResult.parentResult?.isExecuting||!testCaseResult.iteration) && !testCaseResult?.isExecuting && isDry && activeTab == this.STEPS_CURRENT && version?.workspace?.isWebMobile"
           >
             <app-chrome-record-button></app-chrome-record-button>
-          </div>
+          </div>-->
           <button
             *ngIf="testCaseResult?.isExecuting && isDry"
             (click)="stopExecution(getTestCaseResult()?.testDeviceResult?.testPlanResult)"

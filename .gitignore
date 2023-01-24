@@ -5,3 +5,13 @@ out/**
 bin/**
 logs/**
 *.zip
+agent/.classpath
+agent/.factorypath
+agent/.project
+MITA_framework/bin/app.pid
+MITA_framework/logs/application.log
+MITA_framework/logs/automator.log
+MITA_framework/null/config/agent.properties
+agent/.classpath
+agent/.factorypath
+agent/.project

@@ -69,11 +69,11 @@ public class ApplicationEventHandler {
     automatorConfig.setAppBridge(cloudAppBridge);
     automatorConfig.init();
 
-    AdbBridge adbBridge = context.getBean(AdbBridge.class);
-    MobileAutomationServer mobileAutomationServer = context.getBean(MobileAutomationServer.class);
+    // AdbBridge adbBridge = context.getBean(AdbBridge.class);
+    // MobileAutomationServer mobileAutomationServer = context.getBean(MobileAutomationServer.class);
     AgentBrowserService agentBrowserService = context.getBean(AgentBrowserService.class);
-    AndroidDeviceListener androidDeviceListener = context.getBean(AndroidDeviceListener.class);
-    IosDeviceListener iosDeviceListener = context.getBean(IosDeviceListener.class);
+    // AndroidDeviceListener androidDeviceListener = context.getBean(AndroidDeviceListener.class);
+    // IosDeviceListener iosDeviceListener = context.getBean(IosDeviceListener.class);
     AgentWebServer agentWebServer = context.getBean(AgentWebServer.class);
     agentWebServer.startWebServerConnectors();
     try {
@@ -81,13 +81,13 @@ public class ApplicationEventHandler {
     } catch (AgentDeletedException e) {
       log.info("-------------- Post App Context Failed Agent is deleted --------------");
     }
-    androidDeviceListener.syncInitialDeviceStatus();
-    adbBridge.createBridge();
-    ExecutorService executorService = Executors.newSingleThreadExecutor();
-    executorService.submit(androidDeviceListener);
-    ExecutorService executorService1 = Executors.newSingleThreadExecutor();
-    executorService1.submit(iosDeviceListener);
-    mobileAutomationServer.start();
+    // androidDeviceListener.syncInitialDeviceStatus();
+    // adbBridge.createBridge();
+    // ExecutorService executorService = Executors.newSingleThreadExecutor();
+    // executorService.submit(androidDeviceListener);
+    // ExecutorService executorService1 = Executors.newSingleThreadExecutor();
+    // executorService1.submit(iosDeviceListener);
+    // mobileAutomationServer.start();
     agentWebServerService.registerLocalAgent();
     log.info("-------------- Post App Context Ready Actions Finished --------------");
   }

@@ -3,7 +3,7 @@
     <app-workspace-switcher
       class="ts-col-15"
       [version]="version"></app-workspace-switcher>
-    <div class="header-quick-link-container position-relative">
+   <!-- <div class="header-quick-link-container position-relative">
       <a
         class="link-item"
         [routerLink]="['/support']">
@@ -37,9 +37,9 @@
           *ngIf="authGuard?.session?.user"
           class="gl-drop-menu"></app-global-add>
       </div>
-    </div>
+    </div>-->
   </div>
-  <div class="addon_widget" *ngIf="testsigmaOSEnabled">
+<!--  <div class="addon_widget" *ngIf="testsigmaOSEnabled">
     <div class="ts-col-90 h-100">
       <iframe src="/kibbutz/login?redirect_uri=/ui/strip" class="h-100 w-100 border-0">
       </iframe>
@@ -56,8 +56,7 @@
         class="border-0 btn-clear btn-clear-default btn-sm mt-16 pl-14 pointer pr-14 py-7 w-100"
         [translate]="'dashboard.addon.view_more'"></button>
     </div>
-
-  </div>
+  </div>-->
   <div
     [class.show-addons]="testsigmaOSEnabled"
     class="dashboard-content" *ngIf="version">

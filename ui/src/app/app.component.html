@@ -7,10 +7,10 @@
     class="ts-col-100 h-100">
     <router-outlet></router-outlet>
   </div>
-  <div class="quick-start-btn-boundary">
+  <!--<div class="quick-start-btn-boundary">
     <app-quick-start *ngIf="authGuard?.session?.user && !isOnboardingRoute"></app-quick-start>
     <app-fresh-chat-widget *ngIf="authGuard?.session?.user && !isOnboardingRoute"></app-fresh-chat-widget>
-  </div>
+  </div>-->
   <simple-notifications [options]="{preventDuplicates: true}"></simple-notifications>
 </div>
 </div>
