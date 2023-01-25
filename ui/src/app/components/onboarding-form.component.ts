@@ -145,8 +145,8 @@ export class OnboardingFormComponent extends BaseComponent implements OnInit {
   }
 
   submitForm() {
-    this.onboardingService.save(this.onboarding).toPromise().then(
-      () => {this.login();}
+    this.onboardingService.save(this.onboarding).subscribe(
+      () => {this.router.navigate(['login']);}
     );
   }
 
