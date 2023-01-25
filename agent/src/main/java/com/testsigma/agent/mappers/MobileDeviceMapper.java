@@ -14,9 +14,9 @@ import com.testsigma.agent.mobile.MobileDevice;
 import com.android.ddmlib.IDevice;
 import org.mapstruct.*;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
-  nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-  nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+// @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
+//   nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+//   nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface MobileDeviceMapper {
 
   @Mapping(target = "uniqueId", source = "serialNumber")
