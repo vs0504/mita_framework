@@ -20,7 +20,7 @@ export class OnboardingService {
   }
 
   save(onboarding: Onboarding){
-    return this.http.post(this.URLConstants.onboardingURL,onboarding.serialize(),{responseType:"text"});
+    return this.http.post<Onboarding>(this.URLConstants.onboardingURL,onboarding.serialize()).pipe();
   }
 
   show() {

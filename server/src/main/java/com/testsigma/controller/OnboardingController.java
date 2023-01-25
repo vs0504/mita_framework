@@ -37,18 +37,17 @@ public class OnboardingController {
   }
 
   @PostMapping
-  public ResponseEntity<?> post(@RequestBody OnboardingRequest onboardingRequest) throws TestsigmaException {
+  public void post(@RequestBody OnboardingRequest onboardingRequest) throws TestsigmaException {
 
-//    updateUsernameAndPassword(onboardingRequest);
-//    if (onboardingRequest.getIsSendUpdates())
-//      osService.createAccount(onboardingRequest);
-//    setOnboardingDone();
-    String response = onboardService.saveUserDetails(onboardingRequest);
-    if( response != null)
-      return ResponseEntity.status(HttpStatus.OK).body(response);
-    else
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please check onboarding details properly!") ;
-
+    updateUsernameAndPassword(onboardingRequest);
+    if (onboardingRequest.getIsSendUpdates())
+      osService.createAccount(onboardingRequest);
+    setOnboardingDone();
+//    String response = onboardService.saveUserDetails(onboardingRequest);
+//    if( response != null)
+//      return ResponseEntity.status(HttpStatus.OK).body(response);
+//    else
+//      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please check onboarding details properly!")
   }
 
   @RequestMapping(value = "/otp", method = RequestMethod.POST)
