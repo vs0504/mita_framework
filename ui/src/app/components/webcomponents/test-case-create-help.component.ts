@@ -55,14 +55,14 @@ import {WorkspaceType} from "../../enums/workspace-type.enum";
     </span>
     </div>
     <div>
-      <div
+     <!-- <div
         *ngIf="!showVideo"
         class="d-flex align-items-center justify-content-center w-100 theme-border border-rds-12 theme-gray-highlight pointer" style="height: 200px; color: red">
         <i
           (click)="showVideo= !showVideo"
           class="fa-youtube fz-38"></i>
-      </div>
-      <iframe
+      </div>-->
+      <!--<iframe
         *ngIf="showVideo && isWeb"
         class="border-rds-12"
         width="100%" height="300"
@@ -101,7 +101,7 @@ import {WorkspaceType} from "../../enums/workspace-type.enum";
         src="https://s3.amazonaws.com/assets.testsigma.com/videos/test-cases/rest-api/create.mp4"
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen></iframe>
+        allowfullscreen></iframe>-->
     </div>
   `,
   styles: []

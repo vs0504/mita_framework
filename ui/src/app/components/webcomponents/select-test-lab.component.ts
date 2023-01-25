@@ -135,7 +135,7 @@ export class SelectTestLabComponent implements OnInit {
       //   else if (this.isTestsigmaLabInstalled) {
       //     labType = TestPlanLabType.TestsigmaLab
       //   }
-        this.selectTestLabForm.controls["testPlanLabType"].setValue(TestPlanLabType.TestsigmaLab)
+        this.selectTestLabForm.controls["testPlanLabType"].setValue(TestPlanLabType.Hybrid)
       // }
     });
   }
