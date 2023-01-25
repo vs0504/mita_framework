@@ -91,7 +91,7 @@ export class LeftNavComponent extends BaseComponent implements OnInit,OnDestroy 
       const testCaseResults = "test_case_results";
       if((moment(this.userPreference.createdDate) < moment().subtract(5, 'minute')) &&
         !this.userPreference?.showedGitHubStar && this.userPreference.clickedSkipForNow<2 && !this.router.url.includes(testCaseResults)) {
-        this.GithubStarPopup();
+        // this.GithubStarPopup();
       }
 
     })

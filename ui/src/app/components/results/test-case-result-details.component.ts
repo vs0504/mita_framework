@@ -206,15 +206,15 @@ export class TestCaseResultDetailsComponent extends BaseComponent implements OnI
       this.removeAutoRefresh();
       if(this.userPreference){
         this.testPlanResultService.findAll("createdDate>" + this.userPreference.createdDate + ",result:SUCCESS").subscribe(res => {
-          if(res.content.length>0 && this.userPreference.clickedSkipForNow==1 && !this.userPreference.showedGitHubStar)
-            this.GithubStarPopup();
+          // if(res.content.length>0 && this.userPreference.clickedSkipForNow==1 && !this.userPreference.showedGitHubStar)
+            // this.GithubStarPopup();
         })
       } else {
         this.userPreferenceService.show().subscribe(userPreference => {
             this.userPreference = userPreference;
           this.testPlanResultService.findAll("createdDate>" + this.userPreference.createdDate + ",result:SUCCESS").subscribe(res => {
-              if (res.content.length>0 && this.userPreference.clickedSkipForNow == 1 && !this.userPreference.showedGitHubStar)
-                this.GithubStarPopup();
+              // if (res.content.length>0 && this.userPreference.clickedSkipForNow == 1 && !this.userPreference.showedGitHubStar)
+                // this.GithubStarPopup();
             })
           }
         )
