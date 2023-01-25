@@ -16,7 +16,7 @@ import {BaseComponent} from "../../../shared/components/base.component";
 })
 export class TelemetryComponent extends BaseComponent implements OnInit {
 
-  disableTelemetry: boolean = false;
+  disableTelemetry: boolean = true;
   server: Server = new Server();
   public saving: boolean = false;
   public showAction: boolean = false;
