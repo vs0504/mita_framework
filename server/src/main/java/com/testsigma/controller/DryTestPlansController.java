@@ -32,6 +32,7 @@ import java.util.List;
 @Log4j2
 @RequestMapping(path = "/dry_test_plans", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor(onConstructor = @__({@Autowired, @Lazy}))
+@CrossOrigin
 public class DryTestPlansController {
 
   private final DryTestPlanService service;

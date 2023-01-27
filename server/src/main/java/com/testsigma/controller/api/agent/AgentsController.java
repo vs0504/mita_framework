@@ -42,6 +42,7 @@ import java.util.List;
 @RequestMapping(path = "/api/agents")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class AgentsController {
   private final AgentService agentService;
   private final AgentMapper mapper;

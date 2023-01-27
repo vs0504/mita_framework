@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/testsigma_os_config")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class TestsigmaOSConfigController {
 
   private final TestsigmaOSConfigMapper mapper;

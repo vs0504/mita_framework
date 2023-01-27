@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping(path = "/element_filters")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class ElementFiltersController {
 
   private final ElementFilterService service;

@@ -36,6 +36,7 @@ import java.util.List;
 @RequestMapping("/schedule_test_plans")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class ScheduleTestPlansController {
 
   private final ScheduleTestPlanService service;

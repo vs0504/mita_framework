@@ -41,6 +41,7 @@ import java.util.List;
 @RequestMapping(value = "/test_data", consumes = MediaType.APPLICATION_JSON_VALUE)
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class TestDataProfilesController {
   private final TestDataProfileService service;
   private final TestDataProfilesXLSImportService testDataXLSImportService;

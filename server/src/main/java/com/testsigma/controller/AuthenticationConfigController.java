@@ -18,6 +18,7 @@ import java.util.UUID;
 @RequestMapping("/auth_config")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class AuthenticationConfigController {
   private final AuthenticationConfigMapper mapper;
   private final AdditionalPropertiesConfig authConfig;

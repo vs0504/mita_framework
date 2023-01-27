@@ -34,6 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/upload_versions")
 @Log4j2
+@CrossOrigin
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class UploadVersionsController {
 

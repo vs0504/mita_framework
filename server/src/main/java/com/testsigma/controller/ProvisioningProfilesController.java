@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/settings/provisioning_profiles")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class ProvisioningProfilesController {
 
   private final ProvisioningProfileService service;

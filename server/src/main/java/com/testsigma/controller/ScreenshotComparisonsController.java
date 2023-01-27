@@ -36,6 +36,7 @@ import java.util.List;
 @RequestMapping(path = "/screenshot_comparisons", produces = MediaType.APPLICATION_JSON_VALUE)
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class ScreenshotComparisonsController {
   private final TestStepScreenshotService testStepScreenshotService;
   private final StepResultScreenshotComparisonService service;

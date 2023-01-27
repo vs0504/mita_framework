@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping(path = "/grid_nodes")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class PrivateGridNodesController {
   private final PrivateGridService privateGridService;
   private final PrivateGridNodeMapper mapper;

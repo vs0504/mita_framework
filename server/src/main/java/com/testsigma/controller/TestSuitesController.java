@@ -36,6 +36,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/test_suites")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestSuitesController {
 
   private final TestSuiteService testSuiteService;

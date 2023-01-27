@@ -33,6 +33,7 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping(path = "/api/v1/environments")
+@CrossOrigin
 public class EnvironmentsController {
 
   private final EnvironmentMapper environmentMapper;

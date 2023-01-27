@@ -50,6 +50,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/test_cases")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestCasesController {
 
   private final TestCaseService testCaseService;

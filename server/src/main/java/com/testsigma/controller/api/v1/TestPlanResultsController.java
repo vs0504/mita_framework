@@ -30,6 +30,7 @@ import java.util.List;
 @RestController(value = "apiExecutionResultsController")
 @RequestMapping(path = "/api/v1/test_plan_results")
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class TestPlanResultsController {
   private final TestPlanService testPlanService;
   private final ObjectFactory<AgentExecutionService> agentExecutionServiceObjectFactory;

@@ -23,6 +23,7 @@ import java.io.IOException;
 @RequestMapping(path = URLConstants.PRESIGNED_BASE_URL)
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class OnPremStorageController {
   private final StorageServiceFactory storageServiceFactory;
   private final JWTTokenService jwtTokenService;

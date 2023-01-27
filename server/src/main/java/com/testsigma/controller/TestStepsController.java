@@ -40,6 +40,7 @@ import java.util.List;
 @RequestMapping(path = "/test_steps", produces = MediaType.APPLICATION_JSON_VALUE)
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestStepsController {
 
   private final HttpClient httpClient;

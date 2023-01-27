@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "/settings/agents")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class AgentsController {
 
   private final AgentMapper agentMapper;

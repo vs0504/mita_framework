@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/addons")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class AddonsController {
 
   private final AddonService service;

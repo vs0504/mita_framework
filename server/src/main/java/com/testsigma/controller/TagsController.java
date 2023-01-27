@@ -16,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public abstract class TagsController {
 
   private final TagMapper mapper;

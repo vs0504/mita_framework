@@ -38,6 +38,7 @@ import java.util.Optional;
 @RequestMapping(path = "/external_mappings")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class EntityExternalMappingsController {
     private final EntityExternalMappingService externalMappingService;
     private final EntityExternalMappingMapper mapper;

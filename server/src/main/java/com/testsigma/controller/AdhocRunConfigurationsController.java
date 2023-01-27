@@ -27,6 +27,7 @@ import java.util.List;
 @RequestMapping(path = "/adhoc_run_configurations", produces = MediaType.APPLICATION_JSON_VALUE)
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class AdhocRunConfigurationsController {
   private final AdhocRunConfigurationService adhocRunConfigurationService;
   private final AdhocRunConfigurationsMapper dryRunConfigurationMapper;

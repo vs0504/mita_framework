@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping(path = "/test_case_filters")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class TestCaseFiltersController {
 
   private final TestCaseFilterService service;
