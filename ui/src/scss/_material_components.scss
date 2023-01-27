@@ -537,7 +537,8 @@ mat-expansion-panel {
   &.mat-checkbox-checked {
     .mat-checkbox-layout {
       border-color: $theme-pass-color;
-      color: $theme-pass-color;
+      // color: $theme-pass-color;
+      color:#02c7e4;
     }
   }
 }
@@ -578,7 +579,8 @@ mat-expansion-panel {
   &.mat-checkbox-checked, &.mat-checkbox-indeterminate {
     &:not(.mat-checkbox-disabled) {
       .mat-checkbox-background {
-        background-color: $pass-new-result-color !important;
+        // background-color: $pass-new-result-color !important;
+        background-color: #0fa5d8
       }
     }
   }

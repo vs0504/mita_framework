@@ -663,7 +663,8 @@ color: $theme-text-color;
 
 .theme-btn-primary {
 @extend .btn, .rb-medium;
-background-color: $theme-selected-green-color;
+background-color: #0fa5d8;
+// background-color: $theme-selected-green-color;
 padding: 6px 12px 6px;
 
 &:hover {

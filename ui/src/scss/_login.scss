@@ -37,7 +37,8 @@
 
 .login-primary-btn {
   @extend .btn,.theme-btn-primary,.w-100, .rb-semi-bold;
-  background-color: var(--primary-btn-color);
+  background-color: #0fa5d8;
+  // background-color: var(--primary-btn-color);
   padding: 13px 20px;
 }
 
