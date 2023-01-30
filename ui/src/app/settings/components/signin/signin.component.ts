@@ -71,7 +71,7 @@ export class SigninComponent extends BaseComponent implements OnInit {
       let opensource = new TestsigmaOSConfig();
       opensource.deserialize(this.authGuard.openSource.serialize())
       opensource.accessKey = message.data;
-      opensource.userName = "Testsigma OS";
+      opensource.userName = "Mita OS";
       this.opensourceService.create(opensource).subscribe(opensource => {
         this.authGuard.openSource.accessKey = opensource.accessKey;
       })
