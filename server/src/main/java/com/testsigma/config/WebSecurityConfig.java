@@ -15,7 +15,6 @@ import com.testsigma.service.JWTTokenService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -44,7 +43,7 @@ import javax.validation.constraints.NotNull;
 import static com.testsigma.config.AjaxLoginFormConfigurer.ajaxLogin;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   private final static String JSESSIONID_COOKIE = "JSESSIONID";
@@ -154,7 +153,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    configureOauth2LoginHandlers(
+
       configureFilters(
         configureLoginHandlers(
           configureLogoutHandlers(
@@ -163,7 +162,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 configureCsrf(
                   configureCors(
                     basicConfig(http)
-                  )
                 )
               )
             )

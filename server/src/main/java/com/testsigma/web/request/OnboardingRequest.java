@@ -16,4 +16,11 @@ public class OnboardingRequest {
   private Boolean isSendUpdates;
   private RegistrationType registrationType;
   private RegistrationMedium registrationMedium;
+  private String apiKey;
+  private String jwtSecret;
+  private Boolean isApiEnabled;
+  private String authenticationType;
+  private String googleClientId;
+  private String googleClientSecret;
+
 }

@@ -43,4 +43,21 @@ public class UserOnboardingDetails {
 
     @Column(name = "resgitration_type_medium")
     private String registrationMedium;
+
+    @Column(name = "api_key")
+    private String apiKey;
+
+    @Column(name = "jwt_secret")
+    private String jwtSecret;
+    @Column(name = "is_api_enabled")
+    private Boolean isApiEnabled;
+
+    @Column(name = "authentication_type")
+    private String authenticationType;
+
+    @Column(name = "google_client_id")
+    private String googleClientId;
+
+    @Column(name = "google_client_secret")
+    private String googleClientSecret;
 }

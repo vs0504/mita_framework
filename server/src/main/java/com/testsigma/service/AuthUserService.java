@@ -3,6 +3,8 @@ package com.testsigma.service;
 import com.testsigma.config.AdditionalPropertiesConfig;
 import com.testsigma.model.AuthUser;
 import com.testsigma.model.AuthenticationType;
+import com.testsigma.model.UserOnboardingDetails;
+import com.testsigma.repository.UserOnboardingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -32,16 +34,19 @@ public class AuthUserService implements UserDetailsService, OAuth2UserService<Oi
   private BCryptPasswordEncoder bCryptPasswordEncoder;
   private final ServerService serverService;
 
+  @Autowired
+  private UserOnboardingRepository userOnboardingRepository;
   @Override
   public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
     AuthUser authUser = new AuthUser();
     authUser.setUuid(UUID.randomUUID().toString());
+    UserOnboardingDetails userDetails = userOnboardingRepository.findByUserDetailsByUserName(name);
     setServerUuid(authUser);
     switch (authenticationConfig.getAuthenticationType()) {
       case FORM:
-        authUser.setEmail(authenticationConfig.getUserName());
-        authUser.setUserName(authenticationConfig.getUserName());
-        authUser.setPassword(bCryptPasswordEncoder.encode(authenticationConfig.getPassword()));
+        authUser.setEmail(userDetails.getEmail());
+        authUser.setUserName(userDetails.getUsername());
+        authUser.setPassword(bCryptPasswordEncoder.encode(userDetails.getPassword()));
         authUser.setAuthenticationType(AuthenticationType.FORM);
         if (!authUser.getUsername().equals(name)) {
           throw new UsernameNotFoundException("Unable to find user with name - " + name);
