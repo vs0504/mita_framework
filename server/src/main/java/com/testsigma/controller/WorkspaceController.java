@@ -30,6 +30,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/workspaces")
 @Log4j2
+@CrossOrigin
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class WorkspaceController {
 

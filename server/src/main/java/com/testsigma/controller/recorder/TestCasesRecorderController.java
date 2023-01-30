@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(value = "/os_recorder/test_cases")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestCasesRecorderController {
 
     private final TestCaseService testCaseService;

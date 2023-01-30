@@ -18,6 +18,7 @@ import java.sql.SQLException;
 @RequestMapping(path = "/chrome_extension_details")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class ChromeExtensionDetailsController {
   private final ChromeExtensionDetailsService service;
   private final ChromeExtensionDetailsMapper mapper;

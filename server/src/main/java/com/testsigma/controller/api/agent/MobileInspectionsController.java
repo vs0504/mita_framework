@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = {"/api/agents/{uuid}/mobile_inspections"})
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class MobileInspectionsController {
 
   private final MobileInspectionService mobileInspectionService;

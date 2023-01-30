@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,7 @@ import java.util.*;
 @Log4j2
 @RequestMapping(path = "/os_recorder/v2/nlp_templates", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class NLPTemplatesController {
     private final NaturalTextActionsService naturalTextActionsService;
     private final NaturalTextActionMapper naturalTextActionMapper;

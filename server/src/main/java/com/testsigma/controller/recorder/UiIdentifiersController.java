@@ -41,6 +41,7 @@ import java.util.List;
 @RequestMapping(path = "/os_recorder/ui_identifiers")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class UiIdentifiersController {
     private final ElementService uiIdentifierService;
     private final ElementMapper elementMapper;

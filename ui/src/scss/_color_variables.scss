@@ -23,7 +23,7 @@ $theme-queued-color:                  #3C8FE2;
 $theme-stopped-color:                 #C4C4C4;
 $theme-running-color:                 #378d77;
 
-$theme-pass-active-color:             #0ab57d;
+$theme-pass-active-color:             #0fa5d8;
 $theme-failed-active-color:           #ea243c;
 $theme-abort-active-color:            #fba60d;
 $theme-not-executed-active-color:     #542fd0;
@@ -113,7 +113,7 @@ $stopped-result-color: #000;
 $prerequisite-failed-color: #fa6900;
 $running-result-color: rgb(55, 141, 120);//cross browser not supported that's why we are using rbg color
 
-$pass-active-color: #0ab57d;
+$pass-active-color: #0fa5d8;
 $prequisite-active-failed-color: #ff4500;
 $queued-active-result-color: #107eef;
 $not-executed-active-color: #542fd0;

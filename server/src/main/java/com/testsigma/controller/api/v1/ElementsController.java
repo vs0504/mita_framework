@@ -37,6 +37,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/elements")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class ElementsController {
   private final ElementService elementService;
   private final ElementMapper elementMapper;

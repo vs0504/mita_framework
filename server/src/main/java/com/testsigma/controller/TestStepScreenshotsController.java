@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/test_step_screenshots", produces = MediaType.APPLICATION_JSON_VALUE)
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class TestStepScreenshotsController {
   private final TestStepScreenshotService service;
   private final TestStepScreenshotMapper mapper;

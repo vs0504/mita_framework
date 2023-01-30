@@ -41,6 +41,7 @@ import java.util.*;
 @RequestMapping(path = "/os_recorder/v2/test_steps", produces = MediaType.APPLICATION_JSON_VALUE)
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestStepsRecorderController {
 
     private final HttpClient httpClient;

@@ -29,6 +29,7 @@ import java.sql.SQLException;
 @RestController
 @RequestMapping("/user_preferences")
 @Log4j2
+@CrossOrigin
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class UserPreferencesController {
   private final UserPreferenceService userPreferenceService;

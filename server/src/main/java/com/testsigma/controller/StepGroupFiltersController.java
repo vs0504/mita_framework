@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping(path = "/step_group_filters")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class StepGroupFiltersController {
 
   private final StepGroupFilterService service;

@@ -38,6 +38,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = {"/kibbutz"}, produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class AddonAPIsController {
   private final ProxyAddonService addonService;
   private final AddonNaturalTextActionService service;

@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequestMapping(path = "/test_plans")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestPlansController {
   private final TestPlanService testPlanService;
   private final TestDeviceService testDeviceService;

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/api/agents/test_device_results/{id}")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestDeviceResultsController {
 
   private final TestDeviceResultService testDeviceResultService;

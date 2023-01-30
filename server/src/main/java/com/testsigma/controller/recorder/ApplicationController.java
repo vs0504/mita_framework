@@ -26,6 +26,7 @@ import java.util.List;
 @RequestMapping(path = "/os_recorder/applications")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class ApplicationController {
 
     private final ApplicationMapper applicationMapper;

@@ -8,6 +8,7 @@ import com.testsigma.service.TestsigmaOSConfigService;
 import com.testsigma.util.NetworkUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/os_server_details")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestsigmaOsServerDetailsController {
   private final TestsigmaOSConfigService osConfigService;
   private final TestsigmaOsServerDetailsService serverDetailsService;

@@ -5,6 +5,7 @@ import com.testsigma.service.SuggestionMappingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +17,7 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping(path = "/api/agents/suggestions")
+@CrossOrigin
 public class SuggestionsController {
   private final SuggestionMappingService suggestionMappingService;
 

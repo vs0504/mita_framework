@@ -113,19 +113,19 @@
         </a>
       </li>
 
-      <span *ngIf="!version?.workspace?.isRest"
+      <!-- <span *ngIf="!version?.workspace?.isRest"
             [textContent]="'td_nav.help' | translate"
             class="category-header">
-        </span>
+        </span> -->
       <li
         (click)="closeDialog()"
         *ngIf="!version?.workspace?.isRest">
-        <a
+        <!-- <a
           [routerLinkActive]="'active'" [routerLink]="['/td', versionId, 'actions']"
           class="nav-items">
           <i class="fa-action-text"></i>
           <span [textContent]="'td_nav.nl_actions' | translate"></span>
-        </a>
+        </a> -->
       </li>
     </div>
   </ul>

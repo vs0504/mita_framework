@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +27,7 @@ import java.util.List;
 @RequestMapping(value = "/os_recorder/test_data_sets")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class TestDataSetsRecorderController {
     private final TestDataMapper testDataMapper;
     private final TestDataProfileService testDataProfileService;

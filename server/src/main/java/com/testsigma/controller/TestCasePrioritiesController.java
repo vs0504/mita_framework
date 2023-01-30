@@ -32,6 +32,7 @@ import java.util.List;
 @RequestMapping("/test_case_priorities")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class TestCasePrioritiesController {
 
   private final TestCasePriorityService testCasePriorityService;

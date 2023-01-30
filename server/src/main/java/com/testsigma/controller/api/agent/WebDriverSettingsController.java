@@ -26,6 +26,7 @@ import java.sql.SQLException;
 @RequestMapping(path = "/api/agents/webdriver-settings")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class WebDriverSettingsController {
 
   private final WebDriverSettingsService webDriverSettingsService;

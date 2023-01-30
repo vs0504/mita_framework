@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RestController(value = "agentRunTimeDataController")
 @RequestMapping(path = "/api/agents/run_time_data")
+@CrossOrigin
 public class RunTimeDataController {
   private final RunTimeDataService runTimeDataService;
 

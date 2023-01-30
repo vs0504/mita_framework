@@ -32,6 +32,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = {"/os_recorder/kibbutz"}, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class KibbutzAPIsController {
     private final KibbutzPluginNLPMapper kibbutzPluginNLPMapper;
     private final AddonMapper mapper;

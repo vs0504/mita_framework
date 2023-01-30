@@ -34,6 +34,7 @@ import java.util.List;
 @Log4j2
 @RequestMapping(path = "/test_suite_results")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestSuiteResultsController {
 
   private final TestSuiteResultService testSuiteResultService;

@@ -36,6 +36,7 @@ import java.util.List;
 @RequestMapping(path = "/attachments")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class AttachmentsController {
   private final AttachmentService attachmentService;
   private final AttachmentMapper attachmentMapper;

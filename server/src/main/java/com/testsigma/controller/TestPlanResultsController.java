@@ -42,6 +42,7 @@ import java.util.Map;
 @Log4j2
 @RequestMapping(path = "/test_plan_results", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor(onConstructor = @__({@Autowired, @Lazy}))
+@CrossOrigin
 public class TestPlanResultsController {
   private final TestPlanResultService testPlanResultService;
   private final TestPlanResultMapper testPlanResultMapper;

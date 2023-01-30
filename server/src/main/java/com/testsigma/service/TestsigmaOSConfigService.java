@@ -53,7 +53,7 @@ public class TestsigmaOSConfigService {
   private TestsigmaOSConfig populateTestLab(TestsigmaOSConfig testsigmaOSConfig) {
     Integrations testsigmaLab = integrationsService.findOptionalByApplication(Integration.TestsigmaLab).orElse(new Integrations());
     new Integrations();
-    testsigmaLab.setName("Testsigma OS Lab");
+    testsigmaLab.setName("Mita OS Lab");
     testsigmaLab.setPassword(testsigmaOSConfig.getAccessKey());
     testsigmaLab.setUsername(testsigmaOSConfig.getUserName());
     testsigmaLab.setWorkspace(Integration.TestsigmaLab);

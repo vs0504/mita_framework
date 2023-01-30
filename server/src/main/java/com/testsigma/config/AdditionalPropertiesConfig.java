@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import java.io.*;
 import java.util.Properties;
 
@@ -57,7 +56,7 @@ public class AdditionalPropertiesConfig {
 
   }
 
-  @PostConstruct
+  //@PostConstruct
   public void init() {
     try {
       touchConfigFile();
@@ -90,13 +89,15 @@ public class AdditionalPropertiesConfig {
     FileOutputStream fileOut = null;
     touchConfigFile();
     try {
+
+
       String propertiesPath = testsigmaDataPath + File.separator + "authentication.properties";
       log.info("Saving authentication.properties file to - " + propertiesPath);
       Properties properties = AdditionalPropertiesConfig.loadProperties(new FileInputStream(propertiesPath));
       properties.setProperty("authentication.google.clientId", ObjectUtils.defaultIfNull(this.googleClientId, ""));
       properties.setProperty("authentication.google.clientSecret", ObjectUtils.defaultIfNull(this.googleClientSecret, ""));
-      properties.setProperty("authentication.form.username", ObjectUtils.defaultIfNull(this.userName, ""));
-      properties.setProperty("authentication.form.password", ObjectUtils.defaultIfNull(this.password, ""));
+    //  properties.setProperty("authentication.form.username", ObjectUtils.defaultIfNull(this.userName, ""));
+    //  properties.setProperty("authentication.form.password", ObjectUtils.defaultIfNull(this.password, ""));
       properties.setProperty("authentication.jwt.secret", this.jwtSecret);
       properties.setProperty("authentication.api.key", ObjectUtils.defaultIfNull(this.apiKey, ""));
       properties.setProperty("authentication.api.enabled", String.valueOf(this.isApiEnabled));

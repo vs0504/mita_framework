@@ -38,6 +38,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/settings/integrations")
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class IntegrationsController {
 
 

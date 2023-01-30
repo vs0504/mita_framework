@@ -173,17 +173,17 @@
       class="empty-full-container mt-0 w-100">
       <div class="empty-full-content">
         <div class="empty-run-md" *ngIf="isFiltered || filteredBy!= 'all'"></div>
-        <div *ngIf="!isFiltered && filteredBy=='all'; else showEmptyMessage">
+        <!-- <div *ngIf="!isFiltered && filteredBy=='all'; else showEmptyMessage">
           <a
             rel="noreferrer nofollow"
             href="https://testsigma.com/docs/agent/faqs/" target="_blank" class="fz-24 d-block text-black text-decoration-none pb-15 lh-2point6 ts-col-45 mx-auto text-center" [translate]="'agents.know_more'"></a>
-          <div
+           <div
             class="ts-col-100 mx-auto"
             (click)="showVideo= !showVideo"
             [class.player]="showVideo">
             <video [src]="getSource" controls class="d-flex ts-col-45 mx-auto fixed-video" ></video>
-          </div>
-        </div>
+          </div> 
+        </div> -->
         <ng-template #showEmptyMessage>
           <div class="empty-text"
                [textContent]="getEmptyMessage()"></div>

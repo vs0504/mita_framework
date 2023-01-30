@@ -42,6 +42,7 @@ import java.util.Optional;
 @RequestMapping(path = "/settings/backups")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class BackupDetailsController {
 
   private final BackupDetailMapper mapper;

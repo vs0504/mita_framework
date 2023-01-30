@@ -500,7 +500,8 @@
 
   .mat-custom-radio.mat-radio-checked .mat-radio-label, .mat-checkbox-no-check.mat-checkbox-checked .mat-checkbox-layout {
     border-color: $emerald-green;
-    background-color: $emerald-green;
+    // background-color: $emerald-green;
+    background-color: #0fa5d8;
     color: $white;
   }
   .mat-checkbox-no-check{

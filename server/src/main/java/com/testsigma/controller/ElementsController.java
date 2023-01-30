@@ -44,6 +44,7 @@ import java.util.Random;
 @RequestMapping(path = "/elements")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class ElementsController {
   public final ElementScreenService elementScreenService;
   private final ElementService elementService;

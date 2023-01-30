@@ -45,6 +45,7 @@ import java.util.ArrayList;
 @RestController(value = "agentAgentDevicesController")
 @RequestMapping(value = {"/api/agents/{agentUuid}/devices"})
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class AgentDevicesController {
 
   private final AgentDeviceService agentDeviceService;

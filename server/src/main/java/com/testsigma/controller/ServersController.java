@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/servers")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class ServersController {
 
   private final ServerService serverService;

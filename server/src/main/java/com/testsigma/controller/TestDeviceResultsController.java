@@ -35,6 +35,7 @@ import java.util.List;
 @Log4j2
 @RequestMapping(path = "/test_device_results", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class TestDeviceResultsController {
   private final TestDeviceResultService testDeviceResultService;
   private final TestDeviceResultMapper testDeviceResultMapper;

@@ -28,6 +28,7 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping(path = "/api/agents/test_case_results/{id}")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired, @Lazy}))
+@CrossOrigin
 public class TestCaseResultsController {
 
   private final TestCaseResultService testCaseResultService;

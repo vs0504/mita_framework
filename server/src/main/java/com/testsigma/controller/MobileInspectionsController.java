@@ -29,6 +29,7 @@ import java.util.List;
 @RequestMapping("/mobile_inspections")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@CrossOrigin
 public class MobileInspectionsController {
   private final MobileInspectionService mobileInspectionService;
   private final MobileInspectionMapper mobileInspectionMapper;

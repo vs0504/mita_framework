@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,6 +33,7 @@ import java.util.List;
 @RequestMapping(path = "/suggestion_results", produces = MediaType.APPLICATION_JSON_VALUE, consumes =
   MediaType.APPLICATION_JSON_VALUE)
 @Log4j2
+@CrossOrigin
 public class SuggestionResultsMappingController {
   private final SuggestionResultMappingMapper mapper;
   private final SuggestionResultMappingService service;

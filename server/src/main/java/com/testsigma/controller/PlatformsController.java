@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping(path = "/platforms")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class PlatformsController {
   private final PlatformsService platformService;
 

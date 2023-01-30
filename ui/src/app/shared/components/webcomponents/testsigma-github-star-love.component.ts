@@ -50,7 +50,7 @@ export class TestsigmaGitHubStarLoveComponent extends BaseComponent implements O
   skip() {
     this.userPreference.clickedSkipForNow+=1;
     this.userPreferenceService.save(this.userPreference).subscribe();
-    this.matDialog.openDialogs.find( dialog => dialog.componentInstance instanceof TestsigmaGitHubStarLoveComponent)?.close()
+    // this.matDialog.openDialogs.find( dialog => dialog.componentInstance instanceof TestsigmaGitHubStarLoveComponent)?.close()
 
   }
 }

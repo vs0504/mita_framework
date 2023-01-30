@@ -34,6 +34,7 @@ import java.util.List;
 @RequestMapping(path = "/api/v1/uploads")
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@CrossOrigin
 public class UploadsController {
   private final UploadService uploadService;
   private final UploadMapper uploadMapper;

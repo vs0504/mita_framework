@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import java.util.List;
 @Log4j2
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping(path = "/default_data_generators")
+@CrossOrigin
 public class DefaultDataGeneratorController {
 
   private final DefaultDataGeneratorMapper testDataFunctionMapper;
