@@ -865,7 +865,7 @@ mat-expansion-panel {
     }
     .mat-tab-label-active{
       .lab-item {
-        background: rgba(26, 168, 116, 0.1)!important;
+        background:rgb(125 193 213 / 23%)!important;
         @extend .border-active-1, .text-primary;
       }
     }

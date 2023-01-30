@@ -110,8 +110,8 @@
       top: 3px;
     }
     &.active-selection {
-      background: rgba(26, 168, 116, 0.1);
-      border: 1px solid rgba(26, 168, 116, 0.3);
+      background: #26a1d138;
+      border: 1px solid rgba(45,108,163,0.3);
       @extend .border-rds-4, .text-brand, .rb-medium;
     }
     span{

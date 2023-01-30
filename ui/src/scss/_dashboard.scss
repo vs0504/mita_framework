@@ -214,7 +214,7 @@
   &.active {
     border-color: $theme-pass-color;
     .filter-name{
-      color: $theme-selected-green-color!important;
+      color: #a86f1a;
       @extend .rb-semi-bold;
     }
     .odometer{
@@ -222,7 +222,7 @@
       @extend .rb-medium;
     }
     .filter-group-inner{
-      background: #ECFFF1;
+      background: #ebcb9040;
       height: 80%;
     }
   }
