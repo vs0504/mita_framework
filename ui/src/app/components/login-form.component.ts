@@ -69,6 +69,10 @@ export class LoginFormComponent implements OnInit {
       }})
   }
 
+  signupRedirect(){
+    this.router.navigate(['onboarding']);
+  }
+
   fetchAuthConfig()
   {
     this.authConfigService.find().subscribe(

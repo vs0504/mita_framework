@@ -541,7 +541,8 @@
   }
   .mat-radio-checked .lab-item {
     background: rgba(64, 184, 74, 0.1);
-    border: 2px solid $theme-selected-green-color;
+    // border: 2px solid $theme-selected-green-color;
+    border: 2px solid #0fa5d8;
   }
   //.mat-radio-button +.mat-radio-button {
   //  @extend .ml-14;
