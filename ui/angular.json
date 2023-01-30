@@ -81,7 +81,7 @@
               ],
               "outputHashing": "all",
               "showCircularDependencies": false,
-              "deployUrl": "http://localhost:4202/",
+              "deployUrl": "https://mitav2.machint.com/",
               "budgets": [
                 {
                   "type": "initial",
