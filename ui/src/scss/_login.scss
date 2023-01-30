@@ -28,7 +28,7 @@
   }
 }
 .onboarding-form {
-  @extend .ts-col-60, .my-auto, .d-flex;
+  @extend .ts-col-10, .my-auto, .d-flex;
 }
 
 .text-login-left-info {
@@ -92,7 +92,7 @@ input:-webkit-autofill:active {
 }
 
 .login-container {
-  @extend .bg-white, .border-rds-12, .d-flex, .flex-row, .shadow-all-b10, .ts-col-85, .px-40;
+  @extend .bg-white, .border-rds-12, .d-flex, .flex-row,  .ts-col-85, .px-40;
 }
 
 @media only screen and (min-width: 1281px) {
