@@ -72,6 +72,10 @@ export class OnboardingFormComponent extends BaseComponent implements OnInit {
       this.setEmailValidator();
   }
 
+  loginRedirect(){
+    this.router.navigate(['login']);
+  }
+
   clearEmailValidator(){
     this.updateForm.controls['email'].clearValidators();
   }

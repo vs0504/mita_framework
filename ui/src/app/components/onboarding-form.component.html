@@ -111,7 +111,9 @@
                     class="login-primary-btn"
                     [textContent]="(isCommunityAccess ? 'btn.common.next' : 'onboarding.signUp') | translate"></button>
                 </div>
-
+<div>
+  Already a User? Click here to <a (click)="loginRedirect()" >LOGIN</a>
+</div>
               </form>
             </mat-step>
             <!-- <mat-step>
