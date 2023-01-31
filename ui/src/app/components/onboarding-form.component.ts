@@ -15,6 +15,7 @@ import {MatStepper} from "@angular/material/stepper";
 import {fade} from "../shared/animations/animations";
 import {RegistrationMedium} from "../enums/registration-medium.enum";
 import {ToastrService} from "ngx-toastr";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -49,6 +50,7 @@ export class OnboardingFormComponent extends BaseComponent implements OnInit {
     public onboardingGuard: OnboardingGuard,
     private onboardingService: OnboardingService,
     private sessionService: SessionService,
+    private _snackBar: MatSnackBar,
     private route: ActivatedRoute,) {
     super(authGuard, notificationsService, translateService, toastrService)
   }
@@ -177,6 +179,8 @@ export class OnboardingFormComponent extends BaseComponent implements OnInit {
     ).subscribe(res => {
       this.onboardingGuard.server = null;
       this.router.navigate(['dashboard'],{queryParams: {showTelemetryNotification: true}});
+      this.showNotification(NotificationType.Success, "OnBoarded Successfully");
+      // this._snackBar.open('OnBoarded Successfully',"");
     }, err => {this.showNotification(NotificationType.Error, "Problem while logging in");})
   }
 
