@@ -12,7 +12,8 @@ import {Pageable} from "app/shared/models/pageable";
 @Injectable()
 export class HttpHeadersService {
   public contentTypeApplication = new HttpHeaders({
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin':"*",
   });
 
   constructor() {
