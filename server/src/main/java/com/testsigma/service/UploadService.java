@@ -121,7 +121,7 @@ public class UploadService extends XMLExportImportService<Upload> {
     List<SearchCriteria> params = new ArrayList<>();
     List<UploadVersion> uploadVersions = uploadVersionService.findByUploadId(id);
     for(UploadVersion uploadVersion: uploadVersions ) {
-      params.add(new SearchCriteria("testData", SearchOperation.EQUALITY, "testsigma-storage:/"+uploadVersion.getPath()));
+      params.add(new SearchCriteria("testData", SearchOperation.EQUALITY, "mita-storage:/"+uploadVersion.getPath()));
       params.add(new SearchCriteria("workspaceVersionId", SearchOperation.EQUALITY, workspace_id));
       builder.setParams(params);
       Specification<TestCase> spec = builder.build();

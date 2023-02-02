@@ -1261,7 +1261,7 @@ public class AgentExecutionService {
     if(testDataPropertiesEntity.getTestDataValue().startsWith("http")) {
       newUrl = new URL(testDataPropertiesEntity.getTestDataValue());
     } else {
-      String fileUrl = testDataPropertiesEntity.getTestDataValue().replace("testsigma-storage:/", "");
+      String fileUrl = testDataPropertiesEntity.getTestDataValue().replace("mita-storage:/", "");
       newUrl = storageService.generatePreSignedURL(fileUrl, StorageAccessLevel.READ, 180);
     }
     if(TestPlanLabType.TestsigmaLab == testDevice.getTestPlanLabType()) {
