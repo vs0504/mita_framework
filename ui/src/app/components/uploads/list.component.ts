@@ -197,7 +197,7 @@ export class ListComponent extends BaseComponent implements OnInit {
       else {
         if (environmentResults.isEmpty)
           _this.uploadVersionService.findAll("uploadId:" + id).subscribe(res => {
-            let uploadPaths = res.content.map(version =>"testsigma-storage:/" + version.path)
+            let uploadPaths = res.content.map(version =>"mita-storage:/" + version.path)
             _this.checkForLinkedTestCases(uploadPaths,id);
           })
         else

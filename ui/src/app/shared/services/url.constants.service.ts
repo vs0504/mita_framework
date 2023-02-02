@@ -11,7 +11,7 @@ import {environment} from "../../../environments/environment";
 @Injectable()
 export class UrlConstantsService {
   public environmentUrl = `${environment.apiUrl}`;
-  public apiBase = this.environmentUrl;
+  public apiBase = this.environmentUrl+"/api";
   public sessionUrl = this.apiBase + '/sessions';
   public agentsUrl = this.apiBase + '/settings/agents';
   public uploadsUrl = this.apiBase + "/uploads";

@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 
 @Log4j2
 public class RestStepProcessor extends StepProcessor {
-  private final static String TESTSIGMA_STORAGE = "testsigma-storage:";
+  private final static String TESTSIGMA_STORAGE = "mita-storage:";
 
   public RestStepProcessor(WebApplicationContext webApplicationContext, List<TestCaseStepEntityDTO> testCaseStepEntityDTOS,
                            WorkspaceType workspaceType, Map<String, Element> elementMap,

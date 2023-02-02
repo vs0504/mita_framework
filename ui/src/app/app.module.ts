@@ -292,7 +292,7 @@ export function momentAdapterFactory() {
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(httpClient: HttpClient) {
-  return new TranslateHttpLoader(httpClient, environment.cloudFrontURL + '/assets/i18n/', '.json');
+  return new TranslateHttpLoader(httpClient, environment.cloudFrontURL + '/ui/assets/i18n/', '.json');
 }
 
 @NgModule({

@@ -1,0 +1,11 @@
+
+
+{
+  "/api/*": {
+    "target": "http://65.0.72.25:9090/",
+      "secure": false,
+     "changeOrigin":true,
+     "logLevel": "debug",
+     "pathRewrite": {"^/api" : ""}
+  }
+}

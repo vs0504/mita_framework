@@ -76,13 +76,13 @@
           </div>
           <div class="ts-col-45 pl-2 d-flex" [ngSwitch]="upload.isInProgress">
             <div *ngSwitchCase="false"
-                 class="text-truncate ts-col-55" [textContent]="'testsigma-storage:/.../'+upload.fName"></div>
+                 class="text-truncate ts-col-55" [textContent]="'mita-storage:/.../'+upload.fName"></div>
             <div class="rb-regular-i-d mr-auto ml-20 ts-col-20 ng-star-inserted fa-copy"
                  *ngSwitchCase="false"
                  [class.result-status-text-7]="upload.filePathCopied"
                  [class.text-link]="!upload.filePathCopied"
                  [matTooltip]="upload.filePathCopied ? ('uploads.list.message.copied' | translate) : ('uploads.list.copy_path' | translate) "
-                 [cdkCopyToClipboard]="'testsigma-storage:/'+upload?.fName"
+                 [cdkCopyToClipboard]="'mita-storage:/'+upload?.fName"
                  (click)="showCopyTooltip(upload)"></div>
             <div *ngSwitchCase="true" [translate]="'(refresh)'" class="text-link" (click)="fetchUploads()"></div>
           </div>
