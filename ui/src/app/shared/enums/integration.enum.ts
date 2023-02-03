@@ -12,7 +12,7 @@ export enum Integration {
   GoogleChat = 'GoogleChat',
   Trello = 'Trello',
   Linear = 'Linear',
-  TestsigmaLab = "TestsigmaLab",
+  TestsigmaLab = "MitaLab",
   ClickUp = 'ClickUp',
   PrivateGrid = 'PrivateGrid',
   XrayCloud = "XrayCloud",

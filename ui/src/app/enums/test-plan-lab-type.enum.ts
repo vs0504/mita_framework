@@ -6,7 +6,7 @@
  */
 
 export enum TestPlanLabType {
-  TestsigmaLab = "TestsigmaLab",
+  TestsigmaLab = "MitaLab",
   Hybrid = "Hybrid",
   PrivateGrid = "PrivateGrid"
 }

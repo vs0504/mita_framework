@@ -1,3 +1,3 @@
 export enum PlatformType {
-  TestsigmaLab = "TestsigmaLab"
+  TestsigmaLab = "MitaLab"
 }
