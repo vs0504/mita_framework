@@ -178,7 +178,7 @@ export class OnboardingFormComponent extends BaseComponent implements OnInit {
       this.updateForm.getRawValue()['password'],
     ).subscribe(res => {
       this.onboardingGuard.server = null;
-      this.router.navigate(['dashboard'],{queryParams: {showTelemetryNotification: true}});
+      this.router.navigate(['dashboard'],{queryParams: {showTelemetryNotification: false}});
       this.showNotification(NotificationType.Success, "OnBoarded Successfully");
       // this._snackBar.open('OnBoarded Successfully',"");
     }, err => {this.showNotification(NotificationType.Error, "Problem while logging in");})
