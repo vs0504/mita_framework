@@ -446,7 +446,7 @@
   "execution.test_plan_type.DISTRIBUTED": "Distributed Testing",
   "execution.lab_type.TestsigmaLab": "Mita Lab",
   "execution.lab_type.PrivateGrid": "Private Grid",
-  "execution.lab_type.Hybrid": "Local Devices",
+  "execution.lab_type.Hybrid": "Platforms",
   "execution.lab_type.cloud": "Mita Cloud",
   "execution.major_test_step.failure.Run_Next_Testcase": "Abort And Run Next Test Case",
   "execution.major_test_step.failure.Run_Next_Step": "Report And Continue Next Test Step",
