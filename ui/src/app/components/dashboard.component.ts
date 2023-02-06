@@ -38,17 +38,18 @@ export class DashboardComponent extends BaseComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchVersion();
-    if (this.showTelemetryNotification) {
-      const dialogRef = this.matModal.open<TelemetryNotificationComponent>(TelemetryNotificationComponent, {
-        width: '33%',
-        position: {top: '25px', right: '25px'},
-        panelClass: ['mat-dialog', 'border-rds-6','border-active-t-5']
-      });
-      dialogRef.afterClosed().subscribe( () => {
-        this.router.navigate(['dashboard']);
-      })
-    }
-    this.pushToParent(this.route, this.route.params);
+    // if (this.showTelemetryNotification) {
+    //   const dialogRef = this.matModal.open<TelemetryNotificationComponent>(TelemetryNotificationComponent, {
+    //     width: '33%',
+    //     position: {top: '25px', right: '25px'},
+    //     panelClass: ['mat-dialog', 'border-rds-6','border-active-t-5']
+    //   });
+    //   dialogRef.afterClosed().subscribe( () => {
+    //     this.router.navigate(['dashboard']);
+    //   })
+    // }
+    this.router.navigate(['dashboard']);
+    // this.pushToParent(this.route, this.route.params);
   }
 
   fetchVersion() {

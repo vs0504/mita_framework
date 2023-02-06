@@ -140,7 +140,7 @@
               </div>
             </div>
           </div>
-          <div class="ts-col-10 text-center action-icons my-auto">
+          <div class="ts-col-10 text-center action-icons my-auto" >
             <a
               data-placement="bottom"
               [matTooltip]="'pagination.edit' | translate"
@@ -148,9 +148,10 @@
               class="fa-pencil-on-paper action-icon mr-10"></a>
             <a
               data-placement="bottom"
-              [matTooltip]="'pagination.delete' | translate"
-              (click)="fetchLinkedPlans(agent)"
+              [matTooltip]="'pagination.delete' | translate" href="javascript: void(0)"
+              
               class="fa-trash-thin action-icon"></a>
+              <!-- (click)="fetchLinkedPlans(agent)" -->
           </div>
         </div>
       </div>
