@@ -375,13 +375,17 @@ public class AddonAction {
   private void handleStaleElementExceptionType(Exception e) {
     if (getElementSearchCriteria()) {
       String errorMessage = "The element  <b>\"%s:%s\"</b> is removed and currently not present in the page due to dynamic updates on the element or the " +
-        "page.-<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
-        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>";
+        "page."
+//              "-<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
+//        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>"
+             ;
       setErrorMessage(String.format(errorMessage, elementPropertiesEntity.getFindByType(), elementPropertiesEntity.getLocatorValue()));
     } else {
       String errorMessage = "The element state matching with given criteria is changed due to dynamic updates on the element or the " +
-        "page. For more details, please visit below documentation.<br>-<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
-        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>";
+        "page."
+//              " For more details, please visit below documentation.<br>-<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
+//        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>"
+              ;
       setErrorMessage(errorMessage);
     }
     setErrorCode(ErrorCodes.STALE_ELEMENT_EXCEPTION);
@@ -438,14 +442,20 @@ public class AddonAction {
     } else if (e instanceof NoSuchElementException) {
       String errorMessage;
       if (getElementSearchCriteria()) {
-        errorMessage = String.format("Element with <b>\"%s:%s\" </b> not found in current page.<br> Please visit below page for more details<br> <a class=\"text-link\"" +
-            " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
-            "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>",
+        errorMessage = String.format("Element with <b>\"%s:%s\" </b> not found in current page."
+//                        "<br> Please visit below page for more details<br> "
+//                        "<a class=\"text-link\"" +
+//            " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
+//            "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>"
+                ,
           elementPropertiesEntity.getFindByType(), elementPropertiesEntity.getLocatorValue());
       } else {
-        errorMessage = "There is no element matching with given criteria.<br> Please visit below page for more details<br> <a class=\"text-link\"" +
-          " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
-          "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>";
+        errorMessage = "There is no element matching with given criteria."
+//                "<br> Please visit below page for more details<br> "
+//                "<a class=\"text-link\"" +
+//          " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
+//          "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>"
+                ;
       }
       setErrorMessage(errorMessage);
       setErrorCode(ErrorCodes.NO_SUCH_ELEMENT);
