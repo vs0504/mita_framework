@@ -1,6 +1,7 @@
 package com.testsigma.service;
 
 import com.amazonaws.HttpMethod;
+import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
@@ -34,14 +35,8 @@ public class AwsS3StorageService extends StorageService {
     this.storageConfig = storageConfig;
     this.applicationConfig = applicationConfig;
     this.httpClient = httpClient;
-
-    this.amazonS3 = AmazonS3ClientBuilder.standard()
-      .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(storageConfig.getAwsEndpoint(),
-        storageConfig.getAwsRegion()))
-      .withPathStyleAccessEnabled(true)
-      .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(storageConfig.getAwsAccessKey(),
-        storageConfig.getAwsSecretKey())))
-      .build();
+    AWSCredentials awsCreds = new BasicAWSCredentials(storageConfig.getAwsAccessKey(), storageConfig.getAwsSecretKey());
+    this.amazonS3 = AmazonS3ClientBuilder.standard().withRegion(storageConfig.getAwsRegion()).withCredentials(new AWSStaticCredentialsProvider(awsCreds)).build();
     log.info("Created AwsS3StorageService");
   }
 
