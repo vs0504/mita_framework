@@ -30,7 +30,8 @@ import java.util.List;
 @Log4j2
 public class MobileDriver extends TestsigmaDriver {
 
-  public static final String APPIUM_INVALID_URL = "<br> For more information - <a href = \"https://support.testsigma.com/a/solutions/articles/32000023959-most-common-errors-appium-specific\" target=\"_blank\">https://support.testsigma.com/a/solutions/articles/32000023959-most-common-errors-appium-specific</a>";
+  public static final String APPIUM_INVALID_URL = "";
+         // "<br> For more information - <a href = \"https://support.testsigma.com/a/solutions/articles/32000023959-most-common-errors-appium-specific\" target=\"_blank\">https://support.testsigma.com/a/solutions/articles/32000023959-most-common-errors-appium-specific</a>";
 
   public MobileDriver() {
     super();

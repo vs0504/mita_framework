@@ -245,13 +245,17 @@ public abstract class ElementAction extends DriverAction {
   private void handleStaleElementExceptionType(Exception e) {
     if (elementSearchCriteria != null) {
       String errorMessage = "The element with locator <b>\"%s:%s\"</b> is removed and currently not present in the page due to dynamic updates on the element or the " +
-        "page.-<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
-        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>";
+        "page.-"
+//              "<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
+//        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>"
+              ;
       setErrorMessage(String.format(errorMessage, elementSearchCriteria.getFindByType(), elementSearchCriteria.getByValue()));
     } else {
       String errorMessage = "The element state matching with given criteria is changed due to dynamic updates on the element or the " +
-        "page. For more details, please visit below documentation.<br>-<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
-        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>";
+        "page. For more details, please visit below documentation.<br>"
+//              "-<a class=\"text-link\" href = \"https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7\" " +
+//        "target=\"_blank\">https://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements#problem7</a>"
+              ;
       setErrorMessage(errorMessage);
     }
     setErrorCode(ErrorCodes.STALE_ELEMENT_EXCEPTION);
@@ -306,13 +310,17 @@ public abstract class ElementAction extends DriverAction {
     } else if (e instanceof NoSuchElementException) {
       String errorMessage;
       if (elementSearchCriteria != null) {
-        errorMessage = String.format("Element with locator<b>\"%s:%s\" </b> not found in current page.<br> Please visit below page for more details<br> <a class=\"text-link\"" +
-          " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
-          "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>", elementSearchCriteria.getFindByType(), elementSearchCriteria.getByValue());
+        errorMessage = String.format("Element with locator<b>\"%s:%s\" </b> not found in current page.<br> Please visit below page for more details<br> "
+               // "<a class=\"text-link\""
+//          " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
+//          "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>"
+                , elementSearchCriteria.getFindByType(), elementSearchCriteria.getByValue());
       } else {
-        errorMessage = "There is no element matching with given criteria.<br> Please visit below page for more details<br> <a class=\"text-link\"" +
-          " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
-          "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>";
+        errorMessage = "There is no element matching with given criteria.<br> Please visit below page for more details<br> "
+                //"\<a class=\"text-link\"" +
+//          " href = \"http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements\" " +
+//          "target=\"_blank\">http://support.testsigma.com/support/solutions/articles/32000024739-most-common-issues-caused-when-using-elements</a>"
+        ;
       }
       setErrorMessage(errorMessage);
       setErrorCode(ErrorCodes.NO_SUCH_ELEMENT);
