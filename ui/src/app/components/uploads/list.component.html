@@ -104,7 +104,7 @@
             <a *ngIf="upload.latestVersion?.id"
               data-placement="bottom"
               [matTooltip]="'hint.message.common.download' | translate"
-              [href]="'/upload_versions/'+upload.latestVersion?.id+'/download'"
+              [href]="'/api/upload_versions/'+upload.latestVersion?.id+'/download'"
               target="_blank"
               class="fa-download-thin action-icon"></a>
           </span>

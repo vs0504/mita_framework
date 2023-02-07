@@ -107,7 +107,7 @@ public class UploadVersion extends BaseModel {
   public String getS3Path(){
     String originalFileName = ObjectUtils.defaultIfNull(getFileName(), "tmp")
             .replaceAll("\\s+", "_");
-    return "/uploads/" + getId() +
+    return "uploads/" + getId() +
              "/" + originalFileName;
   }
 }
