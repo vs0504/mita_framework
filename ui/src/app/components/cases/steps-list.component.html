@@ -73,9 +73,9 @@
 
 <div
   class="d-flex flex-wrap theme-w-o-h-scroll">
+  <!-- [class.ts-col-100]="version?.workspace?.isRest || isRest || isForLoop || canDrag || !isHelpWidgetShowed" -->
   <div
-    [class.ts-col-100]="version?.workspace?.isRest || isRest || isForLoop || canDrag || !isHelpWidgetShowed"
-    class="ts-col-70 h-100 overflow-hidden">
+    class="ts-col-100 h-100 overflow-hidden">
     <div
       [class.showed]="canShowBulkActions"
       class="bulk-action-container">
@@ -154,7 +154,7 @@
       <i class="fa-times-circle-regular ml-auto fz-16 pointer" (click)="isRibbonShowed= false"></i>
     </div>-->
   </div>
-  <div
+  <!-- <div
     *ngIf="(!version?.workspace?.isRest  || !isRest || !isForLoop || canDrag || !isHelpWidgetShowed ) && !isReorder"
     [class.ts-col-30]="isHelpWidgetShowed"
     class="h-100">
@@ -177,6 +177,6 @@
         class="text-t-secondary"
         [translate]="'hint.message.common.help'"></span>
     </span>
-  </div>
+  </div> -->
 </div>
 
