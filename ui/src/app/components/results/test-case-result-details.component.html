@@ -105,14 +105,14 @@
               class="theme-btn-clear-default  ml-14"
               [translate]="'elements.btn.record'"></button>
           </div>
-          <button
+          <!-- <button
             *ngIf="!isDry"
             [disabled]="testCaseResult?.isExecuting"
             (click)="reportBug()"
             [matTooltip]="'result.hint.report.bug' | translate"
             class="btn icon-btn border-rds-2 ml-14">
             <i class="fa-bug"></i>
-          </button>
+          </button> -->
           <button
             [disabled]="testCaseResult?.isExecuting"
             (click)="openUpdateStatus()"
