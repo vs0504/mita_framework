@@ -32,7 +32,7 @@ import {WorkspaceType} from "../../enums/workspace-type.enum";
         <span class="small-sub-header rb-medium" [textContent]="('test_case.create_help.test_data.label'|translate) +':'"></span>
         <p>
           <span [translate]="'test_case.create_help.test_data.details'"></span><br>
-          <span [translate]="'message.common.refer_this'"></span>
+          <!--span [translate]="'message.common.refer_this'"></span>
           &nbsp;
           <a
             class="small-sub-header rb-medium text-link"
@@ -40,18 +40,20 @@ import {WorkspaceType} from "../../enums/workspace-type.enum";
             href="https://testsigma.com/tutorials/test-cases/data-driven-testing/"
             target="_blank" [translate]="'message.common.help_document'"></a>
           &nbsp;
-          <span [translate]="'test_case.create_help.test_data.help_document_description'"></span> for more details on Data-driven Test Cases.</p>
+          <span [translate]="'test_case.create_help.test_data.help_document_description'"></span> for more details on Data-driven Test Cases.-->
+          </p>
         <span class="small-sub-header rb-medium" [textContent]="('test_case.create_help.data_driven.label'|translate) +':'"></span>
         <p>
           <span [translate]="'test_case.create_help.data_driven.details'"></span><br>
-          <span [translate]="'message.common.refer_this'"></span>&nbsp;
+          <!--span [translate]="'message.common.refer_this'"></span>&nbsp;
           <a
             class="small-sub-header rb-medium text-link"
             rel="noreferrer nofollow"
             href="https://testsigma.com/tutorials/test-cases/data-driven-testing/"
             target="_blank" [translate]="'message.common.help_document'"></a>
             &nbsp;
-          <span [translate]="'test_case.create_help.data_driven.help_document_description'"></span></p>
+          <span [translate]="'test_case.create_help.data_driven.help_document_description'"></span-->
+          </p>
     </span>
     </div>
     <div>

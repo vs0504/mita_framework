@@ -98,7 +98,7 @@ export class DetailsComponent extends BaseComponent implements OnInit {
   destroyVersion(id) {
     this.versionService.destroy(id).subscribe(
       () => {
-        this.translate.get("message.common.deleted.success", {FieldName: 'Version'})
+        this.translate.get("message.common.deleted.success", {FieldName: 'Project'})
           .subscribe(res => this.showNotification(NotificationType.Success, res))
         let url;
         if(this.fullScreenDetails)
