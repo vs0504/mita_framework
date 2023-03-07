@@ -72,14 +72,14 @@ export class FormComponent extends BaseComponent implements OnInit {
     this.versionService.create(this.version).subscribe(
       res => {
         this.saving = false;
-        this.translate.get("message.common.created.success", {FieldName: "Version"}).subscribe((msg: string) => {
+        this.translate.get("message.common.created.success", {FieldName: "Project"}).subscribe((msg: string) => {
           this.showNotification(NotificationType.Success, msg);
         });
         this.router.navigate(['/workspaces', res.workspace.id, 'versions', res.id], {relativeTo: this.route});
       },
       _err => {
         this.saving = false;
-        this.translate.get('message.common.created.failure', {FieldName: "Version"})
+        this.translate.get('message.common.created.failure', {FieldName: "Project"})
           .subscribe(msg => this.showAPIError(_err, msg,'Workspace Version'))
       }
     );
@@ -94,14 +94,14 @@ export class FormComponent extends BaseComponent implements OnInit {
     this.versionService.update(this.version).subscribe(
       res => {
         this.saving = false;
-        this.translate.get("message.common.update.success", {FieldName: "Version"}).subscribe((res: string) => {
+        this.translate.get("message.common.update.success", {FieldName: "Project"}).subscribe((res: string) => {
           this.showNotification(NotificationType.Success, res);
         });
         this.router.navigate(['/workspaces', res.workspaceId, 'versions', res.id], {relativeTo: this.route});
       },
       _err => {
         this.saving = false;
-        this.translate.get('message.common.created.failure', {FieldName: "Version"})
+        this.translate.get('message.common.created.failure', {FieldName: "Project"})
           .subscribe(msg => this.showAPIError(_err, msg))
       }
     );
