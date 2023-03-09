@@ -2,7 +2,7 @@
 
 {
   "/api/*": {
-    "target": "http://65.0.182.14:9090/",
+    "target": "http://10.11.12.82:9090/",
       "secure": false,
      "changeOrigin":true,
      "logLevel": "debug",

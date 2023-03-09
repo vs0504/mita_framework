@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
   apiUrl: '',
-  cloudFrontURL: 'http://mitav2.machint.com/'
+  cloudFrontURL: 'http://10.11.12.82:4202/'
 };
