@@ -27,7 +27,7 @@ public class AutomatorMessages {
   public static final String MSG_EXECUTION_FAILURE = "Test plan execution failed";
   public static final String MSG_INCOMPATIBLE_DEVICE_AND_APP = "Incompatible app and device architecture";
 
-  final public static String EXECUTION_ALREADY_RUNNING = "The specified Test Plan is currently running. Please wait until the current Test Plan is complete." 
+  final public static String EXECUTION_ALREADY_RUNNING = "The specified Test Plan is currently running. Please wait until the current Test Plan is complete." ;
   // You may also use Mita Test Plan Status Check API to wait for the current Test Plan to complete. More details - https://testsigma.com/docs/continuous-integration/rest-api/";
 
   public static final String AGENT_INACTIVE = "Agent is out of Sync. Please restart Agent";
