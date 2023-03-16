@@ -90,9 +90,8 @@ export class ElementFiltersComponent extends BaseComponent implements OnInit {
       queryString += ",locatorValue:*" +encodeURIComponent(new ElementFilter().byPassSpecialCharacters(this.filterLocatorValue))  + "*";
     if (this.filterScreenName)
       queryString += ",screenName:*" + encodeURIComponent(this.filterScreenName) + "*"
-    if (this.filterName){
+    if (this.filterName)
       queryString += ",name:*" + encodeURIComponent(this.filterName) + "*"
-    }
     if (this.filterLocatorTypes?.length)
       queryString += ",locatorType@" + this.filterLocatorTypes.join("#")
     if (this.createdDateRange?.valid) {

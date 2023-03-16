@@ -33,7 +33,7 @@
         </ul>
       </div>
     </div>
-    <div class="ml-auto d-flex align-items-center">
+    <div class="ml-auto d-flex align-items-center mr-20">
       <app-auto-refresh
         class="d-inline-block"
         *ngIf="isExecutionRunning"
@@ -78,11 +78,11 @@
                  class="text-dark text-decoration-none"
                  target="_blank" [translate]="'runs.details.export_as_xls'"></a>
             </li>
-            <li
+            <!-- <li
               class="border-rds-10 btn rb-medium grey-on-hover text-dark ml-0">
               <a [href]="'/reports/junit/'+testPlanResult?.id" class="text-dark text-decoration-none"
                  target="_blank" [translate]="'runs.details.export_as_junit'"></a>
-            </li>
+            </li> -->
           </ul>
         </div>
       </div>
@@ -122,7 +122,7 @@
       <a
         [routerLink]="['/td/suite_results', testSuiteResult?.id]"
         *ngIf="testSuiteResult?.testSuite?.name"
-        class="list-card bordered sm-pm">
+        class="list-card bordered sm-pm mr-20">
         <div
           class="d-flex fz-12 align-items-center"
           [class.ts-col-20]="showFilter || showRunDetails"
