@@ -54,7 +54,7 @@ import {FormControl} from "@angular/forms";
         <button
           mat-dialog-close
           class="theme-btn-clear-default"
-          [translate]="'message.common.clear'"></button>
+          [translate]="'btn.common.close'"></button>
         <button
           [disabled]="!isValid"
           [mat-dialog-close]="true"
