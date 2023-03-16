@@ -89,9 +89,7 @@ import {TestLabFormControls} from "../../enums/test-lab-form-controls";
         <div style="font-size:medium;font-weight: 400;" class="ml-5">
             <span [innerHTML]="'test_plan.testsigmalab.requires_access_to_cloud' | translate"></span>
             <a (click)="closeDialog()" [innerHTML]="'message.common.click_here' | translate" [routerLink]="['/settings/testsigma']"></a>
-            <a [innerHTML]="'test_plan.testsigmalab.learn_more' | translate"
-               rel="noreferrer nofollow"
-               href="https://testsigma.com/docs/getting-started/testsigma-community-cloud/" target="_blank"></a>
+            
             <span [innerHTML]="'test_plan.testsigmalab.communityEdition' | translate"></span>
         </div>
       </div>

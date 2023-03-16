@@ -5,13 +5,13 @@
       [filteredBy]="filteredBy"
       [translatePreFix]="'agents.list.sort_by.'"
       (filterAction)="filterBy($event.filterBy)"></agents-filter>
-  <div class="short-hand-actions">
+  <div class="short-hand-actions mr-10">
 
     <app-toggle-search-button
       [class.visibility-hidden]="!hasAgents"
       (searchAction)="search($event)"></app-toggle-search-button>
 
-    <div class="dropdown mouse-over mx-20 d-inline-block">
+    <!-- <div class="dropdown mouse-over mx-20 d-inline-block">
       <div class="btn-group">
         <a class="theme-btn-clear-default rb-medium text-dark"
            href="{{agentDownloadLink()}}" target="_blank">
@@ -46,7 +46,7 @@
           </li>
         </ul>
       </div>
-    </div>
+    </div> -->
 
     <button class="theme-btn-primary" [routerLink]="['new']">
       + <span [translate]="'agents.header.add_new_agent'"></span>
