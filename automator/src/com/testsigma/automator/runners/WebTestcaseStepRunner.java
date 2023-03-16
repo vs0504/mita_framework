@@ -25,7 +25,8 @@ import java.util.regex.Pattern;
 @Log4j2
 public class WebTestcaseStepRunner extends TestcaseStepRunner {
 
-  public static final String INVALID_RUNTIME_DATA = "No data available for runtime test data variable %s. Refer previous Test Steps in this Test Case or Test Steps in other Test Cases to know the variable names saved by using store(naturalText) action Test Steps. Go to https://testsigma.com/docs/test-data/types/runtime/ to know more about runtime test data.";
+  public static final String INVALID_RUNTIME_DATA = "No data available for runtime test data variable %s. Refer previous Test Steps in this Test Case or Test Steps in other Test Cases to know the variable names saved by using store(naturalText) action Test Steps.";
+//  Go to https://testsigma.com/docs/test-data/types/runtime/ to know more about runtime test data.";
 
   private TestCaseStepEntity testcaseStep;
   private TestCaseStepResult testCaseStepResult;

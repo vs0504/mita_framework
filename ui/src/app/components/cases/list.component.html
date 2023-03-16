@@ -1,6 +1,6 @@
 <div
   class="ts-col-100 h-100">
-  <div class="page-header d-flex">
+  <div class="page-header d-flex mr-10">
 
     <div class="tab-navigation pb-2 h-40p">
       <ul class="tab-nav mb-n2 fz-18" role="tablist">
@@ -25,7 +25,7 @@
         </li>
       </ul>
       <div class="ml-auto d-flex align-items-center pb-5">
-        <div *ngIf="testCases?.content?.length" class="dropdown section-title mouse-over d-inline-block">
+        <!-- <div *ngIf="testCases?.content?.length" class="dropdown section-title mouse-over d-inline-block">
           <div class="btn-group">
             <button
               class="btn icon-btn border-rds-2 ml-14 mr-14">
@@ -41,7 +41,7 @@
               </li>
             </ul>
           </div>
-        </div>
+        </div> -->
         <a
           [routerLink]="['/td', versionId, isStepGroup? 'step_groups':'cases', 'create']" [queryParams]="{ isGroup: isStepGroup}"
           class="theme-btn-primary  ml-10"
@@ -50,7 +50,7 @@
     </div>
   </div>
 
-  <div class="page-content">
+  <div class="page-content mr-10">
   <div class="d-flex fz-20 align-items-center mt-10 mb-15">
     <div
       #filterListBtn

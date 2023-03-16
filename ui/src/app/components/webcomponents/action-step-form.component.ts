@@ -112,11 +112,11 @@ export class ActionStepFormComponent extends BaseComponent implements OnInit {
     "Verify that the current page displays text This email address is not registered on WordPress.com"];
   private placeholders: any[];
   private stepCreateArticles = {
-    "WebApplication": "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
-    "MobileWeb": "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
-    "AndroidNative": "https://testsigma.com/docs/test-cases/create-steps-recorder/android-apps/",
-    "IOSNative": "https://testsigma.com/docs/test-cases/create-steps-recorder/ios-apps/overview/",
-    "Rest": "https://testsigma.com/tutorials/getting-started/automate-rest-apis/"
+    "WebApplication": "",
+    "MobileWeb": "",
+    "AndroidNative": "",
+    "IOSNative": "",
+    "Rest": ""
   }
   public stepArticleUrl = "";
   public navigateTemplate = [1044, 94, 10116, 10001]

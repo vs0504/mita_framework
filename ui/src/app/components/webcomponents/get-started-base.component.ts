@@ -35,7 +35,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.overview",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/overview.mp4",
           descriptionKey: "get_started.overview_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases"
         },
@@ -43,7 +43,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.create_automated_test",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/create-testcase.mp4",
           descriptionKey: "get_started.create_automated_test_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases/create"
         },
@@ -51,7 +51,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.run_tests",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/run-testcase.mp4",
           descriptionKey: "get_started.run_tests_description",
-          articleLink: "https://testsigma.com/tutorials/getting-started/automate-web-applications/",
+          articleLink: "",
           countKey: "dryTestCaseCount",
           navigateToTry: "cases"
         },
@@ -59,7 +59,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.data_driven",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/data-driven-testing.mp4",
           descriptionKey: "get_started.data_driven_description",
-          articleLink: "https://testsigma.com/tutorials/test-cases/data-driven-testing/",
+          articleLink: "",
           countKey: "testDataCount",
           navigateToTry: "data/new"
         },
@@ -67,7 +67,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.cross_browser",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/cross-browser-testing.mp4",
           descriptionKey: "get_started.cross_browser_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/overview/",
+          articleLink: "",
           countKey: "crossExecutionCount",
           navigateToTry: "plans/new"
         },
@@ -75,7 +75,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.manage_suites",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/create-test-suite.mp4",
           descriptionKey: "get_started.manage_suites_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-suites/overview/",
+          articleLink: "",
           countKey: "testSuiteCount",
           navigateToTry: "suites/new"
         },
@@ -83,7 +83,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.schedule_plans",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/schedule-testplan.mp4",
           descriptionKey: "get_started.schedule_plans_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/schedule-plans/",
+          articleLink: "",
           countKey: "executionCount",
           navigateToTry: "plans"
         },
@@ -91,7 +91,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.ci/cd_integration",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/web/continuous-integration.mp4",
           descriptionKey: "get_started.ci/cd_integration_description",
-          articleLink: "https://testsigma.com/docs/continuous-integration/jenkins/",
+          articleLink: "",
           countKey: "ciCdCount",
           navigateToTry: "plans"
         }]
@@ -103,7 +103,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.overview",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/overview.mp4",
           descriptionKey: "get_started.overview_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases"
         },
@@ -111,7 +111,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.create_automated_test",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/create-testcase.mp4",
           descriptionKey: "get_started.create_automated_test_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases/create"
         },
@@ -119,7 +119,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.run_tests",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/run-testcase.mp4",
           descriptionKey: "get_started.run_tests_description",
-          articleLink: "https://testsigma.com/tutorials/getting-started/automate-web-applications/",
+          articleLink: "",
           countKey: "dryTestCaseCount",
           navigateToTry: "cases"
         },
@@ -127,7 +127,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.data_driven",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/data-driven-testing.mp4",
           descriptionKey: "get_started.data_driven_description",
-          articleLink: "https://testsigma.com/tutorials/test-cases/data-driven-testing/",
+          articleLink: "",
           countKey: "testDataCount",
           navigateToTry: "data/new"
         },
@@ -135,7 +135,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.cross_device",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/cross-device-testing.mp4",
           descriptionKey: "get_started.cross_device_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/overview/",
+          articleLink: "",
           countKey: "crossExecutionCount",
           navigateToTry: "plans/new"
         },
@@ -143,7 +143,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.manage_suites",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/create-test-suite.mp4",
           descriptionKey: "get_started.manage_suites_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-suites/overview/",
+          articleLink: "",
           countKey: "testSuiteCount",
           navigateToTry: "suites/new"
         },
@@ -151,7 +151,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.schedule_plans",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/schedule-testplan.mp4",
           descriptionKey: "get_started.schedule_plans_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/schedule-plans/",
+          articleLink: "",
           countKey: "executionCount",
           navigateToTry: "plans"
         },
@@ -159,7 +159,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.ci/cd_integration",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/mobile-web/continuous-integration.mp4",
           descriptionKey: "get_started.ci/cd_integration_description",
-          articleLink: "https://testsigma.com/docs/continuous-integration/jenkins/",
+          articleLink: "",
           countKey: "ciCdCount",
           navigateToTry: "plans"
         }]
@@ -171,7 +171,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.overview",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/overview.mp4",
           descriptionKey: "get_started.overview_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/android-apps/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases"
         },
@@ -179,7 +179,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.create_automated_test",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/create-testcase.mp4",
           descriptionKey: "get_started.create_automated_test_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/android-apps/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases/create"
         },
@@ -187,7 +187,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.run_tests",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/run-testcase.mp4",
           descriptionKey: "get_started.run_tests_description",
-          articleLink: "https://testsigma.com/tutorials/getting-started/automate-web-applications/",
+          articleLink: "",
           countKey: "dryTestCaseCount",
           navigateToTry: "cases"
         },
@@ -195,7 +195,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.data_driven",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/data-driven-testing.mp4",
           descriptionKey: "get_started.data_driven_description",
-          articleLink: "https://testsigma.com/tutorials/test-cases/data-driven-testing/",
+          articleLink: "",
           countKey: "testDataCount",
           navigateToTry: "data/new"
         },
@@ -203,7 +203,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.cross_device",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/cross-device-testing.mp4",
           descriptionKey: "get_started.cross_device_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/overview/",
+          articleLink: "",
           countKey: "crossExecutionCount",
           navigateToTry: "plans/new"
         },
@@ -211,7 +211,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.manage_suites",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/create-test-suite.mp4",
           descriptionKey: "get_started.manage_suites_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-suites/overview/",
+          articleLink: "",
           countKey: "testSuiteCount",
           navigateToTry: "suites/new"
         },
@@ -219,7 +219,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.schedule_plans",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/schedule-testplan.mp4",
           descriptionKey: "get_started.schedule_plans_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/schedule-plans/",
+          articleLink: "",
           countKey: "executionCount",
           navigateToTry: "plans"
         },
@@ -227,7 +227,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.ci/cd_integration",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/android/continuous-integration.mp4",
           descriptionKey: "get_started.ci/cd_integration_description",
-          articleLink: "https://testsigma.com/docs/continuous-integration/jenkins/",
+          articleLink: "",
           countKey: "ciCdCount",
           navigateToTry: "plans"
         }]
@@ -239,7 +239,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.overview",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/overview.mp4",
           descriptionKey: "get_started.overview_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/ios-apps/overview/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases"
         },
@@ -247,7 +247,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.create_automated_test",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/create-testcase.mp4",
           descriptionKey: "get_started.create_automated_test_description",
-          articleLink: "https://testsigma.com/docs/test-cases/create-steps-recorder/ios-apps/overview/",
+          articleLink: "",
           countKey: "testCasesCount",
           navigateToTry: "cases/create"
         },
@@ -255,7 +255,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.run_tests",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/run-testcase.mp4",
           descriptionKey: "get_started.run_tests_description",
-          articleLink: "https://testsigma.com/tutorials/getting-started/automate-web-applications/",
+          articleLink: "",
           countKey: "dryTestCaseCount",
           navigateToTry: "cases"
         },
@@ -263,7 +263,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.data_driven",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/data-driven-testing.mp4",
           descriptionKey: "get_started.data_driven_description",
-          articleLink: "https://testsigma.com/tutorials/test-cases/data-driven-testing/",
+          articleLink: "",
           countKey: "testDataCount",
           navigateToTry: "data/new"
         },
@@ -271,7 +271,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.cross_device",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/cross-device-testing.mp4",
           descriptionKey: "get_started.cross_device_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/overview/",
+          articleLink: "",
           countKey: "crossExecutionCount",
           navigateToTry: "plans/new"
         },
@@ -279,7 +279,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.manage_suites",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/create-test-suite.mp4",
           descriptionKey: "get_started.manage_suites_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-suites/overview/",
+          articleLink: "",
           countKey: "testSuiteCount",
           navigateToTry: "suites/new"
         },
@@ -287,7 +287,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.schedule_plans",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/schedule-testplan.mp4",
           descriptionKey: "get_started.schedule_plans_description",
-          articleLink: "https://testsigma.com/docs/test-management/test-plans/schedule-plans/",
+          articleLink: "",
           countKey: "executionCount",
           navigateToTry: "plans"
         },
@@ -295,7 +295,7 @@ export class GetStartedBaseComponent extends BaseComponent implements OnInit {
           titleKey: "get_started.ci/cd_integration",
           source: "https://s3.amazonaws.com/assets.testsigma.com/videos/get-started/ios/continuous-integration.mp4",
           descriptionKey: "get_started.ci/cd_integration_description",
-          articleLink: "https://testsigma.com/docs/continuous-integration/jenkins/",
+          articleLink: "",
           countKey: "ciCdCount",
           navigateToTry: "plans"
         }]

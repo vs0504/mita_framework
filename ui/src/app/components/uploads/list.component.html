@@ -118,11 +118,11 @@
             <span [textContent]="upload.sizeInWords"></span>
             <span class="d-flex justify-content-end ml-10" *ngIf="upload.createdAt">
             <span [translate]="'message.common.created_on'"></span>
-            <span
+            <span class ="ml-5"
               [textContent]="'message.common.time'| translate : { time: (upload.createdAt | date : 'MMM d, yyyy')}"></span>
           </span>
             <span class="d-flex justify-content-end ml-10" *ngIf="upload.updatedAt">
-            <span [translate]="'message.common.updated_on'"></span><span
+            <span [translate]="'message.common.updated_on'"></span><span class ="ml-5"
               [textContent]="'message.common.time'| translate : { time: (upload.updatedAt | date : 'MMM d, yyyy')}"></span>
           </span>
           </div>

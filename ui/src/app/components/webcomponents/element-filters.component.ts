@@ -90,8 +90,9 @@ export class ElementFiltersComponent extends BaseComponent implements OnInit {
       queryString += ",locatorValue:*" +encodeURIComponent(new ElementFilter().byPassSpecialCharacters(this.filterLocatorValue))  + "*";
     if (this.filterScreenName)
       queryString += ",screenName:*" + encodeURIComponent(this.filterScreenName) + "*"
-    if (this.filterName)
+    if (this.filterName){
       queryString += ",name:*" + encodeURIComponent(this.filterName) + "*"
+    }
     if (this.filterLocatorTypes?.length)
       queryString += ",locatorType@" + this.filterLocatorTypes.join("#")
     if (this.createdDateRange?.valid) {
@@ -137,12 +138,12 @@ export class ElementFiltersComponent extends BaseComponent implements OnInit {
     if (this.data.filter.normalizedQuery.find(query => query.key == "name")) {
       this.filterName = <string>this.data.filter.normalizedQuery.find(query => query.key == "name").value;
       this.filterName = this.filterName.split("*")[1];
-      this.filterName = decodeURIComponent(this.filterName);
+      this.filterName = decodeURIComponent(decodeURIComponent(this.filterName));
     }
     if (this.data.filter.normalizedQuery.find(query => query.key == "screenName")) {
       this.filterScreenName = <string>this.data.filter.normalizedQuery.find(query => query.key == "screenName").value;
       this.filterScreenName =  this.filterScreenName.includes("*")? this.filterScreenName.split("*")[1] : this.filterScreenName;
-      this.filterScreenName = decodeURIComponent(this.filterScreenName);
+      this.filterScreenName = decodeURIComponent(decodeURIComponent(this.filterScreenName));
     }
     if (this.data.filter.normalizedQuery.find(query => query.key == "locatorValue")) {
       this.filterLocatorValue = <string>this.data.filter.normalizedQuery.find(query => query.key == "locatorValue").value;

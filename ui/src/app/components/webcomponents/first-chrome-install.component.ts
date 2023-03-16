@@ -25,15 +25,6 @@ import {OnBoarding} from "../../enums/onboarding.enum";
         <div
           class="help-body">
           <span [translate]="'first_chrome_install.description'"></span>
-          <a
-            mat-dialog-close
-            (click)="removePreference()"
-            class="text-link text-nowrap pl-4"
-            target="_blank"
-            rel="noreferrer nofollow"
-            href="https://testsigma.com/docs/faqs/why-chrome-extension/"
-            [translate]="'message.common.lean_more'">
-          </a>
         </div>
         <div class="d-flex align-items-center justify-content-end">
           <div

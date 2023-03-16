@@ -62,11 +62,11 @@ export class StepsListComponent extends BaseComponent implements OnInit {
   public createStepGroupFromPopUp: MatDialogRef<CreateTestGroupFromStepFormComponent, any>;
   public currentStepType: string;
   private stepCreateArticles = {
-    "WebApplication": "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
-    "MobileWeb": "https://testsigma.com/docs/test-cases/create-steps-recorder/web-apps/overview/",
-    "AndroidNative": "https://testsigma.com/docs/test-cases/create-steps-recorder/android-apps/",
-    "IOSNative": "https://testsigma.com/docs/test-cases/create-steps-recorder/ios-apps/overview/",
-    "Rest": "https://testsigma.com/tutorials/getting-started/automate-rest-apis/"
+    "WebApplication": "",
+    "MobileWeb": "",
+    "AndroidNative": "",
+    "IOSNative": "",
+    "Rest": ""
   }
   private stepVideoResources = {
     "WebApplication": "https://s3.amazonaws.com/assets.testsigma.com/videos/test-cases/web/create-steps.mp4",
