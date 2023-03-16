@@ -1,6 +1,6 @@
 <div class="page-header">
   <div class="page-title" [translate]="'test_case_types.title'"></div>
-  <div class="short-hand-actions">
+  <div class="short-hand-actions mr-20">
     <app-toggle-search-button
       class="mr-20"
       [class.visibility-hidden]="!testCaseTypes?.totalElements && !isFiltered"
@@ -12,7 +12,7 @@
       + <span [translate]="'message.common.add_type'"></span></button>
   </div>
 </div>
-<div class="page-content pb-0">
+<div class="page-content pb-0 mr-10">
   <app-placeholder-loader
     *ngIf="testCaseTypes.isFetching"></app-placeholder-loader>
   <cdk-virtual-scroll-viewport
