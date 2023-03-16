@@ -38,19 +38,19 @@
     <app-toggle-search-button
       [class.visibility-hidden]="!((!elements.isEmpty&& !!!query) || !!query)"
       (searchAction)="search($event)"></app-toggle-search-button>
-    <button
+    <!-- <button
       *ngIf="hasInspectorFeature()"
       [routerLink]="['/td', 'record', this.versionId]"
       [queryParams]="{isRecord: true}"
       class="theme-btn-clear-default ml-14"
-      [translate]="'elements.btn.record'"></button>
+      [translate]="'elements.btn.record'"></button> -->
     <div *ngIf="version?.workspace?.isWebMobile && chromeRecorderService.isChrome"
          [matTooltip]="( !chromeRecorderService.isInstalled ?'elements.form.chrome_extension.not_have_info':'') | translate">
-      <button
+      <!-- <button
         [disabled]="!chromeRecorderService.isInstalled"
         (click)="elementCapture? stopCapture() : startCapture()"
         class="theme-btn-clear-default ml-14"
-        [translate]="(!elementCapture)?'elements.btn.record':'elements.btn.stop'"></button>
+        [translate]="(!elementCapture)?'elements.btn.record':'elements.btn.stop'"></button> -->
     </div>
     <button
       (click)="openAddEditElement(null)"
@@ -188,12 +188,12 @@
       <div class="empty-run-md"></div>
       <div [translate]="filterId == 1 && !query ?'elements.not_created':'message.common.search.not_found'" class="empty-text"></div>
       <div class="d-flex" *ngIf="filterId == 1 && !query">
-        <button
+        <!-- <button
           *ngIf="hasInspectorFeature()"
           [routerLink]="['/td', 'record', this.versionId]"
           [queryParams]="{isRecord: true}"
           class="theme-btn-clear-default ml-14"
-          [translate]="'elements.btn.record'"></button>
+          [translate]="'elements.btn.record'"></button> -->
         <button
           (click)="openAddEditElement(null)"
           class="theme-btn-primary ml-14 my-auto"
