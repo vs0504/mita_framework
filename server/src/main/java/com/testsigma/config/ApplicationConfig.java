@@ -3,14 +3,21 @@ package com.testsigma.config;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 @Log4j2
 @Configuration
 @Data
 @Component
 public class ApplicationConfig {
+
+  @Bean
+  public RestTemplate getRestTemplate() {
+    return new RestTemplate();
+  }
 
   @Value("${server.url}")
   private String serverUrl;

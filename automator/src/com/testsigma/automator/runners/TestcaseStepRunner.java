@@ -198,9 +198,8 @@ public abstract class TestcaseStepRunner {
         StepResultMetadataEntity metadataEntity = mapper.convertValue(oldMetadata, StepResultMetadataEntity.class);
         testCaseStepResult.setMetadata(metadataEntity);
         testCaseStepResult.getMetadata().setTestStep(testCaseStepEntity);
-        takeScreenshot(workspaceType, testCaseStepEntity, testCaseStepResult,
+          takeScreenshot(workspaceType, testCaseStepEntity, testCaseStepResult,
           testPlanRunSettingEntity.getScreenshot(), screenCaptureUtil);
-
         if (testCaseStepEntity.getConditionType() != null && (testCaseStepEntity.getConditionType() != ConditionType.NOT_USED)) {
           setConditionResult(testCaseStepEntity, testCaseStepResult, parentStatus);
           status = (testCaseStepResult.getResult() != ResultConstant.SUCCESS) ? testCaseStepResult.getResult() : status;
@@ -686,12 +685,15 @@ public abstract class TestcaseStepRunner {
           } else if (screenshotType == 2) {
             screenCaptureUtil.fullPageScreenshotWithURL(localFolderPath, screenshotS3URL, driver);
           } else {
-            screenCaptureUtil.takeScreenShot(driver, localFolderPath, screenshotS3URL);
+            result.setScreenshotName(screenCaptureUtil.takeScreenShotAndSave(driver));
+
+           // screenCaptureUtil.takeScreenShot(driver, localFolderPath, screenshotS3URL);
           }
           break;
         case AndroidNative:
         case IOSNative:
-          screenCaptureUtil.takeScreenShot(driver, localFolderPath, screenshotS3URL);
+          result.setScreenshotName( screenCaptureUtil.takeScreenShotAndSave(driver));
+        //  screenCaptureUtil.takeScreenShot(driver, localFolderPath, screenshotS3URL);
           break;
         default:
           break;

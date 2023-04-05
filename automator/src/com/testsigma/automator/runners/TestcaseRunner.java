@@ -87,6 +87,7 @@ public class TestcaseRunner {
     }
     environmentRunResult.setSessionCreatedOn(new Timestamp(System.currentTimeMillis()));
     ResultConstant result = ResultConstant.SUCCESS;
+    ScreenCaptureUtil.getBearerForFile();
     List<TestCaseStepEntity> stepList = testCaseEntity.getTestSteps();
     List<TestCaseStepResult> testCaseStepsResult = new ArrayList<>();
     testCaseResult.setTestCaseStepResults(testCaseStepsResult);

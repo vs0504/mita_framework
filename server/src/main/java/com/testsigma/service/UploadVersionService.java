@@ -9,9 +9,12 @@ package com.testsigma.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.testsigma.config.StorageServiceFactory;
 import com.testsigma.dto.BackupDTO;
+import com.testsigma.dto.UserRequestDto;
 import com.testsigma.dto.export.UploadVersionXMLDTO;
 import com.testsigma.event.EventType;
 import com.testsigma.event.UploadVersionEvent;
@@ -25,6 +28,7 @@ import com.testsigma.specification.SearchOperation;
 import com.testsigma.specification.UploadVersionSpecificationsBuilder;
 import com.testsigma.tasks.ReSignTask;
 import com.testsigma.util.HttpClient;
+import com.testsigma.web.request.UploadRequest;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -32,19 +36,29 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.entity.mime.content.FileBody;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.*;
+import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -58,6 +72,7 @@ import java.util.stream.Collectors;
 public class UploadVersionService extends XMLExportImportService<UploadVersion> {
   private final WebApplicationContext webApplicationContext;
   private final StorageServiceFactory storageServiceFactory;
+  private final RestTemplate restTemplate;
   private final ProvisioningProfileUploadService profileUploadService;
   private final ProvisioningProfileDeviceService profileDeviceService;
   private final ApplicationEventPublisher applicationEventPublisher;
@@ -106,8 +121,9 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
   public void uploadFile(File uploadedFile, UploadVersion uploadVersion) throws TestsigmaException {
 
     try {
-      String storageFilePath = uploadVersion.getS3Path();
-      uploadToStorage(storageFilePath, uploadedFile, uploadVersion);
+     // String storageFilePath = uploadVersion.getS3Path();
+    //  uploadToStorage(storageFilePath, uploadedFile, uploadVersion);
+      String storageFilePath =  uploadToStorageUsingPython(uploadedFile,uploadVersion);
       UploadVersionAppInfo uploadedVersion = appParserService.parseFile(uploadedFile);
       uploadVersion.setPath(storageFilePath);
       uploadVersion.setActivity(uploadedVersion.getAppActivity());
@@ -143,7 +159,68 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
     }
   }
 
+  public String uploadToStorageUsingPython(File uploadedFile, UploadVersion uploadVersion) {
+    String fileKey = "";
+    try {
+      String url = "https://msvc.machint.com/file-upload";
+      HttpHeaders headers = new HttpHeaders();
+      headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+      headers.set("Authorization",getBearerForFile());
 
+      MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
+
+      formData.add("file", new FileSystemResource(uploadedFile));
+      formData.add("uploadedBy","Machint");
+      formData.add("generatedDate",new Date());
+      formData.add("status","1");
+      formData.add("requestid","23576598");
+      formData.add("requestsrc","UI");
+      formData.add("requesttype","image");
+      HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(formData,headers);
+      Map response = restTemplate.postForObject(url, entity, Map.class);
+      System.out.println("response--->"+response);
+
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode jsonNode = mapper.valueToTree(response).get("responsedata");
+      fileKey = ""+jsonNode.get("file_name");
+      uploadVersion.setUploadStatus(UploadStatus.Completed);
+
+      return fileKey.substring(1, fileKey.length() - 1);
+
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      uploadVersion.setUploadStatus(UploadStatus.Failed);
+      return fileKey;
+    }
+  }
+
+  public String getBearerForFile() {
+    String url = "https://msvc.machint.com/login";
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
+    UserRequestDto userRequestDto = new UserRequestDto();
+    HttpEntity<Object> entity = new HttpEntity<>(userRequestDto,headers);
+    Map<String, String> urlParams = new HashMap<>();
+    UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(url);
+    try {
+      ResponseEntity<Map> response = restTemplate.exchange(builder.buildAndExpand(urlParams).toUri(), HttpMethod.valueOf("POST"), entity, Map .class);
+      String bearerTkoken = "Bearer " ;
+      if (response.getBody() != null) {
+        Map responseBody = response.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode jsonNode = mapper.valueToTree(responseBody).get("response");
+        String bearer = "" + jsonNode.get("jwt_token");
+        bearerTkoken = bearerTkoken+ bearer.substring(1, bearer.length() - 1);
+        System.out.println("bearerTkoken--->" + bearerTkoken);
+
+      }
+      return bearerTkoken;
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    return "";
+  }
 
   public List<UploadVersion> setSignedFlag(List<UploadVersion> versions, Long deviceId) {
     ProvisioningProfileDevice profileDevice = profileDeviceService.findByAgentDeviceId(deviceId);
