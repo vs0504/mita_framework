@@ -211,10 +211,11 @@
               [matTooltip]="'hint.message.common.extend' | translate"
               class="fa-expand-alt btn icon-btn ml-14"></i>
           </div>
-          <img
+          <img class="screen-short" [src]="testStepResult?.screenFile">
+          <!-- <img
             class="screen-short"
             [src]="testStepResult?.screenShotURL"
-            (error)="setBrokenImage()">
+            (error)="setBrokenImage()"> -->
         </div>
         <div
           class="theme-border theme-screen-short d-flex

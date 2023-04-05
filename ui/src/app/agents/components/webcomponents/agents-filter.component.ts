@@ -49,6 +49,7 @@ export class AgentsFilterComponent implements OnInit {
   }
 
   private eventFromFilterButton(res) {
-    return res.path.find(path => path.nodeName == "AGENTS-FILTER")
+    // return res.path.find(path => path.nodeName == "AGENTS-FILTER")
+    return null;
   }
 }

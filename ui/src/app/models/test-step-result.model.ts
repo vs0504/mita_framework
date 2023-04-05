@@ -29,6 +29,8 @@ export class TestStepResult extends ResultBase implements PageObject {
   @serializable
   public testCaseId: number;
   @serializable
+  public screenFile : any;
+  @serializable
   public stepId: Number;
   @serializable
   public stepGroupId: Number;

@@ -256,7 +256,7 @@ export class ActionStepResultDetailsComponent extends BaseComponent implements O
       width: '100vw',
       height: '100vh',
       position: {top: '0', left: '0', right: '0', bottom: '0'},
-      data: {screenShortUrl: this.testStepResult.screenShotURL},
+      data: {screenShortUrl: this.testStepResult.screenFile},
       panelClass: ['mat-dialog', 'full-width', 'rds-none']
     })
   }

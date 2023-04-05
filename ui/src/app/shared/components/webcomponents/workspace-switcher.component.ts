@@ -134,10 +134,10 @@ export class WorkspaceSwitcherComponent implements OnInit {
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate(['/dashboard']);
-    setTimeout(() => {
-      this.router.routeReuseStrategy.shouldReuseRoute = shouldReuseMethod;
-      this.router.onSameUrlNavigation = 'ignore';
-    }, 300);
+    // setTimeout(() => {
+    //   this.router.routeReuseStrategy.shouldReuseRoute = shouldReuseMethod;
+    //   this.router.onSameUrlNavigation = 'ignore';
+    // }, 300);
   }
 
   toggle() {

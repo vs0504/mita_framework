@@ -52,6 +52,8 @@ export class TestDataFilterComponent implements OnInit {
   }
 
   private eventFromFilterButton(res) {
-    return res.path.find(path => path.nodeName == "TEST-DATA-FILTER")
+    console.log("res-->",res);
+    // return res.path.find(path => path.nodeName == "TEST-DATA-FILTER")
+    return null
   }
 }
