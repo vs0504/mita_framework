@@ -2,7 +2,7 @@
 
 {
   "/api/*": {
-    "target": "http://localhost:9090/",
+    "target": "http://10.11.12.247:9090/",
       "secure": false,
      "changeOrigin":true,
      "logLevel": "debug",
