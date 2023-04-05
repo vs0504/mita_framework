@@ -81,7 +81,7 @@
               ],
               "outputHashing": "all",
               "showCircularDependencies": false,
-              "deployUrl": "http://10.11.12.247:4202/",
+              "deployUrl": "http://localhost:4202/",
               "budgets": [
                 {
                   "type": "initial",
