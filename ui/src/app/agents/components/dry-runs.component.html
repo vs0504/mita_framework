@@ -10,23 +10,23 @@
   </div>
   <div *ngIf="dryTestCaseResults?.numberOfElements" class="list-container">
     <div class="list-view lg-pm green-highlight" *ngFor="let dryTestCaseResult of dryTestCaseResults.content">
-      <div class="ts-col-15">
+      <div class="ts-col-15 align-items-center d-flex">
         <a [routerLink]="['/td', 'test_case_results', dryTestCaseResult.id]"
            class="d-flex pointer">
           <app-result-pie-chart-column [resultEntity]="dryTestCaseResult"></app-result-pie-chart-column>
         </a>
       </div>
-      <div class="text-dark ts-col-50">
+      <div class="text-dark ts-col-50 align-items-center d-flex">
         <a class="fz-14 text-break list-title"
            [routerLink]="['/td', 'test_case_results', dryTestCaseResult.id]">
           <span class="text-capitalize"
                 [textContent]="dryTestCaseResult.testCase.name"></span>
         </a>
       </div>
-      <div class="ts-col-15"
+      <div class="ts-col-15 align-items-center d-flex"
            [textContent]="dryTestCaseResult?.testDeviceResult?.startTime | date:'hh:mm a MMM d, yyyy'">
       </div>
-      <div class="ts-col-20">
+      <div class="ts-col-20 align-items-center d-flex">
         <app-duration-format
           [duration]="dryTestCaseResult.duration"></app-duration-format>
       </div>

@@ -202,7 +202,7 @@
           <div class="action-section">
             <a
               target="_self"
-              [href]="testStepResult.screenShotURL"
+              [href]="'/api/upload_versions/'+testStepResult.screenshotName+'/scrennshotDownload'"
               [matTooltip]="'hint.message.common.download' | translate"
               class="fa-download-thin btn icon-btn"
               [download]="testStepResult.screenShotURL"></a>
