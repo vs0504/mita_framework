@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.testsigma.automator.utilities.ScreenCaptureUtil;
 import com.testsigma.config.StorageServiceFactory;
 import com.testsigma.dto.BackupDTO;
 import com.testsigma.dto.UserRequestDto;
@@ -37,11 +38,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.entity.mime.content.FileBody;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -116,6 +119,39 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
         uploadVersion.getPath(),
                     StorageAccessLevel.READ, 300);
     return newPreSignedURL.toString();
+  }
+
+
+  public ResponseEntity<?> downloadFileUsingPython(UploadVersion uploadVersion) {
+
+
+    return getByteArrayResourceResponseEntity(uploadVersion.getFileName(), uploadVersion.getPath());
+
+  }
+
+  @NotNull
+  public ResponseEntity<ByteArrayResource> getByteArrayResourceResponseEntity(String fileName, String hashCode) {
+    byte[] fileContent = getFileInBytes(hashCode);
+    HttpHeaders headers = new HttpHeaders();
+    headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+ fileName);
+    ByteArrayResource resource = new ByteArrayResource(fileContent);
+    return ResponseEntity.ok().headers(headers).contentLength(fileContent.length)
+            .contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+  }
+
+  public byte[] getFileInBytes(String fileHashCode) {
+    RestTemplate restTemplate = new RestTemplate();
+    String fileUrl = "https://docs.machint.com/get-uploaded-file?file_name="+fileHashCode;
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
+    headers.add("Authorization",getBearerForFile());
+    HttpEntity<String> entity = new HttpEntity<>(headers);
+    ResponseEntity<byte[]> response = restTemplate.exchange(
+            fileUrl,
+            HttpMethod.GET,
+            entity,
+            byte[].class);
+    return response.getBody();
   }
 
   public void uploadFile(File uploadedFile, UploadVersion uploadVersion) throws TestsigmaException {

@@ -25,6 +25,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -67,10 +68,22 @@ public class UploadVersionsController {
 
 
   @GetMapping(value = "/{id}/download")
-  public void download(@PathVariable("id") Long id, HttpServletResponse response) throws ResourceNotFoundException, IOException {
+  public ResponseEntity<?> download(@PathVariable("id") Long id, HttpServletResponse response) throws ResourceNotFoundException, IOException {
     UploadVersion version = this.uploadVersionService.find(id);
-    String preSignedURL = this.uploadVersionService.getPreSignedURL(version);
-    response.sendRedirect(preSignedURL);
+    return uploadVersionService.downloadFileUsingPython(version);
   }
+
+  @GetMapping(value = "/{hashCode}/scrennshotDownload")
+  public ResponseEntity<?> scrennshotDownload(@PathVariable("hashCode") String hashCode, HttpServletResponse response) throws ResourceNotFoundException, IOException {
+    return uploadVersionService.getByteArrayResourceResponseEntity(hashCode+".png",hashCode);
+  }
+
+
+//  @GetMapping(value = "/{id}/download")
+//  public void download(@PathVariable("id") Long id, HttpServletResponse response) throws ResourceNotFoundException, IOException {
+//    UploadVersion version = this.uploadVersionService.find(id);
+//    String preSignedURL = this.uploadVersionService.getPreSignedURL(version);
+//    response.sendRedirect(preSignedURL);
+//  }
 
 }

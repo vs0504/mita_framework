@@ -47,7 +47,7 @@
          class="fa-close-alt text-t-secondary fz-12 pt-2 mr-5 pointer visibility-hidden" (click)="clearSearch()"></i>
     </div>
   <span *ngIf="canDrag" [translate]="'testcase.details.steps.re-oder'" class="p-20 fz-14"></span>
-  <div class="ml-auto d-flex ts-col-45 justify-content-end">
+  <div class="d-flex ts-col-60 justify-content-end">
     <button
       *ngIf="(!canDrag && !canShowBulkActions && stepLength > 1) || searchTerm"
       (click)="canDrag=true;isReorder=true;"

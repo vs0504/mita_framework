@@ -42,13 +42,13 @@
          <!-- <div *ngIf="version?.workspace?.isWeb && !testCase?.deleted">
             <app-chrome-record-button></app-chrome-record-button>
           </div>-->
-          <button
+          <!--button
             *ngIf="!testCase?.deleted"
             (click)="openTestCaseClone()"
             [matTooltip]="'hint.message.common.clone' | translate"
             class="btn icon-btn border-rds-2 ml-14">
             <i class="fa-copy-new"></i>
-          </button>
+          </button-->
           <a
             *ngIf="!testCase?.deleted"
             [routerLink]="['/td', testCase.workspaceVersionId, testCase.isStepGroup? 'step_groups':'cases', testCaseId, 'edit']"
