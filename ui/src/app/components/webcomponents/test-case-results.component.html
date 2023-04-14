@@ -79,6 +79,10 @@
                 class="text-dark text-decoration-none"
                 target="_blank" [translate]="'runs.details.export_as_xls'"></a>
             </li>
+            <li
+                  class="border-rds-10 btn rb-medium grey-on-hover text-dark">
+                  <div (click)="sendMail()" [textContent]="'runs.details.send_mail' | translate"> </div>
+            </li>
             <!-- <li
               class="border-rds-10 btn rb-medium grey-on-hover text-dark ml-0">
               <a

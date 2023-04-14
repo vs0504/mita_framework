@@ -89,10 +89,14 @@
             [textContent]="testPlan.name"></a>
           <div
             class="pt-4 text-t-secondary"
+          
+            [innerHTML]="(testPlan?.description)"></div>
+            <!-- <div
+            class="pt-4 text-t-secondary"
             [matTooltip]="(testPlan?.description?.length>151) ? testPlan?.description : ''"
             [innerHTML]="(testPlan?.description?.length>151) ?
             (testPlan?.description | slice:0:150)+'...':(testPlan?.description) ||
-              ('results.list_view.no_description' | translate) "></div>
+              ('results.list_view.no_description' | translate) "></div> -->
         </div>
         <div class="ts-col-15">
           <app-lab-environments-info

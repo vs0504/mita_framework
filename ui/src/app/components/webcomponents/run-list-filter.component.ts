@@ -48,6 +48,7 @@ export class RunListFilterComponent implements OnInit {
   reset() {
     this.filterResult = undefined;
     this.filterStartTime = undefined;
+    this.filterTriggeredType = undefined;
     this.filterApplied = false;
     this.filterAction.emit(false);
   }

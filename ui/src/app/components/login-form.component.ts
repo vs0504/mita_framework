@@ -5,6 +5,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthenticationConfigService} from "../services/authentication-config.service";
 import {AuthenticationConfig} from "../models/authentication-config.model";
 import {AuthenticationType} from "../shared/enums/authentication-type.enum";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login-form',
@@ -21,6 +22,7 @@ export class LoginFormComponent implements OnInit {
   @ViewChild('loginFormElm') loginFormElm: ElementRef<HTMLFormElement>;
 
   constructor(
+    private _snackBar: MatSnackBar,
     private router: Router,
     private authConfigService: AuthenticationConfigService,
     private sessionService: SessionService,
@@ -55,18 +57,28 @@ export class LoginFormComponent implements OnInit {
       this.loginForm.getRawValue()['username'],
       this.loginForm.getRawValue()['password'],
     ).subscribe(res => {
+      console.log("login response---->",res);
       this.inTransit = false;
       this.router.navigate(['dashboard']);
     }, err => {
+     
+      
       this.inTransit = false;
       this.error = err.error.error;
+      console.log("error while login--->",this.error)
+      if(this.error!=null){
       if(this.error.includes("user name and password is disabled") || this.error.includes("Problem in configured authentication provider")){
         this.router.navigate(['login'],{queryParams: {error:'bad_auth'}});
       } else if(this.error.includes("not activated")){
         this.router.navigate(['login'],{queryParams: {error:'not_activated'}})
-      } else{
+      } else {
         this.router.navigate(['login'],{queryParams: {error:'bad_cred'}});
-      }})
+      } }
+      else {
+        this._snackBar.open("Invalid credentials","",{"duration":2000});
+      }
+    
+    })
   }
 
   signupRedirect(){

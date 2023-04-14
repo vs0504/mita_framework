@@ -74,7 +74,7 @@ export class UrlConstantsService {
   public backupExportUrl = this.apiBase+ "/settings/backups/export" ;
   public backupXmlUrl = this.apiBase+ "/settings/backups/xml" ;
   public testProjectImportURL = this.apiBase + "/settings/backups/test_project";
-
+  public sendTestPlanResultURL = this.apiBase+"/test_plan_results/testPlanResultSendMail"
   public onboardingURL = this.apiBase + '/onboarding';
 
   public agentDownloadTagUrl = this.agentsUrl + "/download_tag";
