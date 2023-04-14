@@ -22,6 +22,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,6 +30,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Properties;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -176,6 +195,58 @@ public class TestPlanResultService {
     log.info("Publishing event - " + event.toString());
     applicationEventPublisher.publishEvent(event);
   }
+
+  public void sendEmail(String emailList,String plannedDate,String plannedTime, XLSUtil wrapper) {
+
+      // Sender's credentials
+      String from = "venkatakarthik199@gmail.com";
+      String password = "prdkdwjugrkfefnn";
+
+      // Mail server properties
+      Properties properties = new Properties();
+      properties.put("mail.smtp.auth", "true");
+      properties.put("mail.smtp.starttls.enable", "true");
+      properties.put("mail.smtp.host", "smtp.gmail.com");
+      properties.put("mail.smtp.port", "465");
+
+      // Create a session with the sender's credentials
+      Session session = Session.getInstance(properties, new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication(from, password);
+        }
+      });
+
+      try {
+
+        File file = new File("result.xlsx");
+        FileOutputStream outputStream = new FileOutputStream(file);
+        wrapper.getWorkbook().write(outputStream);
+        // Create a new message
+        Message message = new MimeMessage(session);
+
+        // Set the sender, recipient, and subject
+        message.setFrom(new InternetAddress(from));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailList));
+        message.setSubject("Email with Excel attachment");
+
+        // Create a data source and attach the Excel file to it
+        DataSource source = new FileDataSource(file);
+        DataHandler handler = new DataHandler(source);
+
+        // Attach the data handler to the message as an attachment
+        message.setDataHandler(handler);
+        message.setFileName("run-results.xlsx");
+
+        // Send the message
+        Transport.send(message);
+
+        System.out.println("Email sent successfully.");
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+  }
+
 
   public TestPlanResultEvent<TestPlanResult> createEvent(TestPlanResult testPlanResult, EventType eventType) {
     TestPlanResultEvent<TestPlanResult> event = new TestPlanResultEvent<>();
