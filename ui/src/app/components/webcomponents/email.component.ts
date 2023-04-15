@@ -39,8 +39,7 @@ export class EmailComponent  implements OnInit {
       emailList:this.emailPlanForm.value.email,
       testPlanId:this.testData.testPlanResult.testPlan.id,
       runId:this.testData.testPlanResult.id,
-      plannedDate:this.emailPlanForm.value.date,
-      plannedTime: this.emailPlanForm.value.time
+      plannedTime: this.emailPlanForm.value.date+" "+this.emailPlanForm.value.time+":00"
 
   };
 
