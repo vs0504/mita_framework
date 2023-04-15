@@ -191,7 +191,7 @@ public class TestPlanResultsController {
     TestPlanResult testPlanResult = testPlanResultService.findByIdAndtestPlanId(testPlanEmailDTO.getRunId(), testPlanEmailDTO.getTestPlanId());
     XLSUtil wrapper = new XLSUtil();
     testPlanResultService.export(testPlanResult, wrapper, false);
-    testPlanResultService.sendEmail(testPlanEmailDTO.getEmailList(),testPlanEmailDTO.getPlannedDate(),testPlanEmailDTO.getPlannedTime(),wrapper);
+    testPlanResultService.sendEmail(testPlanEmailDTO.getEmailList(),testPlanEmailDTO.getPlannedTime(),wrapper);
   }
 
 }

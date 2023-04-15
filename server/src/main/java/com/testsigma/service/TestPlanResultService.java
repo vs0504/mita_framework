@@ -30,30 +30,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.util.Properties;
-import javax.mail.Authenticator;
 import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
+import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-
-
+import javax.mail.internet.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -196,58 +184,6 @@ public class TestPlanResultService {
     applicationEventPublisher.publishEvent(event);
   }
 
-  public void sendEmail(String emailList,String plannedDate,String plannedTime, XLSUtil wrapper) {
-
-      // Sender's credentials
-      String from = "venkatakarthik199@gmail.com";
-      String password = "prdkdwjugrkfefnn";
-
-      // Mail server properties
-      Properties properties = new Properties();
-      properties.put("mail.smtp.auth", "true");
-      properties.put("mail.smtp.starttls.enable", "true");
-      properties.put("mail.smtp.host", "smtp.gmail.com");
-      properties.put("mail.smtp.port", "465");
-
-      // Create a session with the sender's credentials
-      Session session = Session.getInstance(properties, new Authenticator() {
-        @Override
-        protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication(from, password);
-        }
-      });
-
-      try {
-
-        File file = new File("result.xlsx");
-        FileOutputStream outputStream = new FileOutputStream(file);
-        wrapper.getWorkbook().write(outputStream);
-        // Create a new message
-        Message message = new MimeMessage(session);
-
-        // Set the sender, recipient, and subject
-        message.setFrom(new InternetAddress(from));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailList));
-        message.setSubject("Email with Excel attachment");
-
-        // Create a data source and attach the Excel file to it
-        DataSource source = new FileDataSource(file);
-        DataHandler handler = new DataHandler(source);
-
-        // Attach the data handler to the message as an attachment
-        message.setDataHandler(handler);
-        message.setFileName("run-results.xlsx");
-
-        // Send the message
-        Transport.send(message);
-
-        System.out.println("Email sent successfully.");
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-  }
-
-
   public TestPlanResultEvent<TestPlanResult> createEvent(TestPlanResult testPlanResult, EventType eventType) {
     TestPlanResultEvent<TestPlanResult> event = new TestPlanResultEvent<>();
     event.setEventData(testPlanResult);
@@ -317,6 +253,76 @@ public class TestPlanResultService {
     }
     this.findConsolidatedResultByTestPlanId(testPlanResult);
     this.export(testPlanResult,wrapper,true);
+  }
+
+  public void sendEmail(String emailList,String plannedTime,XLSUtil wrapper){
+    final String username = "venkatakarthik199@gmail.com";
+    final String password = "lcyevfdurctfretd";
+    String subject = "Mita result";
+    String body = "Please find the attached mail.";
+
+    Properties props = new Properties();
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.host", "smtp.gmail.com");
+    props.put("mail.smtp.port", "587");
+
+    Session session = Session.getInstance(props,
+            new javax.mail.Authenticator() {
+              protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(username, password);
+              }
+            });
+
+
+   // String dateString = plannedDate+" "+plannedTime+":00";//"2023-04-15 13:30:00"; // Custom date and time string
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Date customDate = new Date();// Format of the custom date and time string
+    try {
+      if(plannedTime.length()>3)
+      customDate = dateFormat.parse(plannedTime);
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+    try {
+
+      Message message = new MimeMessage(session);
+      message.setFrom(new InternetAddress(username));
+      message.setRecipients(Message.RecipientType.TO,
+              InternetAddress.parse(emailList));
+      message.setSubject(subject);
+
+      MimeBodyPart messageBodyPart = new MimeBodyPart();
+      messageBodyPart.setContent(body, "text/html");
+
+      Multipart multipart = new MimeMultipart();
+      multipart.addBodyPart(messageBodyPart);
+
+      MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+      File file = new File("result.xlsx");
+      FileOutputStream outputStream = new FileOutputStream(file);
+      wrapper.getWorkbook().write(outputStream);
+      attachmentBodyPart.attachFile(file);
+      attachmentBodyPart.setFileName("result.xlsx");
+
+      multipart.addBodyPart(attachmentBodyPart);
+
+      message.setContent(multipart);
+
+      Transport.send(message);
+
+      System.out.println("Email sent successfully!");
+
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+      }
+    }, customDate);
   }
 
   private void findConsolidatedResultByTestPlanId(TestPlanResult testPlanResult) {

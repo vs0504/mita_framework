@@ -8,6 +8,5 @@ public class TestPlanEmailDTO {
     private String emailList;
     private Long testPlanId;
     private Long runId;
-    private String plannedDate;
     private String plannedTime;
 }
