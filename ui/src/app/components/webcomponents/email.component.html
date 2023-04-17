@@ -11,11 +11,15 @@
                 mat-dialog-close>
         </button>
       </div>
+     
       <div class="theme-overlay-content ts-form pt-10">
+        <div class="form-group pb-18 mt-n25" style="position: absolute!important;" *ngIf="emailValidationMessage">
+          <label [translate]="'runs.details.mail_validation_message'" class="text-danger"></label>
+        </div>
         <div class="form-group">
           <div>
             <label
-            class="details-title"
+            class="details-title field"
             [translate]="'runs.details.mail_label'"></label>
             <input
             class="form-control"
@@ -28,11 +32,12 @@
               <div class="form-group pb-20 ts-col-45">
                 <div>
                   <label
-            class="details-title"
+            class="details-title field"
             [translate]="'runs.details.mail_date'"></label>
                   <input
                     class="form-control field flex-row"
                     type="date"
+                    [min]="today"
                     id="date"
                     name="date"
                     [formControlName]="['date']">
@@ -40,7 +45,7 @@
               </div>
               <div class="form-group pb-20 ts-col-45">
                 <label
-            class="details-title"
+            class="details-title field"
             [translate]="'runs.details.mail_time'"></label>
                 <input
                   class="form-control field flex-row"

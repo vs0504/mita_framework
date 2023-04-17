@@ -1,13 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup,FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TestPlanResult } from 'app/models/test-plan-result.model';
 import { HttpHeadersService } from 'app/shared/services/http-headers.service';
 import { UrlConstantsService } from 'app/shared/services/url.constants.service';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
-
-import {  MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
   selector: 'app-email',
@@ -15,8 +12,9 @@ import {  MatChipInputEvent } from '@angular/material/chips';
 })
 export class EmailComponent  implements OnInit {
     @Input('formGroup') emailPlanForm : FormGroup;
-    @Inject(MAT_DIALOG_DATA) public testPlanResult: { data: any }
-    //@Input() testPlanResult: TestPlanResult;
+    @Inject(MAT_DIALOG_DATA) public testPlanResult: { data: any };
+    public today:any;
+    public emailValidationMessage: any;
     constructor(
       @Inject(MAT_DIALOG_DATA) public testData: {testPlanResult:TestPlanResult},
       private formBuilder: FormBuilder, 
@@ -28,37 +26,33 @@ export class EmailComponent  implements OnInit {
         this.emailPlanForm = this.formBuilder.group({
             email: [''],
             date:[''],
-            time:['']
+            time:[''],
+
         });
+        this.today = new Date().toLocaleDateString('sv');
     }
   emailHandler(){
-    console.log("this----->",this)
-  
-   
-    let requestData={
-      emailList:this.emailPlanForm.value.email,
-      testPlanId:this.testData.testPlanResult.testPlan.id,
-      runId:this.testData.testPlanResult.id,
-      plannedTime: this.emailPlanForm.value.date+" "+this.emailPlanForm.value.time+":00"
+    const expression: RegExp = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    const result: boolean = expression.test(this.emailPlanForm.value.email);
+    if(result){
+      this.emailValidationMessage = "";
+      let requestData={
+        emailList:this.emailPlanForm.value.email,
+        testPlanId:this.testData.testPlanResult.testPlan.id,
+        runId:this.testData.testPlanResult.id,
+        plannedTime: this.emailPlanForm.value.date+" "+this.emailPlanForm.value.time+":00"
 
-  };
-
-  this.http.post(this.URLConstants.sendTestPlanResultURL, requestData, {headers: this.httpHeaders.contentTypeApplication}).subscribe(data => {
+      };
+    this.http.post(this.URLConstants.sendTestPlanResultURL, requestData, {headers: this.httpHeaders.contentTypeApplication}).subscribe(data => {
     console.log("data--->",data)
 }, error => {
   console.log("error-->",error);
 });
-//alert("wait for some time");
-  // console.log("requestData--->",requestData);
-  //   axios.post(this.URLConstants.sendTestPlanResultURL, requestData,{headers: this.httpHeaders.contentTypeApplication})
-  //   .then(response => {
-  //     console.log("response--->",response)
-  //   })
-  //   .catch(error => {
-        
-  //       console.error('There was an error!', error);
-  //   });
     this.emailDialogRef.close();
+}
+else{
+  this.emailValidationMessage = "Invalid email";
+}
   }
 
 }

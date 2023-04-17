@@ -1656,6 +1656,7 @@
   "runs.details.send_mail": "Send Mail",
   "runs.details.mail_title": "Mail info",
   "runs.details.mail_label": "Email ",
+  "runs.details.mail_validation_message": "Invalid Email address",
   "runs.details.mail_date":"Date",
   "runs.details.mail_time":"Time",
   "ui_identifiers.import.title": "Import",

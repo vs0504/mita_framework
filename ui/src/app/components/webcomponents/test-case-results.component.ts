@@ -79,7 +79,7 @@ export class TestCaseResultsComponent extends BaseComponent implements OnInit {
     console.log("You clicked mail button");
     this.emailDialogRef = this.matModal.open(EmailComponent, {
       backdropClass: 'cdk-overlay-transparent-backdrop',
-      height: '375px',
+      height: '405px',
       width: '364px',
       data: {testPlanResult:this.testPlanResult},
       panelClass: 'mat-overlay'

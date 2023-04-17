@@ -279,7 +279,7 @@ public class TestPlanResultService {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     Date customDate = new Date();// Format of the custom date and time string
     try {
-      if(plannedTime.length()>3)
+      if(plannedTime.length()>4)
       customDate = dateFormat.parse(plannedTime);
     } catch (Exception e){
       e.printStackTrace();
