@@ -256,10 +256,10 @@ public class TestPlanResultService {
   }
 
   public void sendEmail(String emailList,String plannedTime,XLSUtil wrapper){
-    final String username = "venkatakarthik199@gmail.com";
-    final String password = "lcyevfdurctfretd";
-    String subject = "Mita result";
-    String body = "Please find the attached mail.";
+    final String username = "alerts@machint.com";
+    final String password = "Mac&Vel@9900";
+    String subject = "MITA run results";
+    String body = "Please find the MITA run results in the below attachment. ";
 
     Properties props = new Properties();
     props.put("mail.smtp.auth", "true");
