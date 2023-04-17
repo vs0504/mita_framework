@@ -16,15 +16,15 @@
           <app-result-pie-chart-column [resultEntity]="environmentResult"></app-result-pie-chart-column>
         </a>
       </div>
-      <div class="text-dark ts-col-50">
+      <div class="text-dark ts-col-50 d-flex align-items-center">
         <a class="list-title"
            [routerLink]="['/td', 'machine_results', environmentResult.id]">
           <span class="text-capitalize pr-10" [textContent]="environmentResult.testDevice.title"></span>
         </a>
       </div>
-      <div class="ts-col-15"
+      <div class="ts-col-15 d-flex align-items-center"
            [textContent]="environmentResult.startTime | date:'hh:mm a MMM d, yyyy'"></div>
-      <div class="ts-col-20">
+      <div class="ts-col-20 d-flex align-items-center">
         <app-duration-format
           [duration]="environmentResult.duration"></app-duration-format>
       </div>

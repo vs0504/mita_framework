@@ -7,6 +7,7 @@
 
 package com.testsigma.controller;
 
+import com.testsigma.dto.TestPlanEmailDTO;
 import com.testsigma.dto.TestPlanResultDTO;
 import com.testsigma.exception.ResourceNotFoundException;
 import com.testsigma.mapper.TestPlanResultMapper;
@@ -183,6 +184,14 @@ public class TestPlanResultsController {
     XLSUtil wrapper = new XLSUtil();
     testPlanResultService.export(testPlanResult, wrapper, false);
     wrapper.writeToStream(request, response, testPlanResult.getTestPlan().getName());
+  }
+
+  @RequestMapping(value = {"/testPlanResultSendMail"}, method = RequestMethod.POST)
+  public void sendEmail( @RequestBody TestPlanEmailDTO testPlanEmailDTO) throws ResourceNotFoundException {
+    TestPlanResult testPlanResult = testPlanResultService.findByIdAndtestPlanId(testPlanEmailDTO.getRunId(), testPlanEmailDTO.getTestPlanId());
+    XLSUtil wrapper = new XLSUtil();
+    testPlanResultService.export(testPlanResult, wrapper, false);
+    testPlanResultService.sendEmail(testPlanEmailDTO.getEmailList(),testPlanEmailDTO.getPlannedTime(),wrapper);
   }
 
 }

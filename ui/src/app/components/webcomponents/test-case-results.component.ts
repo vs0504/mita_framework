@@ -4,6 +4,7 @@ import {TestCaseResultService} from "../../services/test-case-result.service";
 import {InfiniteScrollableDataSource} from "../../data-sources/infinite-scrollable-data-source";
 import {ResultConstant} from "../../enums/result-constant.enum";
 import {fromEvent, Subscription} from "rxjs";
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {debounceTime, distinctUntilChanged, filter, tap} from "rxjs/operators";
 import { AuthenticationGuard } from 'app/shared/guards/authentication.guard';
 import { NotificationsService } from 'angular2-notifications';
@@ -11,6 +12,7 @@ import {TranslateService} from '@ngx-translate/core';
 import {ToastrService} from "ngx-toastr";
 import {BaseComponent} from "../../shared/components/base.component";
 import {EntityType} from "../../enums/entity-type.enum";
+import { EmailComponent } from './email.component';
 
 @Component({
   selector: 'app-test-case-results',
@@ -31,6 +33,7 @@ export class TestCaseResultsComponent extends BaseComponent implements OnInit {
   public testCaseResultsDataSource: InfiniteScrollableDataSource;
   public filterResult: ResultConstant[];
   public isFilterApplied: Boolean;
+  public emailDialogRef: MatDialogRef<EmailComponent>;
   public autoRefreshSubscription: Subscription;
   public autoRefreshInterval: number = 10000;
   public isDisabledAutoRefresh: boolean = false;
@@ -45,6 +48,7 @@ export class TestCaseResultsComponent extends BaseComponent implements OnInit {
     public authGuard: AuthenticationGuard,
     public notificationsService: NotificationsService,
     public translate: TranslateService,
+    public matModal: MatDialog,
     public toastrService: ToastrService) {
     super(authGuard, notificationsService, translate, toastrService);
   }
@@ -70,7 +74,18 @@ export class TestCaseResultsComponent extends BaseComponent implements OnInit {
     this.autoRefreshInterval = event;
     this.autoRefreshIntervalAction.emit(this.autoRefreshInterval);
   }
+  
+  sendMail(){
+    console.log("You clicked mail button");
+    this.emailDialogRef = this.matModal.open(EmailComponent, {
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      height: '405px',
+      width: '364px',
+      data: {testPlanResult:this.testPlanResult},
+      panelClass: 'mat-overlay'
+    });
 
+  }
 
   toggleFilter() {
     this.showRunDetails = false;

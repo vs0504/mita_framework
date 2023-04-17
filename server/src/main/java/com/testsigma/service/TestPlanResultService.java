@@ -22,6 +22,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -29,12 +30,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import javax.mail.Message;
+import javax.mail.Multipart;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -246,6 +253,76 @@ public class TestPlanResultService {
     }
     this.findConsolidatedResultByTestPlanId(testPlanResult);
     this.export(testPlanResult,wrapper,true);
+  }
+
+  public void sendEmail(String emailList,String plannedTime,XLSUtil wrapper){
+    final String username = "alerts@machint.com";
+    final String password = "Mac&Vel@9900";
+    String subject = "MITA run results";
+    String body = "Please find the MITA run results in the below attachment. ";
+
+    Properties props = new Properties();
+    props.put("mail.smtp.auth", "true");
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.host", "smtp.gmail.com");
+    props.put("mail.smtp.port", "587");
+
+    Session session = Session.getInstance(props,
+            new javax.mail.Authenticator() {
+              protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(username, password);
+              }
+            });
+
+
+   // String dateString = plannedDate+" "+plannedTime+":00";//"2023-04-15 13:30:00"; // Custom date and time string
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    Date customDate = new Date();// Format of the custom date and time string
+    try {
+      if(plannedTime.length()>4)
+      customDate = dateFormat.parse(plannedTime);
+    } catch (Exception e){
+      e.printStackTrace();
+    }
+    Timer timer = new Timer();
+    timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+    try {
+
+      Message message = new MimeMessage(session);
+      message.setFrom(new InternetAddress(username));
+      message.setRecipients(Message.RecipientType.TO,
+              InternetAddress.parse(emailList));
+      message.setSubject(subject);
+
+      MimeBodyPart messageBodyPart = new MimeBodyPart();
+      messageBodyPart.setContent(body, "text/html");
+
+      Multipart multipart = new MimeMultipart();
+      multipart.addBodyPart(messageBodyPart);
+
+      MimeBodyPart attachmentBodyPart = new MimeBodyPart();
+      File file = new File("result.xlsx");
+      FileOutputStream outputStream = new FileOutputStream(file);
+      wrapper.getWorkbook().write(outputStream);
+      attachmentBodyPart.attachFile(file);
+      attachmentBodyPart.setFileName("result.xlsx");
+
+      multipart.addBodyPart(attachmentBodyPart);
+
+      message.setContent(multipart);
+
+      Transport.send(message);
+
+      System.out.println("Email sent successfully!");
+
+    }
+    catch (Exception e) {
+      e.printStackTrace();
+    }
+      }
+    }, customDate);
   }
 
   private void findConsolidatedResultByTestPlanId(TestPlanResult testPlanResult) {

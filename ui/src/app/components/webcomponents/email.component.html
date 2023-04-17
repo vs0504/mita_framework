@@ -1,0 +1,77 @@
+
+<form [formGroup]="emailPlanForm"
+      class="ts-form ts-col-100 h-100">
+      
+<div class="theme-overlay-container">
+    <div class="theme-overlay-header">
+        <span class="theme-overlay-title" [translate]="'runs.details.mail_title'"></span>
+        <button class="theme-overlay-close"
+                type="button"
+                [matTooltip]="'hint.message.common.close' | translate"
+                mat-dialog-close>
+        </button>
+      </div>
+     
+      <div class="theme-overlay-content ts-form pt-10">
+        <div class="form-group pb-18 mt-n25" style="position: absolute!important;" *ngIf="emailValidationMessage">
+          <label [translate]="'runs.details.mail_validation_message'" class="text-danger"></label>
+        </div>
+        <div class="form-group">
+          <div>
+            <label
+            class="details-title field"
+            [translate]="'runs.details.mail_label'"></label>
+            <input
+            class="form-control"
+            required
+            name="email"
+            formControlName="email"
+            autofocus/>
+          </div>
+            <div class="d-flex justify-content-between mt-20">
+              <div class="form-group pb-20 ts-col-45">
+                <div>
+                  <label
+            class="details-title field"
+            [translate]="'runs.details.mail_date'"></label>
+                  <input
+                    class="form-control field flex-row"
+                    type="date"
+                    [min]="today"
+                    id="date"
+                    name="date"
+                    [formControlName]="['date']">
+                </div>
+              </div>
+              <div class="form-group pb-20 ts-col-45">
+                <label
+            class="details-title field"
+            [translate]="'runs.details.mail_time'"></label>
+                <input
+                  class="form-control field flex-row"
+                  type="time"
+                  id="time"
+                  name="time"
+                  [formControlName]="['time']">
+                <!-- <div
+                  [translate]="'schedule.plan.invalid_time'"
+                  class="error"></div> -->
+              </div>
+            </div>
+            </div>
+            <div>
+            </div>
+           
+            <div class="theme-overlay-footer">
+                <button
+                  class="theme-btn-clear-default"
+                  [translate]="'btn.common.close'"
+                  mat-dialog-close></button>
+                <button class="theme-btn-primary"
+                        (click)="emailHandler()"
+                        [translate]="'rest.step.btn.send'"></button>
+              </div>
+        
+        </div>
+  </div>
+</form>
