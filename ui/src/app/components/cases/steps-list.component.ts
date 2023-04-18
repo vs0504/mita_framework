@@ -86,6 +86,7 @@ export class StepsListComponent extends BaseComponent implements OnInit {
   public addonAction: Page<AddonNaturalTextAction>;
   public saving: boolean = false;
   public activeTab: string ='steps';
+  public cdKScrollStepGroupId: number;
 
   constructor(
     private route: ActivatedRoute,
@@ -110,6 +111,11 @@ export class StepsListComponent extends BaseComponent implements OnInit {
     }else{
     this.route.parent.params.subscribe((params: Params) => {
       this.fetchTestCase(params.testCaseId);
+    });
+    this.route.parent.queryParams.subscribe((queryParams: Params) => {
+      if(queryParams['stepGroupId']){
+        this.cdKScrollStepGroupId = parseInt(queryParams['stepGroupId']);
+      }
     });
     }
     this.testCaseService.refresh.subscribe((id)=>{

@@ -10,7 +10,9 @@
 import {Component, OnInit} from '@angular/core';
 import {InfiniteScrollableDataSource} from "../../data-sources/infinite-scrollable-data-source";
 import {TestCaseService} from "../../services/test-case.service";
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TestCase} from "../../models/test-case.model";
+
 
 @Component({
   selector: 'app-test-step-test-cases',
@@ -20,8 +22,11 @@ import {ActivatedRoute} from '@angular/router';
 export class StepGroupTestCasesComponent implements OnInit {
   public testCases: InfiniteScrollableDataSource;
   public testCaseId: number;
+  public groupTestCase: TestCase;
+
 
   constructor(
+    public router: Router,
     private route: ActivatedRoute,
     private testCaseService: TestCaseService) {
   }
@@ -29,6 +34,13 @@ export class StepGroupTestCasesComponent implements OnInit {
   ngOnInit(): void {
     this.testCaseId = this.route.parent.snapshot.params.testCaseId;
     this.fetchTestCases();
+  }
+
+  navigateToCase(testCaseId: number){
+    this.router.navigate(
+      ['/td', 'cases',  testCaseId],
+      {queryParams: {"stepGroupId": this.groupTestCase?.id}}
+    )
   }
 
   fetchTestCases() {

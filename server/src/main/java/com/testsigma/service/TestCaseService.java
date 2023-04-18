@@ -125,8 +125,7 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
       AgentExecutionService agentExecutionService = agentExecutionServiceObjectFactory.getObject();
       agentExecutionService.setTestPlan(testPlan);
       agentExecutionService.checkTestCaseIsInReadyState(testCase);
-      agentExecutionService
-        .loadTestCase(testDataSetName, testCaseEntityDTO, testPlan, testDevice, workspace);
+      agentExecutionService.loadTestCase(testDataSetName, testCaseEntityDTO, testPlan, testDevice, workspace);
     } catch (TestsigmaNoMinsAvailableException e) {
       log.debug("======= Testcase Error=========");
       log.error(e.getMessage(), e);
@@ -249,6 +248,9 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
   }
 
   public Integer markAsDelete(List<Long> ids) {
+      for(Long id : ids) {
+      this.testStepService.deleteStepsByStepGroupId(id);
+    }
     return testCaseRepository.markAsDelete(ids);
   }
 
