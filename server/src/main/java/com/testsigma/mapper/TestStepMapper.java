@@ -11,19 +11,25 @@ package com.testsigma.mapper;
 
 import com.testsigma.automator.entity.DefaultDataGeneratorsEntity;
 import com.testsigma.dto.*;
+import com.testsigma.dto.export.ForLoopConditionXMLDTO;
 import com.testsigma.dto.export.TestStepXMLDTO;
 import com.testsigma.model.*;
 import com.testsigma.web.request.TestStepRequest;
-import com.testsigma.web.request.testproject.TestProjectTestStepRequest;
 import org.mapstruct.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE,
   nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
   nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
 public interface TestStepMapper {
+  @Mapping(target = "dataMap", expression = "java(testStep.getDataMap())")
+  @Mapping(target = "forLoopCondition", expression = "java(this.mapForLoopConditionDTO(testStep.getForLoopConditions()))")
+  TestStepXMLDTO mapTestStep(TestStep testStep);
+
   List<TestStepXMLDTO> mapTestSteps(List<TestStep> testSteps);
+
   List<TestStepDTO> mapTestStepsToDTO(List<TestStep> testSteps);
   TestStep map(TestStepDTO testStepDTO);
 
@@ -34,14 +40,18 @@ public interface TestStepMapper {
 
 //  @Mapping(target = "testDataFunction", expression = "java(this.mapTestDataFunction(testStepDataMap.getTestDataFunction()))")
   @Mapping(target = "forLoop", expression = "java(this.mapForLoop(testStepDataMap.getForLoop()))")
+  @Mapping(target = "testData", expression = "java(this.mapTestData(testStepDataMap.getTestData()))")
   TestStepDataMapEntityDTO mapDataMap(TestStepDataMap testStepDataMap);
 
   TestStepForLoopEntityDTO mapForLoop(TestStepForLoop testStepForLoop);
 
+  Map<String, TestStepNlpDataEntityDTO> mapTestData(Map<String, TestStepNlpData> testDataMap);
+
   DefaultDataGeneratorsEntity mapTestDataFunction(DefaultDataGeneratorsDetails defaultDataGeneratorsDetails);
 
-
+  @Mapping(target = "forLoopCondition", expression = "java(this.mapForLoopConditionDTO(testStep.getForLoopConditions()))")
   TestStepDTO mapDTO(TestStep testStep);
+
   @Mapping(target = "status", source = "expectedResponseStatus")
   RestStepDTO map(RestStep restStep);
 
@@ -65,16 +75,9 @@ public interface TestStepMapper {
   @Mapping(target = "preRequisiteStepId", expression = "java(request.getPreRequisiteStepId())")
   @Mapping(target = "naturalTextActionId", expression = "java(request.getNaturalTextActionId())")
   @Mapping(target = "addonActionId", expression = "java(request.getAddonActionId())")
-  @Mapping(target = "testData", expression = "java(request.getTestData())")
-  @Mapping(target = "testDataType", expression = "java(request.getTestDataType())")
-  @Mapping(target = "element", expression = "java(request.getElement())")
-  @Mapping(target = "attribute", expression = "java(request.getAttribute())")
-  @Mapping(target = "forLoopStartIndex", expression = "java(request.getForLoopStartIndex())")
-  @Mapping(target = "forLoopEndIndex", expression = "java(request.getForLoopEndIndex())")
-  @Mapping(target = "forLoopTestDataId", expression = "java(request.getForLoopTestDataId())")
-  @Mapping(target = "addonTDF", expression = "java(request.getAddonTDF())")
-  @Mapping(target = "testDataFunctionId", expression = "java(request.getTestDataFunctionId())")
-  @Mapping(target = "testDataFunctionArgs", expression = "java(request.getTestDataFunctionArgs())")
+  @Mapping(target = "dataMap", expression = "java(request.getDataMap())")
+  @Mapping(target = "element", expression = "java(request.getDataMap().getElement())")
+  @Mapping(target = "attribute", expression = "java(request.getDataMap().getAttribute())")
   @Mapping(target = "maxIterations", expression = "java(request.getMaxIterations())")
   void merge(TestStepRequest request, @MappingTarget TestStep testStep);
 
@@ -91,5 +94,36 @@ public interface TestStepMapper {
   @Mapping(target = "authorizationType", expression = "java(org.apache.commons.lang3.ObjectUtils.defaultIfNull(restStepDTO.getAuthorizationType(), com.testsigma.model.RestStepAuthorizationType.NONE).ordinal())")
   @Mapping(target = "authorizationValue", expression = "java(org.apache.commons.lang3.ObjectUtils.defaultIfNull(restStepDTO.getAuthorizationValue(), \"\").toString())")
   RestStepEntityDTO mapStepEntity(RestStepDTO restStepDTO);
-}
 
+
+  List<ForLoopConditionXMLDTO> mapToCloudForConditions(List<TestStep> testSteps);
+
+  default ForLoopCondition mapForLoopCondition(List<ForLoopCondition> forLoopCondition) {
+    if(forLoopCondition != null && forLoopCondition.size() > 0) {
+      return forLoopCondition.get(0);
+    }
+    return null;
+  }
+
+  default ForLoopConditionDTO mapForLoopConditionDTO(List<ForLoopCondition> forLoopCondition) {
+    if(forLoopCondition != null && forLoopCondition.size() > 0) {
+      return mapDTO(forLoopCondition.get(0));
+    }
+    return null;
+  }
+
+  ForLoopConditionDTO mapDTO(ForLoopCondition forLoopCondition);
+
+  default ForLoopConditionXMLDTO mapToCloudForCondition(TestStep testStep) {
+    ForLoopConditionXMLDTO condition = new ForLoopConditionXMLDTO();
+    condition.setTestCaseId(testStep.getTestCaseId());
+    condition.setTestStepId(testStep.getId());
+    condition.setTestDataProfileId(testStep.getDataMap().getForLoop().getTestDataId());
+    condition.setLeftParamValue(String.valueOf(testStep.getDataMap().getForLoop().getStartIndex()));
+    condition.setRightParamValue(String.valueOf(testStep.getDataMap().getForLoop().getEndIndex()));
+    condition.setLeftParamType(TestDataType.raw);
+    condition.setRightParamType(TestDataType.raw);
+    condition.setIterationType(IterationType.INDEX);
+    return condition;
+  }
+}

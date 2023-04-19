@@ -28,6 +28,8 @@ public interface ElementRepository extends BaseRepository<Element, Long> {
 
   List<Element> findByNameInAndWorkspaceVersionId(List<String> names, Long workspaceVersionId);
 
+  Page<Element> findByNameAndWorkspaceVersionId(Pageable pageable, String name, Long workspaceVersionId);
+
   @Query("SELECT element FROM Element element " +
           "WHERE (element.workspaceVersionId =:versionId) " +
           "AND element.locatorValue =:locValue AND element.locatorType =:locType AND " +

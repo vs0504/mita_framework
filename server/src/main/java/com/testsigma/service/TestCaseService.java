@@ -18,6 +18,7 @@ import com.testsigma.dto.export.TestCaseXMLDTO;
 import com.testsigma.event.EventType;
 import com.testsigma.event.TestCaseEvent;
 import com.testsigma.exception.*;
+import com.testsigma.mapper.ForLoopConditionsMapper;
 import com.testsigma.mapper.TestCaseMapper;
 import com.testsigma.mapper.TestStepMapper;
 import com.testsigma.model.*;
@@ -69,6 +70,8 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
   private final TestDataProfileService testDataService;
   private final EntityExternalMappingService entityExternalMappingService;
   private final IntegrationsService integrationsService;
+  private final ForLoopConditionService forLoopConditionsService;
+  private final ForLoopConditionsMapper forLoopConditionsMapper;
 
   public Page<TestCase> findAll(Specification<TestCase> specification, Pageable pageable) {
     return testCaseRepository.findAll(specification, pageable);
@@ -331,7 +334,15 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
         if(testDataProfileStep != null)
           step.setTestDataProfileStepId(testDataProfileStep.getId());
         step.setParentStep(parentStep);
-        step = this.testStepService.create(step);
+        step = this.testStepService.create(step, false);
+        if(step.getConditionType() != null && step.getConditionType() == TestStepConditionType.LOOP_FOR) {
+          ForLoopCondition parentForLoopCondition = forLoopConditionsService.findByTestStepId(parent.getId()).get();
+          ForLoopCondition newForLoopCondition;
+          newForLoopCondition = forLoopConditionsMapper.copy(parentForLoopCondition);
+          newForLoopCondition.setId(null);
+          newForLoopCondition.setTestStepId(step.getId());
+          forLoopConditionsService.save(newForLoopCondition);
+        }
         parentStepIds.put(parent.getId(), step);
         newSteps.add(step);
         position++;
@@ -357,10 +368,10 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
             && step.getParentId() == null) {
       step.setConditionType(TestStepConditionType.CONDITION_IF);
     }
-    this.testStepService.create(step);
+    this.testStepService.create(step, false);
     for (TestStep parent : steps) {
       TestStep destroyStep = this.testStepService.find(parent.getId());
-      this.testStepService.destroy(destroyStep);
+      this.testStepService.destroy(destroyStep, false);
     }
   }
 

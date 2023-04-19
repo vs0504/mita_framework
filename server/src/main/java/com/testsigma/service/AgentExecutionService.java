@@ -11,6 +11,7 @@ package com.testsigma.service;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.testsigma.automator.entity.ConditionType;
 import com.testsigma.automator.entity.TestDeviceEntity;
 import com.testsigma.config.ApplicationConfig;
 import com.testsigma.config.StorageServiceFactory;
@@ -104,6 +105,7 @@ public class AgentExecutionService {
   private List<TestCaseDataDrivenResult> dataDrivenResultsReRunList;
   private Boolean isDataDrivenRerun;
   private final XrayCloudService xrayCloudService;
+  private final ForLoopConditionService forLoopConditionService;
 
 
   // ################################################  START  ###################################################
@@ -1155,11 +1157,11 @@ public class AgentExecutionService {
     testCaseResultService.markTestCaseResultAsInProgress(testCaseResult);
   }
 
-  private Map<Long, Integer> getStepGroupParentForLoopStepIdIndexes(TestCaseEntityDTO testCaseEntityDTO){
-    Map<Long, Integer> dataIndex = testCaseEntityDTO.getStepGroupParentForLoopStepIdIndexes();
+  private Map<Long, Long> getStepGroupParentForLoopStepIdIndexes(TestCaseEntityDTO testCaseEntityDTO){
+    Map<Long, Long> dataIndex = testCaseEntityDTO.getStepGroupParentForLoopStepIdTestDataSetMap();
     if(!testCaseEntityDTO.getIsStepGroup()){
       dataIndex.put(ParameterTestDataProcessor.OVERRIDE_STEP_GROUP_STEP_WITH_TEST_CASE_PROFILE_ID,
-              testCaseEntityDTO.getTestDataIndex() == null ? 0 : testCaseEntityDTO.getTestDataIndex());
+              testCaseEntityDTO.getTestDataIndex() == null ? 0L : testCaseEntityDTO.getTestDataIndex().longValue());
     }
     return dataIndex;
   }
@@ -1167,7 +1169,8 @@ public class AgentExecutionService {
   private boolean isStepInsideForLoop(TestCaseStepEntityDTO testCaseStepEntity) throws ResourceNotFoundException {
     if (testCaseStepEntity.getParentId() != null) {
       TestStep testStep = testStepService.find(testCaseStepEntity.getParentId());
-      return (testStep.getType() == TestStepType.FOR_LOOP);
+      return (testStep.getType() == TestStepType.FOR_LOOP) ||
+              (testStep.getConditionType() != null && testStep.getConditionType() == TestStepConditionType.LOOP_FOR);
     }
     return false;
   }
@@ -1261,7 +1264,7 @@ public class AgentExecutionService {
     if(testDataPropertiesEntity.getTestDataValue().startsWith("http")) {
       newUrl = new URL(testDataPropertiesEntity.getTestDataValue());
     } else {
-      String fileUrl = testDataPropertiesEntity.getTestDataValue().replace("mita-storage:/", "");
+      String fileUrl = testDataPropertiesEntity.getTestDataValue().replace("testsigma-storage:/", "");
       newUrl = storageService.generatePreSignedURL(fileUrl, StorageAccessLevel.READ, 180);
     }
     if(TestPlanLabType.TestsigmaLab == testDevice.getTestPlanLabType()) {
@@ -1298,35 +1301,44 @@ public class AgentExecutionService {
         osVersion = agentDevice.getPlatformOsVersion();
         platform = agentDevice.getOsName().getPlatform();
       }
+      log.info("Platform: " + platform + ", OsVersion: " + osVersion + ", WorkspaceType: " + testDevice.getWorkspaceVersion().getWorkspace().getWorkspaceType() + ", TestPlanLabType: " + testPlanLabType);
       platformOsVersion = platformsService.getPlatformOsVersion(platform, osVersion, testDevice.getWorkspaceVersion().getWorkspace().getWorkspaceType(), testPlanLabType);
     }
     else {
+      log.info("PlatformOsVersionId:" + testDevice.getPlatformOsVersionId() + ", TestPlanLabType: " + testPlanLabType);
       platformOsVersion = platformsService.getPlatformOsVersion(testDevice.getPlatformOsVersionId(), testPlanLabType);
     }
-  if (testPlanLabType != TestPlanLabType.PrivateGrid)
+    log.info("PlatformOsVersion: " + platformOsVersion);
+    if (testPlanLabType != TestPlanLabType.PrivateGrid)
          settings.setPlatform(platformOsVersion.getPlatform());
-  else
-    settings.setPlatform(testDevice.getPlatform());
-    if (TestPlanLabType.Hybrid == testPlanLabType) {
-      settings.setOsVersion(platformOsVersion.getVersion());
+    else {
+      settings.setPlatform(testDevice.getPlatform());
+      if (TestPlanLabType.Hybrid == testPlanLabType) {
+        settings.setOsVersion(platformOsVersion.getVersion());
+      }
     }
   }
 
   protected void populatePlatformBrowserDetails(TestDevice testDevice, TestDeviceSettings settings,
                                                 TestPlanLabType testPlanLabType, Agent agent,EnvironmentEntityDTO environmentEntityDTO)
     throws TestsigmaException {
-
-
     PlatformBrowserVersion platformBrowserVersion = null;
+    log.info("Agent: " + agent);
+    log.info("TestPlanLabType: " + testPlanLabType);
     if (agent != null && testPlanLabType == TestPlanLabType.Hybrid) {
       Platform platform = agent.getOsType().getPlatform();
       String osVersion = agent.getPlatformOsVersion(platform);
+      log.info("Platform: " + platform + ", OsVersion: " + osVersion);
       Browsers browser = OSBrowserType.getBrowser(testDevice.getBrowser());
       String browserVersion = agent.getBrowserVersion(browser.toString());
+      log.info("Browser: " + browser + ", BrowserVersion: " + browserVersion);
       platformBrowserVersion = platformsService.getPlatformBrowserVersion(platform, osVersion, browser, browserVersion, testPlanLabType);
     } else {
+      log.info("TestDevice: " + testDevice);
+      log.info("TestPlanLabType:: " + testPlanLabType);
       platformBrowserVersion = platformsService.getPlatformBrowserVersion(testDevice.getPlatformBrowserVersionId(), testPlanLabType);
     }
+    log.info("PlatformBrowserVersion: " + platformBrowserVersion);
     if (testPlanLabType.isHybrid()) {
       matchHybridBrowserVersion(agent, platformBrowserVersion, testDevice, platformBrowserVersion.getName(),environmentEntityDTO);
     }
@@ -1372,7 +1384,7 @@ public class AgentExecutionService {
                                                             com.testsigma.model.TestDataSet testDataSet,
                                                             Long testPlanId, Map<String, String> environmentParams,
                                                             TestCaseEntityDTO testCaseEntityDTO, String environmentParamSetName,
-                                                            String dataProfile, Map<Long, Integer> dataSetIndex) throws Exception {
+                                                            String dataProfile, Map<Long, Long> dataSetIndex) throws Exception {
 
     List<Long> loopIds = new ArrayList<>();
     List<Long> skipIds = new ArrayList<>();
@@ -1388,7 +1400,8 @@ public class AgentExecutionService {
       }
 
 
-      if (testStepDTO.getType() == TestStepType.FOR_LOOP) {
+      if (testStepDTO.getType() == TestStepType.FOR_LOOP ||
+              (testStepDTO.getConditionType() != null && testStepDTO.getConditionType() == TestStepConditionType.LOOP_FOR)) {
         loopIds.add(testStepDTO.getId());
         new ForLoopStepProcessor(webApplicationContext, toReturn, workspaceType, elementMap, testStepDTO,
           testPlanId, testDataSet, environmentParams, testCaseEntityDTO, environmentParamSetName, dataProfile, dataSetIndex).processLoop(testStepDTOS, loopIds);
@@ -1427,7 +1440,8 @@ public class AgentExecutionService {
             continue;
           }
 
-          if (subTestStepDTO.getType() == TestStepType.FOR_LOOP) {
+          if (subTestStepDTO.getType() == TestStepType.FOR_LOOP ||
+                  (subTestStepDTO.getConditionType() != null && subTestStepDTO.getConditionType() == TestStepConditionType.LOOP_FOR)) {
             loopIds.add(subTestStepDTO.getId());
             new ForLoopStepProcessor(webApplicationContext, stepGroupSpecialSteps, workspaceType, elementMap, subTestStepDTO,
               testPlanId, testDataSet, environmentParams, testCaseEntityDTO, environmentParamSetName, dataProfile, dataSetIndex)

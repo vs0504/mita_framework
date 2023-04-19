@@ -86,6 +86,8 @@ public class UiIdentifiersController {
         Page<Element> elements;
         if(previousStepElementName != null) {
             elements = uiIdentifierService.findAllSortedByPreviousStepElement(pageable, applicationVersion, name, screenName, previousStepElementName);
+        } else if(applicationVersion != null && uiIdentifierName != null) {
+            elements = uiIdentifierService.findByNameAndWorkspaceVersionId(pageable, uiIdentifierName, applicationVersion);
         } else {
             Specification<Element> spec = builder.build();
             elements = uiIdentifierService.findAll(spec, pageable);

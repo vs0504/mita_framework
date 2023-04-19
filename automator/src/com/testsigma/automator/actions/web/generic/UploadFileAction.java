@@ -23,7 +23,8 @@ public class UploadFileAction extends ElementAction {
     String fileName = String.format("%s_%s", System.currentTimeMillis(), FilenameUtils.getName(new URL(downloadURL).getPath()));
     byte[] fileContent = getFileInBytes(fileName.split("_")[1]);
 
-    String filePath = String.format("%s%s%s", FileUtils.getTempDirectoryPath(), File.separator, fileName);
+    String tempDir = FileUtils.getTempDirectoryPath();
+    String filePath = String.format("%s%s%s", tempDir.endsWith(File.separator)?tempDir.substring(0,tempDir.length()-1):tempDir, File.separator, fileName);
     File file = new File(filePath);
     FileOutputStream fos = new FileOutputStream(file);
     fos.write(fileContent);

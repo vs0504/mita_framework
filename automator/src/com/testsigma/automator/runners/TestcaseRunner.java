@@ -11,6 +11,8 @@ import com.testsigma.automator.service.ObjectMapperService;
 import com.testsigma.automator.utilities.ScreenCaptureUtil;
 import com.testsigma.automator.utilities.ScreenshotUploadTask;
 import com.testsigma.automator.utilities.UploadThreadPool;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +39,9 @@ public class TestcaseRunner {
   protected Map<Long, TestCaseStepResult> mapStepResult;
   protected boolean skipExecution;
   protected String resultFailureMessage;
+  @Getter
+  @Setter
+  protected Long hostStepId;
 
   public TestcaseRunner(TestCaseEntity testCaseEntity, TestCaseResult testCaseResult,
                         Map<Long, TestCaseStepResult> mapStepResult, boolean skipExecution,
@@ -107,6 +112,7 @@ public class TestcaseRunner {
         testCaseStepResult.setTestCaseStepId(testCaseStepEntity.getId());
         testCaseStepResult.setSkipExe(skipExecution);
         testCaseStepResult.setSkipMessage(resultFailureMessage);
+        testCaseStepResult.setForLoopCondition(testCaseStepEntity.getForLoopCondition());
       /*  if (!skipExecution && (workspaceType.equals(WorkspaceType.WebApplication) || workspaceType
           .equals(WorkspaceType.MobileWeb))) {
           url = getUrl();
@@ -211,6 +217,9 @@ public class TestcaseRunner {
           processedSteps = 0;
           testCaseStepsResult = new ArrayList<>();
           testCaseResult.setCurrentIndex(currentIndex);
+        }
+        if(testCaseStepEntity.getFailureMessage() != null && !testCaseStepEntity.getFailureMessage().equals(AutomatorMessages.NO_ITERATIONS_FILTERED)) {
+          break;
         }
 
       }

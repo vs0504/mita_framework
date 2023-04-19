@@ -7,13 +7,17 @@
 
 package com.testsigma.controller;
 
+import com.testsigma.dto.ForLoopConditionDTO;
 import com.testsigma.dto.RestStepResponseDTO;
 import com.testsigma.dto.TestStepDTO;
 import com.testsigma.exception.ResourceNotFoundException;
 import com.testsigma.exception.TestsigmaException;
+import com.testsigma.mapper.ForLoopConditionsMapper;
 import com.testsigma.mapper.TestStepMapper;
+import com.testsigma.model.ForLoopCondition;
 import com.testsigma.model.TestStep;
 import com.testsigma.model.TestStepPriority;
+import com.testsigma.service.ForLoopConditionService;
 import com.testsigma.service.TestStepService;
 import com.testsigma.specification.TestStepSpecificationsBuilder;
 import com.testsigma.util.HttpClient;
@@ -32,9 +36,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 @RestController
 @RequestMapping(path = "/test_steps", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,6 +48,8 @@ public class TestStepsController {
   private final HttpClient httpClient;
   private final TestStepService service;
   private final TestStepMapper mapper;
+  private final ForLoopConditionService forLoopConditionsService;
+  private final ForLoopConditionsMapper forLoopConditionsMapper;
 
   @RequestMapping(path = "/fetch_rest_response", method = RequestMethod.POST)
   public RestStepResponseDTO fetchApiResponse(@RequestBody RestStepRequest restStepRequest) {
@@ -58,8 +62,7 @@ public class TestStepsController {
     log.debug("GET /test_steps ");
     Specification<TestStep> spec = builder.build();
     Page<TestStep> testStep = this.service.findAll(spec, pageable);
-    List<TestStepDTO> testDataDTOS =
-      mapper.mapDTOs(testStep.getContent());
+    List<TestStepDTO> testDataDTOS = mapper.mapDTOs(testStep.getContent());
     return new PageImpl<>(testDataDTOS, pageable, testStep.getTotalElements());
   }
 
@@ -68,7 +71,7 @@ public class TestStepsController {
   public void destroy(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
     log.debug("DELETE /test_steps with id::" + id);
     TestStep testStep = this.service.find(id);
-    service.destroy(testStep);
+    service.destroy(testStep, false);
   }
 
   @PutMapping(path = "/{id}")
@@ -78,8 +81,21 @@ public class TestStepsController {
     TestStep testStep = this.service.find(id);
     mapper.merge(request, testStep);
     testStep.setUpdatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
-    testStep = this.service.update(testStep);
-    return this.mapper.mapDTO(testStep);
+    testStep = this.service.update(testStep, false);
+    TestStepDTO testStepDTO = this.mapper.mapDTO(testStep);
+    if (request.getForLoopConditionsRequest() != null) {
+      Optional<ForLoopCondition> forLoopConditionOptional = forLoopConditionsService.findByTestStepId(testStepDTO.getId());
+      ForLoopCondition forLoopCondition = new ForLoopCondition();
+      if(forLoopConditionOptional.isPresent()) {
+        forLoopCondition = forLoopConditionOptional.get();
+      }
+      forLoopConditionsMapper.merge(forLoopCondition, request.getForLoopConditionsRequest());
+      forLoopCondition.setTestStepId(testStep.getId());
+      forLoopCondition = forLoopConditionsService.save(forLoopCondition);
+      ForLoopConditionDTO forLoopConditionDTO = forLoopConditionsMapper.map(forLoopCondition);
+      testStepDTO.setForLoopCondition(forLoopConditionDTO);
+    }
+    return testStepDTO;
   }
 
   @PostMapping
@@ -90,8 +106,16 @@ public class TestStepsController {
     testStep.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
     if (testStep.getParentId() != null)
       testStep.setDisabled(this.service.find(testStep.getParentId()).getDisabled());
-    testStep = service.create(testStep);
-    return mapper.mapDTO(testStep);
+    testStep = service.create(testStep, false);
+    TestStepDTO testStepDTO = mapper.mapDTO(testStep);
+    if (request.getForLoopConditionsRequest() != null) {
+      ForLoopCondition forLoopCondition = forLoopConditionsMapper.map(request.getForLoopConditionsRequest());
+      forLoopCondition.setTestStepId(testStep.getId());
+      forLoopCondition = forLoopConditionsService.save(forLoopCondition);
+      ForLoopConditionDTO forLoopConditionDTO = forLoopConditionsMapper.map(forLoopCondition);
+      testStepDTO.setForLoopCondition(forLoopConditionDTO);
+    }
+    return testStepDTO;
   }
 
   @DeleteMapping(value = "/bulk_delete")
@@ -109,11 +133,11 @@ public class TestStepsController {
                                    @RequestParam(value = "priority", required = false) TestStepPriority testStepPriority,
                                    @RequestParam(value = "disabled", required = false) Boolean disabled,
                                    @RequestParam(value = "ignoreStepResult", required = false) Boolean ignoreStepResult,
-                                   @RequestParam(value = "visualEnabled", required = false) Boolean visualEnabled) {
+                                   @RequestParam(value = "visualEnabled", required = false) Boolean visualEnabled) throws ResourceNotFoundException {
 
     log.debug("PUT /test_steps/bulk_update_properties with ids::" + Arrays.toString(ids) + " waitTime ::"
       + waitTime + " priority ::" + testStepPriority + " disabled ::" + disabled +" ignoreStepResult ::" +ignoreStepResult);
-    this.service.bulkUpdateProperties(ids, testStepPriority, waitTime, disabled, ignoreStepResult,visualEnabled);
+    this.service.bulkUpdateProperties(ids, testStepPriority, waitTime, disabled, ignoreStepResult,visualEnabled, false);
   }
 
   @PutMapping(value = "/bulk_update")
@@ -122,7 +146,11 @@ public class TestStepsController {
     log.debug("PUT /test_steps/bulk_update with body::" + testStepRequests);
     for (TestStepRequest request : testStepRequests) {
       TestStep step = this.mapper.map(request);
-      this.service.update(step);
+      this.service.update(step, false);
+      if (request.getForLoopConditionsRequest() != null) {
+        ForLoopCondition forLoopCondition = forLoopConditionsMapper.map(request.getForLoopConditionsRequest());
+        forLoopConditionsService.save(forLoopCondition);
+      }
     }
   }
 

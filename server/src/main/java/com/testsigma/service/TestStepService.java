@@ -10,6 +10,7 @@ package com.testsigma.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.testsigma.constants.NaturalTextActionConstants;
 import com.testsigma.dto.BackupDTO;
 import com.testsigma.dto.TestStepDTO;
 import com.testsigma.dto.export.TestStepCloudXMLDTO;
@@ -18,9 +19,12 @@ import com.testsigma.event.EventType;
 import com.testsigma.event.TestStepEvent;
 import com.testsigma.exception.ResourceNotFoundException;
 import com.testsigma.exception.TestsigmaException;
+import com.testsigma.mapper.ForLoopConditionsMapper;
 import com.testsigma.mapper.RestStepMapper;
 import com.testsigma.mapper.TestStepMapper;
+import com.testsigma.mapper.recorder.TestStepRecorderMapper;
 import com.testsigma.model.*;
+import com.testsigma.model.recorder.TestStepRecorderDTO;
 import com.testsigma.repository.TestStepRepository;
 import com.testsigma.specification.SearchCriteria;
 import com.testsigma.specification.SearchOperation;
@@ -30,7 +34,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +43,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -62,6 +67,10 @@ public class TestStepService extends XMLExportImportService<TestStep> {
     private final NaturalTextActionsService naturalTextActionsService;
     private final DefaultDataGeneratorService defaultDataGeneratorService;
     private final ImportAffectedTestCaseXLSExportService affectedTestCaseXLSExportService;
+    private final TestStepMapper testStepMapper;
+    private final TestStepRecorderMapper testStepRecorderMapper;
+    private final ForLoopConditionService forLoopConditionService;
+    private final ForLoopConditionsMapper forLoopConditionsMapper;
 
     private final List<ActionTestDataMap> actionTestDataMap = getMapsList();
     private final List<Integer> depreciatedIds = DeprecatedActionMapper.getAllDeprecatedActionIds();
@@ -69,6 +78,10 @@ public class TestStepService extends XMLExportImportService<TestStep> {
 
     public List<TestStep> findAllByTestCaseId(Long testCaseId) {
         return this.repository.findAllByTestCaseIdOrderByPositionAsc(testCaseId);
+    }
+
+    public List<TestStep> findAllByParentId(Long parentId) {
+        return this.repository.findAllByParentId(parentId);
     }
 
     public List<TestStep> findAllByTestCaseIdAndEnabled(Long testCaseId) {
@@ -106,8 +119,15 @@ public class TestStepService extends XMLExportImportService<TestStep> {
         return this.repository.findAll(spec, pageable);
     }
 
-    public void destroy(TestStep testStep) throws ResourceNotFoundException {
+    public void destroy(TestStep testStep, Boolean isRecorderRequest) throws ResourceNotFoundException {
         repository.decrementPosition(testStep.getPosition(), testStep.getTestCaseId());
+        if(isRecorderRequest) {
+            if (testStep.getConditionType() == TestStepConditionType.LOOP_WHILE) {
+                TestStep parentWhileStep = testStep.getParentStep();
+                repository.delete(parentWhileStep);
+            }
+            this.handleChildStepsDelete(this.findAllByParentId(testStep.getId()));
+        }
         repository.delete(testStep);
         if (testStep.getAddonActionId() != null) {
             AddonNaturalTextAction addonNaturalTextAction = addonNaturalTextActionService.findById(testStep.getAddonActionId());
@@ -116,13 +136,24 @@ public class TestStepService extends XMLExportImportService<TestStep> {
         publishEvent(testStep, EventType.DELETE);
     }
 
+    public void handleChildStepsDelete(List<TestStep> childSteps) throws ResourceNotFoundException{
+        if(childSteps!=null && !childSteps.isEmpty()){
+            for(TestStep childStep:childSteps){
+                handleChildStepsDelete(this.findAllByParentId(childStep.getId()));
+                this.destroy(childStep, true);
+            }
+        }
+    }
+
     public TestStep find(Long id) throws ResourceNotFoundException {
         return this.repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("TestStep missing with id:" + id));
     }
 
-    private TestStep updateDetails(TestStep testStep) {
+    private TestStep updateDetails(TestStep testStep, Boolean isRecorderRequest) throws ResourceNotFoundException {
         RestStep restStep = testStep.getRestStep();
         testStep.setRestStep(null);
+        if(isRecorderRequest)
+            handleWhileTestStepUpdate(testStep);
         testStep = this.repository.save(testStep);
         if (restStep != null) {
             restStep.setStepId(testStep.getId());
@@ -132,38 +163,42 @@ public class TestStepService extends XMLExportImportService<TestStep> {
         return testStep;
     }
 
-    public TestStep update(TestStep testStep) throws TestsigmaException {
+    public TestStep update(TestStep testStep, Boolean isRecorderRequest) throws TestsigmaException {
         if (testStep.getConditionType()==TestStepConditionType.LOOP_WHILE
                 && testStep.getMaxIterations() != null
                 && testStep.getMaxIterations()>100){
             throw  new TestsigmaException(String.format("In While Loop, please set Max iterations between 1 to 100"));
         }
-        testStep = updateDetails(testStep);
-        this.updateDisablePropertyForChildSteps(testStep);
+        testStep = updateDetails(testStep, isRecorderRequest);
+        this.updateDisablePropertyForChildSteps(testStep, isRecorderRequest);
         publishEvent(testStep, EventType.UPDATE);
         return testStep;
     }
 
-    private void updateDisablePropertyForChildSteps(TestStep testStep) throws TestsigmaException {
+    private void updateDisablePropertyForChildSteps(TestStep testStep, Boolean isRecorderRequest) throws TestsigmaException {
         List<TestStep> childSteps = this.repository.findAllByParentIdOrderByPositionAsc(testStep.getId());
         if (childSteps.size() > 0) {
             for (TestStep childStep : childSteps) {
                 childStep.setDisabled(testStep.getDisabled());
-                this.update(childStep);
+                this.update(childStep, isRecorderRequest);
             }
         }
     }
 
 
-    public TestStep create(TestStep testStep) throws TestsigmaException,ResourceNotFoundException{
+    public TestStep create(TestStep testStep, Boolean isRecorderRequest) throws TestsigmaException,ResourceNotFoundException{
         if(testStep.getAction()!=null
                 && testStep.getConditionType() == TestStepConditionType.LOOP_WHILE
                 &&(testStep.getMaxIterations() != null && (testStep.getMaxIterations() > 100))){
             throw  new TestsigmaException(String.format("In While Loop, please set Max iterations between 1 to 100"));
         }
+        setTestStepPosition(testStep);
         this.repository.incrementPosition(testStep.getPosition(), testStep.getTestCaseId());
         RestStep restStep = testStep.getRestStep();
         testStep.setRestStep(null);
+        if(isRecorderRequest) {
+            testStep = this.handleWhileTestStepCreate(testStep);
+        }
         testStep = this.repository.save(testStep);
         if (restStep != null) {
             RestStep newRestStep = mapper.mapStep(restStep);
@@ -179,14 +214,92 @@ public class TestStepService extends XMLExportImportService<TestStep> {
         return testStep;
     }
 
-    public void bulkUpdateProperties(Long[] ids, TestStepPriority testStepPriority, Integer waitTime, Boolean disabled,
-                                     Boolean ignoreStepResult,Boolean visualEnabled) {
-        this.repository.bulkUpdateProperties(ids, testStepPriority != null ? testStepPriority.toString() : null, waitTime,visualEnabled);
-        if (disabled != null || ignoreStepResult != null)
-            this.bulkUpdateDisableAndIgnoreResultProperties(ids, disabled, ignoreStepResult);
+    private void setTestStepPosition(TestStep testStep) {
+        if (testStep.getPosition() == null) {
+            Optional<TestStep> lastStep = this.repository.findFirstByTestCaseIdOrderByPositionDesc(testStep.getTestCaseId());
+            testStep.setPosition(lastStep.map(step -> step.getPosition() + 1).orElse(0));
+        }
     }
 
-    private void bulkUpdateDisableAndIgnoreResultProperties(Long[] ids, Boolean disabled, Boolean ignoreStepResult) {
+    public TestStep handleWhileTestStepCreate(TestStep testStep) throws TestsigmaException {
+        if(TestStepConditionType.LOOP_WHILE == testStep.getConditionType()){
+            TestStep parentWhileStep = testStepMapper.copy(testStep);
+            parentWhileStep.setParentId(testStep.getParentId());
+            parentWhileStep.setParentStep(testStep.getParentStep());
+            parentWhileStep.setConditionType(null);
+            parentWhileStep.setType(TestStepType.WHILE_LOOP);
+            parentWhileStep.setNaturalTextActionId(null);
+            parentWhileStep.setAction(null);
+            TestStepDataMap parentWhileStepMap = new TestStepDataMap();
+            parentWhileStepMap.setWhileCondition("");
+            parentWhileStep.setDataMap(parentWhileStepMap);
+            parentWhileStep = create(parentWhileStep, true);
+            testStep.setParentStep(parentWhileStep);
+            testStep.setParentId(parentWhileStep.getId());
+            testStep.setPosition(parentWhileStep.getPosition()+1);
+        }
+        return testStep;
+    }
+
+    public List<TestStepDTO> filterWhileParentSteps(List<TestStepDTO> testSteps){
+        List<TestStepDTO> newTestSteps = new ArrayList<>();
+        for(TestStepDTO testStep: testSteps){
+            if(testStep.getConditionType() == TestStepConditionType.LOOP_WHILE){
+                Long parentWhileId = testStep.getParentId();
+                if(parentWhileId!=null){
+                    TestStep parentWhileStep = repository.getById(parentWhileId);
+                    if(parentWhileStep.getParentId()!=null){
+                        testStep.setParentId(parentWhileStep.getParentId());
+                    }
+                }
+            }
+            if(testStep.getType() != TestStepType.WHILE_LOOP)
+                newTestSteps.add(testStep);
+        }
+        setMainParentIDForTestStepDTOs(newTestSteps);
+        return newTestSteps;
+    }
+
+    public void handleWhileTestStepUpdate(TestStep testStep) throws ResourceNotFoundException {
+        // Updating disabled property and timeout and parent step to the
+        if(testStep.getConditionType() == TestStepConditionType.LOOP_WHILE){
+            Long updatedParentId = testStep.getParentId();
+            testStep = this.find(testStep.getId());
+            TestStep parentWhileStep = this.find(testStep.getParentId());
+            if(!parentWhileStep.getId().equals(testStep.getParentId()))
+                parentWhileStep.setParentId(updatedParentId);
+            parentWhileStep.setDisabled(testStep.getDisabled());
+            parentWhileStep.setWaitTime(testStep.getWaitTime());
+            parentWhileStep = this.repository.save(parentWhileStep);
+            testStep.setParentId(parentWhileStep.getId());
+        }
+    }
+
+    public void setMainParentIDForTestStepDTOs(List<TestStepDTO> testStepDTOs){
+        for(TestStepDTO testStepDTO:testStepDTOs){
+            setMainParentIDForTestStepDTO(testStepDTO);
+        }
+    }
+
+    public void setMainParentIDForTestStepDTO(TestStepDTO testStepDTO) {
+        if (testStepDTO.getConditionType() == TestStepConditionType.LOOP_WHILE) {
+            TestStep parentStep = repository.getById(testStepDTO.getParentId());
+            if (parentStep.getParentId() != null) {
+                testStepDTO.setParentId(parentStep.getParentId());
+            } else if(parentStep.getAction() == null) {
+                testStepDTO.setParentId(null);
+            }
+        }
+    }
+
+    public void bulkUpdateProperties(Long[] ids, TestStepPriority testStepPriority, Integer waitTime, Boolean disabled,
+                                     Boolean ignoreStepResult,Boolean visualEnabled, Boolean isRecorderRequest) throws ResourceNotFoundException {
+        this.repository.bulkUpdateProperties(ids, testStepPriority != null ? testStepPriority.toString() : null, waitTime,visualEnabled);
+        if (disabled != null || ignoreStepResult != null)
+            this.bulkUpdateDisableAndIgnoreResultProperties(ids, disabled, ignoreStepResult, isRecorderRequest);
+    }
+
+    private void bulkUpdateDisableAndIgnoreResultProperties(Long[] ids, Boolean disabled, Boolean ignoreStepResult, Boolean isRecorderRequest) throws ResourceNotFoundException {
         List<TestStep> testSteps = this.repository.findAllByIdInOrderByPositionAsc(ids);
         for (TestStep testStep : testSteps) {
             if (disabled != null) {
@@ -201,7 +314,7 @@ public class TestStepService extends XMLExportImportService<TestStep> {
             if (ignoreStepResult != null) {
                 testStep.setIgnoreStepResult(ignoreStepResult);
             }
-            this.updateDetails(testStep);
+            this.updateDetails(testStep, isRecorderRequest);
         }
     }
 
@@ -211,7 +324,21 @@ public class TestStepService extends XMLExportImportService<TestStep> {
     }
 
     public void updateTestDataParameterName(Long testDataId, String parameter, String newParameterName) {
-        this.repository.updateTopLevelTestDataParameter(newParameterName, parameter, testDataId);
+        List<TestStep> testSteps = this.repository.getTopLevelTestDataParameter(testDataId);
+        for(TestStep testStep : testSteps) {
+            TestStepDataMap testStepData = testStep.getDataMap();
+            if(testStepData != null && testStepData.getTestData() != null) {
+                testStepData.getTestData().entrySet().forEach(stringTestStepNlpDataEntry -> {
+                    if(stringTestStepNlpDataEntry.getValue().getValue().equals(parameter)){
+                        stringTestStepNlpDataEntry.getValue().setValue(newParameterName);
+                    }
+                });
+            }
+            TestStepDataMap map = testStep.getDataMap();
+            map.setTestData(testStepData.getTestData());
+            testStep.setDataMap(map);
+            save(testStep);
+        }
         List<TestStep> topConditionalSteps = this.repository.getTopLevelConditionalStepsExceptLoop(testDataId);
         for (TestStep step : topConditionalSteps) {
             updateChildLoops(step.getId(), parameter, newParameterName);
@@ -227,8 +354,22 @@ public class TestStepService extends XMLExportImportService<TestStep> {
     }
 
     private void updateChildLoops(Long parentId, String parameter, String newParameterName) {
-        this.repository.updateChildStepsTestDataParameter(newParameterName, parameter, parentId);
-        this.repository.updateChildStepsTestDataParameterUsingTestDataProfileId(newParameterName, parameter, parentId);
+        List<TestStep> childSteps = this.repository.getChildStepsTestDataParameter(parentId);
+        childSteps.addAll(this.repository.getChildStepsTestDataParameterUsingTestDataProfileId(parentId));
+        for(TestStep testStep : childSteps) {
+            TestStepDataMap testStepData = testStep.getDataMap();
+            if(testStepData != null && testStepData.getTestData() != null) {
+                testStepData.getTestData().entrySet().forEach(stringTestStepNlpDataEntry -> {
+                    if(stringTestStepNlpDataEntry.getValue().getValue().equals(parameter)){
+                        stringTestStepNlpDataEntry.getValue().setValue(newParameterName);
+                    }
+                });
+            }
+            TestStepDataMap map = testStep.getDataMap();
+            map.setTestData(testStepData.getTestData());
+            testStep.setDataMap(map);
+            save(testStep);
+        }
         List<TestStep> conditionalSteps = this.repository.getChildConditionalStepsExceptLoop(parentId);
         for (TestStep step : conditionalSteps) {
             updateChildLoops(step.getId(), parameter, newParameterName);
@@ -317,6 +458,7 @@ public class TestStepService extends XMLExportImportService<TestStep> {
     @Override
     public List<TestStep> readEntityListFromXmlData(String xmlData, XmlMapper xmlMapper, BackupDTO importDTO) throws JsonProcessingException, ResourceNotFoundException {
         if (importDTO.getIsCloudImport()) {
+            xmlData = xmlData.replaceAll("API_STEP", "REST_STEP");
             List<TestStep> steps = mapper.mapTestStepsCloudList(xmlMapper.readValue(xmlData, new TypeReference<List<TestStepCloudXMLDTO>>() {
             }));
             HashMap<TestStep, String> stepsMap= this.affectedTestCaseXLSExportService.getStepsMap();
@@ -347,7 +489,7 @@ public class TestStepService extends XMLExportImportService<TestStep> {
                             }
                         }
                     }
-                    if (Objects.equals(step.getTestDataType(), TestDataType.function.getDispName()) && step.getType() != TestStepType.CUSTOM_FUNCTION) {
+                    if (step.getDataMap().getTestData() != null && Objects.equals(step.getDataMap().getTestData().get("test-data").getType(), TestDataType.function.getDispName()) && step.getType() != TestStepType.CUSTOM_FUNCTION) {
                         message = "Deprecated Data Generator / Data Generator not found!";
                         defaultDataGeneratorService.find(step.getTestDataFunctionId());
                     }
@@ -363,10 +505,10 @@ public class TestStepService extends XMLExportImportService<TestStep> {
                     stepsMap.put(step, "Custom Functions not supported in OS");
                     log.info("disabling Custom function test step to avoid further issues, since CSFs are deprecated");
                 }
-                if (step.getType() == TestStepType.FOR_LOOP) {
-                    Optional<TestData> testData = testDataService.getRecentImportedEntity(importDTO, step.getForLoopTestDataId());
+                if (step.getConditionType() == TestStepConditionType.LOOP_FOR && step.getForLoopConditions() != null) {
+                    Optional<TestData> testData = testDataService.getRecentImportedEntity(importDTO, step.getDataMap().getForLoop().getTestDataId());
                     if (testData.isPresent())
-                        step.setForLoopTestDataId(testData.get().getId());
+                        step.getDataMap().getForLoop().setTestDataId(testData.get().getId());
                 }
             }
             return steps;
@@ -378,9 +520,9 @@ public class TestStepService extends XMLExportImportService<TestStep> {
                     Optional<TestData> testData = testDataService.getRecentImportedEntity(importDTO, step.getTestDataProfileStepId());
                     testData.ifPresent(data -> step.setTestDataProfileStepId(data.getId()));
                 }
-                if (step.getType() == TestStepType.FOR_LOOP) {
-                    Optional<TestData> testData = testDataService.getRecentImportedEntity(importDTO, step.getForLoopTestDataId());
-                    testData.ifPresent(data -> step.setForLoopTestDataId(data.getId()));
+                if (step.getType() == TestStepType.FOR_LOOP || step.getConditionType() == TestStepConditionType.LOOP_FOR) {
+                    Optional<TestData> testData = testDataService.getRecentImportedEntity(importDTO, step.getForLoopConditions().get(0).getTestDataProfileId());
+                    //testData.ifPresent(data -> step.setForLoopConditions());
                 }
             }
             return steps;
@@ -391,9 +533,15 @@ public class TestStepService extends XMLExportImportService<TestStep> {
     private void mapDeprecatedActionsWithUpdatesOnes(TestStep step) {
         ActionTestDataMap filteredMap = this.actionTestDataMap.stream().filter(dataMap -> dataMap.getTestDataHash().containsKey(step.getNaturalTextActionId())).findFirst().orElse(null);
         if (filteredMap != null) {
-            step.setTestData(filteredMap.getTestDataHash().get(step.getNaturalTextActionId()));
+            TestStepDataMap testStepData = step.getDataMap() != null ? new TestStepDataMap() : step.getDataMap();
+            if(testStepData.getTestData() == null) {
+                testStepData.setTestData(new HashMap<>());
+            }
+            TestStepNlpData testStepNlpData = new TestStepNlpData();
+            testStepNlpData.setValue(filteredMap.getTestDataHash().get(step.getNaturalTextActionId()));
+            testStepNlpData.setType(TestDataType.raw.getDispName());
+            testStepData.getTestData().put(NaturalTextActionConstants.TEST_STEP_DATA_MAP_KEY_TEST_DATA, testStepNlpData);
             step.setNaturalTextActionId(filteredMap.getOptimizedActionId());
-            step.setTestDataType(TestDataType.raw.getDispName());
         }
     }
 
@@ -445,6 +593,16 @@ public class TestStepService extends XMLExportImportService<TestStep> {
         return present;
     }
 
+    @Override
+    public TestStep processAfterSave(Optional<TestStep> previous, TestStep present, TestStep importEntity, BackupDTO importDTO) {
+        if(importEntity != null && importEntity.getForLoopConditions() != null && importEntity.getForLoopConditions().size() > 0) {
+            ForLoopCondition forLoopCondition = importEntity.getForLoopConditions().get(0);
+            forLoopCondition.setTestStepId(present.getId());
+            forLoopConditionService.save(forLoopCondition);
+        }
+        return present;
+    }
+
     public boolean hasToSkip(TestStep testStep, BackupDTO importDTO) {
         Optional<TestCase> testCase = testCaseService.getRecentImportedEntity(importDTO, testStep.getTestCaseId());
         return testCase.isEmpty();
@@ -468,6 +626,30 @@ public class TestStepService extends XMLExportImportService<TestStep> {
             }
         }
 
+    }
+
+    public List<TestStepRecorderDTO> setNestedChildElements(List<TestStepRecorderDTO> testStepDTOS){
+        List<TestStepRecorderDTO> testStepDTOSToReturn = new ArrayList<>();
+        for(TestStepRecorderDTO testStepDTO : testStepDTOS){
+            Long parentID = testStepDTO.getId();
+            List<TestStep> childSteps = repository.findAllByParentId(parentID);
+            List<TestStepDTO> childStepDTOs = testStepMapper.mapDTOs(childSteps);
+            List<TestStepRecorderDTO> childStepRecorderDTOs = testStepRecorderMapper.mapDTOs(childStepDTOs);
+            testStepDTO.setChildSteps(childStepRecorderDTOs);
+            if(testStepDTO.getParentId()==null)
+                testStepDTOSToReturn.add(testStepDTO);
+        }
+        return testStepDTOSToReturn;
+    }
+
+    public List<TestStepRecorderDTO> setForLoopConditions(List<TestStepRecorderDTO> testStepDTOS) {
+        for(TestStepRecorderDTO testStepRecorderDTO : testStepDTOS) {
+            if(testStepRecorderDTO.getConditionType() == TestStepConditionType.LOOP_FOR) {
+                ForLoopCondition forLoopCondition = forLoopConditionService.findByTestStepId(testStepRecorderDTO.getId()).get();
+                testStepRecorderDTO.setForLoopCondition(forLoopConditionsMapper.getForLoopConditionDTO(forLoopCondition));
+            }
+        }
+        return testStepDTOS;
     }
 
     private void setTemplateId(TestStep present, BackupDTO importDTO) throws ResourceNotFoundException {
@@ -587,7 +769,7 @@ public class TestStepService extends XMLExportImportService<TestStep> {
     }
     public void bulkDelete(Long[] testStepIds) throws ResourceNotFoundException {
         for (Long id:testStepIds){
-              this.destroy(this.find(id));
+              this.destroy(this.find(id), false);
             }
     }
 
@@ -654,7 +836,7 @@ public class TestStepService extends XMLExportImportService<TestStep> {
         return this.repository.findTopByTestCaseIdOrderByPositionDesc(testCaseId);
     }
 
-     public void deleteStepsByStepGroupId(Long stepGroupId){
+    public void deleteStepsByStepGroupId(Long stepGroupId){
         repository.deleteStepsByStepGroupId(stepGroupId);
     }
 

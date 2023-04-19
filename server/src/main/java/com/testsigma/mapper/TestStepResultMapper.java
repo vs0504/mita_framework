@@ -10,10 +10,8 @@
 package com.testsigma.mapper;
 
 
-import com.testsigma.dto.ElementDTO;
-import com.testsigma.dto.ElementMetaDataDTO;
-import com.testsigma.dto.StepResultMetadataDTO;
-import com.testsigma.dto.TestStepResultDTO;
+import com.testsigma.automator.entity.DefaultDataGeneratorsEntity;
+import com.testsigma.dto.*;
 import com.testsigma.model.*;
 import com.testsigma.web.request.*;
 import org.mapstruct.*;
@@ -47,6 +45,8 @@ public interface TestStepResultMapper {
   StepResultMetadata mapMetadata(StepResultMetadataRequest metadataRequest);
 
   StepResultForLoopMetadata mapForLoop(StepResultForLoopMetadataRequest forLoopMetadataRequest);
+
+  ForLoopConditionDTO map(ForLoopConditionRequest forLoopConditionRequest);
 
   StepResultWhileLoopMetadata mapWhileLoop(StepResultWhileLoopMetadataRequest whileLoopMetadataRequest);
 

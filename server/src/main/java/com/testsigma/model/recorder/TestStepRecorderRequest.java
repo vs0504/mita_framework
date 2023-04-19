@@ -1,10 +1,9 @@
 package com.testsigma.model.recorder;
 
 import com.testsigma.model.*;
+import com.testsigma.web.request.ForLoopConditionRequest;
 import com.testsigma.web.request.RestStepDetailsRequest;
 import lombok.Data;
-
-import java.util.List;
 
 @Data
 public class TestStepRecorderRequest {
@@ -31,6 +30,7 @@ public class TestStepRecorderRequest {
     private Long phoneNumberId;
     private Long kibbutzPluginNlpId;
     private KibbutzPluginNLPData kibbutzPluginNlpData;
+    private ForLoopConditionRecorderRequest forLoopCondition;
     private Long mailBoxId;
     private Boolean disabled;
     private Boolean ignoreStepResult;
@@ -42,6 +42,6 @@ public class TestStepRecorderRequest {
     public Boolean isStepGroupSpotEdit = false;
     private Long blockId;
     private Boolean isStepRecorder = false;
-    private UiIdentifierRequest uiIdentifierRequest;
+    private UiIdentifierRequest elementRequest;
 
 }

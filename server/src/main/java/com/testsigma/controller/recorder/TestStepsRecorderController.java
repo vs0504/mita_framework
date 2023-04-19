@@ -4,22 +4,19 @@ import com.testsigma.dto.RestStepResponseDTO;
 import com.testsigma.dto.TestStepDTO;
 import com.testsigma.exception.ResourceNotFoundException;
 import com.testsigma.exception.TestsigmaException;
-import com.testsigma.mapper.ElementMapper;
+import com.testsigma.mapper.ForLoopConditionsMapper;
 import com.testsigma.mapper.TestStepMapper;
 import com.testsigma.mapper.recorder.TestStepRecorderMapper;
 import com.testsigma.mapper.recorder.UiIdentifierMapper;
-import com.testsigma.model.Element;
-import com.testsigma.model.TestStep;
-import com.testsigma.model.TestStepPriority;
-import com.testsigma.model.TestStepType;
-import com.testsigma.model.recorder.TestStepRecorderDTO;
-import com.testsigma.model.recorder.TestStepRecorderRequest;
-import com.testsigma.model.recorder.UiIdentifierRequest;
+import com.testsigma.model.*;
+import com.testsigma.model.recorder.*;
 import com.testsigma.service.ElementService;
+import com.testsigma.service.ForLoopConditionService;
 import com.testsigma.service.TestStepService;
 import com.testsigma.specification.TestStepSpecificationsBuilder;
 import com.testsigma.util.HttpClient;
 import com.testsigma.web.request.ElementRequest;
+import com.testsigma.web.request.ForLoopConditionRequest;
 import com.testsigma.web.request.RestStepRequest;
 import com.testsigma.web.request.TestStepRequest;
 import lombok.RequiredArgsConstructor;
@@ -48,9 +45,10 @@ public class TestStepsRecorderController {
     private final TestStepService service;
     private final TestStepMapper mapper;
     private final ElementService elementService;
-    //private final ElementMapper elementMapper;
     private final UiIdentifierMapper uiIdentifierMapper;
     private final TestStepRecorderMapper testStepRecorderMapper;
+     private final ForLoopConditionService forLoopConditionsService;
+    private final ForLoopConditionsMapper forLoopConditionsMapper;
 
     @RequestMapping(path = "/fetch_rest_response", method = RequestMethod.POST)
     public RestStepResponseDTO fetchApiResponse(@RequestBody RestStepRequest restStepRequest) {
@@ -65,7 +63,10 @@ public class TestStepsRecorderController {
         Page<TestStep> testStep = this.service.findAll(spec, pageable);
         List<TestStepDTO> testDataDTOS =
                 mapper.mapDTOs(testStep.getContent());
+        testDataDTOS = this.service.filterWhileParentSteps(testDataDTOS);
         List<TestStepRecorderDTO> testStepRecorderDTOS = testStepRecorderMapper.mapDTOs(testDataDTOS);
+        testStepRecorderDTOS = this.service.setNestedChildElements(testStepRecorderDTOS);
+        testStepRecorderDTOS = this.service.setForLoopConditions(testStepRecorderDTOS);
         return new PageImpl<>(testStepRecorderDTOS, pageable, testStep.getTotalElements());
     }
 
@@ -74,7 +75,7 @@ public class TestStepsRecorderController {
     public void destroy(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
         log.debug("DELETE /os_recorder/v2/test_steps with id::" + id);
         TestStep testStep = this.service.find(id);
-        service.destroy(testStep);
+        service.destroy(testStep, true);
     }
 
     @PutMapping(path = "/{id}")
@@ -84,35 +85,54 @@ public class TestStepsRecorderController {
         TestStep testStep = this.service.find(id);
         TestStepRecorderDTO testStepRecorderDTO;
         TestStepDTO testStepDTO;
+        Long parentStepId;
         if(request.getType() == TestStepType.NLP_TEXT) {
             request.setType(TestStepType.ACTION_TEXT);
         }
-        if(request.getIsStepRecorder() && request.getUiIdentifierRequest() != null){
+        if(request.getIsStepRecorder() && request.getElementRequest() != null){
             log.info("Update Test step from Step recorder");
-            UiIdentifierRequest uiIdentifierRequest = request.getUiIdentifierRequest();
+            UiIdentifierRequest uiIdentifierRequest = request.getElementRequest();
             ElementRequest elementRequest = uiIdentifierMapper.mapRequest(uiIdentifierRequest);
             Element element = uiIdentifierMapper.map(elementRequest);
             element = elementService.createUiIdentifierFromRecorder(element);
             request.getDataMap().setUiIdentifier(element.getName());
 
-
             TestStepRequest testStepRequest = testStepRecorderMapper.mapRequest(request);
+            replaceCamelCase(testStepRequest.getDataMap());
             mapper.merge(testStepRequest, testStep);
             testStep.setUpdatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
 
             if (testStep.getParentId() != null)
                 testStep.setDisabled(this.service.find(testStep.getParentId()).getDisabled());
-            testStep = this.service.update(testStep);
+            parentStepId = testStep.getParentId();
+            testStep = this.service.update(testStep, true);
             testStepDTO = mapper.mapDTO(testStep);
 
             testStepRecorderDTO = testStepRecorderMapper.mapDTO(testStepDTO);
             testStepRecorderDTO.setUiIdentifierDTO(uiIdentifierMapper.mapDTO(uiIdentifierMapper.map(element)));
         } else{
             TestStepRequest testStepRequest = testStepRecorderMapper.mapRequest(request);
-            testStep = this.service.update(mapper.map(testStepRequest));
+            replaceCamelCase(testStepRequest.getDataMap());
+            parentStepId = testStepRequest.getParentId();
+            testStep = this.service.update(mapper.map(testStepRequest), true);
             testStepDTO = mapper.mapDTO(testStep);
             testStepRecorderDTO = testStepRecorderMapper.mapDTO(testStepDTO);
         }
+
+        if (request.getForLoopCondition() != null) {
+            Optional<ForLoopCondition> forLoopConditionOptional = forLoopConditionsService.findByTestStepId(testStepDTO.getId());
+            ForLoopCondition forLoopCondition = new ForLoopCondition();
+            if(forLoopConditionOptional.isPresent()) {
+                forLoopCondition = forLoopConditionOptional.get();
+            }
+            ForLoopConditionRequest forLoopConditionRequestV1 = forLoopConditionsMapper.getForConditionEntity(request.getForLoopCondition());
+            forLoopConditionsMapper.merge(forLoopCondition, forLoopConditionRequestV1);
+            forLoopCondition.setTestStepId(testStep.getId());
+            forLoopCondition = forLoopConditionsService.save(forLoopCondition);
+            testStepRecorderDTO.setForLoopCondition(forLoopConditionsMapper.getForLoopConditionDTO(forLoopCondition));
+
+        }
+        testStepRecorderDTO.setParentId(parentStepId);
         return testStepRecorderDTO;
     }
 
@@ -122,19 +142,24 @@ public class TestStepsRecorderController {
         log.debug("POST /os_recorder/test_steps with request::" + request);
         TestStepRecorderDTO testStepRecorderDTO;
         TestStepDTO testStepDTO;
+        Long parentStepId;
         if(request.getType() == TestStepType.NLP_TEXT) {
             request.setType(TestStepType.ACTION_TEXT);
         }
-        if(request.getIsStepRecorder() && request.getUiIdentifierRequest() != null){
+        TestStepRequest testStepRequest;
+        TestStep testStep;
+        if(request.getIsStepRecorder() && request.getElementRequest() != null){
             log.info("Create Test step from Step recorder");
-            UiIdentifierRequest uiIdentifierRequest = request.getUiIdentifierRequest();
+            UiIdentifierRequest uiIdentifierRequest = request.getElementRequest();
             ElementRequest elementRequest = uiIdentifierMapper.mapRequest(uiIdentifierRequest);
             Element element = uiIdentifierMapper.map(elementRequest);
             element = elementService.createUiIdentifierFromRecorder(element);
             request.getDataMap().setUiIdentifier(element.getName());
 
-            TestStepRequest testStepRequest = testStepRecorderMapper.mapRequest(request);
-            TestStep testStep = mapper.map(testStepRequest);
+            testStepRequest = testStepRecorderMapper.mapRequest(request);
+            replaceCamelCase(testStepRequest.getDataMap());
+            testStep = mapper.map(testStepRequest);
+            parentStepId = testStep.getParentId();
             testStep.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
             if(testStep.getPosition() == null) {
                 Optional<TestStep> lastTestStep = service.findTopByTestCaseIdOrderByPositionDesc(testStep.getTestCaseId());
@@ -143,26 +168,37 @@ public class TestStepsRecorderController {
             }
             if (testStep.getParentId() != null)
                 testStep.setDisabled(this.service.find(testStep.getParentId()).getDisabled());
-            testStep = service.create(testStep);
+            testStep = service.create(testStep, true);
             testStepDTO = mapper.mapDTO(testStep);
 
             testStepRecorderDTO = testStepRecorderMapper.mapDTO(testStepDTO);
             testStepRecorderDTO.setUiIdentifierDTO(uiIdentifierMapper.mapDTO(uiIdentifierMapper.map(element)));
         } else{
-            TestStepRequest testStepRequest = testStepRecorderMapper.mapRequest(request);
-            TestStep testStep = mapper.map(testStepRequest);
+            testStepRequest = testStepRecorderMapper.mapRequest(request);
+            replaceCamelCase(testStepRequest.getDataMap());
+            testStep = mapper.map(testStepRequest);
+            parentStepId = testStep.getParentId();
             if(testStep.getPosition() == null) {
                 Optional<TestStep> lastTestStep = service.findTopByTestCaseIdOrderByPositionDesc(testStep.getTestCaseId());
                 int position = lastTestStep.isPresent() ? lastTestStep.get().getPosition()+1 : 0;
                 testStep.setPosition(position);
             }
-            testStep = service.create(testStep);
+            testStep = service.create(testStep, true);
             testStepDTO = mapper.mapDTO(testStep);
             testStepRecorderDTO = testStepRecorderMapper.mapDTO(testStepDTO);
         }
         if(testStepRecorderDTO.getUiIdentifierDTO() != null) {
             testStepRecorderDTO.getDataMap().setUiIdentifier(testStepRecorderDTO.getUiIdentifierDTO().getName());
         }
+        if (request.getForLoopCondition() != null) {
+            ForLoopConditionRequest forLoopConditionRequestV1 = forLoopConditionsMapper.getForConditionEntity(request.getForLoopCondition());
+            ForLoopCondition forLoopCondition = forLoopConditionsMapper.map(forLoopConditionRequestV1);
+            forLoopCondition.setTestStepId(testStep.getId());
+            forLoopCondition.setTestCaseId(testStepRecorderDTO.getTestCaseId());
+            forLoopCondition = forLoopConditionsService.save(forLoopCondition);
+            testStepRecorderDTO.setForLoopCondition(forLoopConditionsMapper.getForLoopConditionDTO(forLoopCondition));
+        }
+        testStepRecorderDTO.setParentId(parentStepId);
         return testStepRecorderDTO;
     }
 
@@ -172,7 +208,7 @@ public class TestStepsRecorderController {
         log.debug("DELETE /os_recorder/test_steps/bulk_update_properties with ids::" + Arrays.toString(ids));
         for (Long id : ids) {
             TestStep step = this.service.find(id);
-            this.service.destroy(step);
+            this.service.destroy(step, true);
         }
     }
 
@@ -183,11 +219,11 @@ public class TestStepsRecorderController {
                                      @RequestParam(value = "priority", required = false) TestStepPriority testStepPriority,
                                      @RequestParam(value = "disabled", required = false) Boolean disabled,
                                      @RequestParam(value = "ignoreStepResult", required = false) Boolean ignoreStepResult,
-                                     @RequestParam(value = "visualEnabled", required = false) Boolean visualEnabled) {
+                                     @RequestParam(value = "visualEnabled", required = false) Boolean visualEnabled) throws ResourceNotFoundException {
 
         log.debug("PUT /os_recorder/test_steps/bulk_update_properties with ids::" + Arrays.toString(ids) + " waitTime ::"
                 + waitTime + " priority ::" + testStepPriority + " disabled ::" + disabled +" ignoreStepResult ::" +ignoreStepResult);
-        this.service.bulkUpdateProperties(ids, testStepPriority, waitTime, disabled, ignoreStepResult,visualEnabled);
+        this.service.bulkUpdateProperties(ids, testStepPriority, waitTime, disabled, ignoreStepResult,visualEnabled, true);
     }
 
     @PutMapping(value = "/bulk_update")
@@ -202,9 +238,9 @@ public class TestStepsRecorderController {
             if (request.getType() == TestStepType.NLP_TEXT) {
                 request.setType(TestStepType.ACTION_TEXT);
             }
-            if (request.getIsStepRecorder() && request.getUiIdentifierRequest() != null) {
+            if (request.getIsStepRecorder() && request.getElementRequest() != null) {
                 log.info("Update Test step from Step recorder");
-                UiIdentifierRequest uiIdentifierRequest = request.getUiIdentifierRequest();
+                UiIdentifierRequest uiIdentifierRequest = request.getElementRequest();
                 ElementRequest elementRequest = uiIdentifierMapper.mapRequest(uiIdentifierRequest);
                 Element element = uiIdentifierMapper.map(elementRequest);
                 element = elementService.createUiIdentifierFromRecorder(element);
@@ -224,12 +260,45 @@ public class TestStepsRecorderController {
                 testStepRecorderDTO.setUiIdentifierDTO(uiIdentifierMapper.mapDTO(uiIdentifierMapper.map(element)));
             } else {
                 TestStepRequest testStepRequest = testStepRecorderMapper.mapRequest(request);
-                testStep = this.service.update(mapper.map(testStepRequest));
+                testStep = this.service.update(mapper.map(testStepRequest), true);
                 testStepDTO = mapper.mapDTO(testStep);
                 testStepRecorderDTO = testStepRecorderMapper.mapDTO(testStepDTO);
+            }
+            if (request.getForLoopCondition() != null) {
+                Optional<ForLoopCondition> forLoopConditionOptional = forLoopConditionsService.findByTestStepId(testStepDTO.getId());
+                ForLoopCondition forLoopCondition = new ForLoopCondition();
+                if(forLoopConditionOptional.isPresent()) {
+                    forLoopCondition = forLoopConditionOptional.get();
+                }
+                ForLoopConditionRequest forLoopConditionRequestV1 = forLoopConditionsMapper.getForConditionEntity(request.getForLoopCondition());
+                forLoopConditionsMapper.merge(forLoopCondition, forLoopConditionRequestV1);
+                forLoopCondition.setTestStepId(testStep.getId());
+                forLoopCondition = forLoopConditionsService.save(forLoopCondition);
+                testStepRecorderDTO.setForLoopCondition(forLoopConditionsMapper.getForLoopConditionDTO(forLoopCondition));
             }
             testStepRecorderDTOS.add(testStepRecorderDTO);
         }
         return testStepRecorderDTOS;
+    }
+
+    private void replaceCamelCase(TestStepDataMap testStepDataMap) {
+        if(testStepDataMap.getTestData() == null) {
+            return;
+        }
+        Map<String, TestStepNlpData> testDataMap = new HashMap<>();
+        for (Iterator<String> keys = testStepDataMap.getTestData().keySet().iterator(); keys.hasNext();) {
+            String key = keys.next();
+            TestStepNlpData testStepNlpData = testStepDataMap.getTestData().get(key);
+            if(key.equals("testData1")) {
+                testDataMap.put("test-data1", testStepNlpData);
+            }
+            else if(key.equals("testData2")) {
+                testDataMap.put("test-data2", testStepNlpData);
+            }
+            else {
+                testDataMap.put("test-data", testStepNlpData);
+            }
+        }
+        testStepDataMap.setTestData(testDataMap);
     }
 }
