@@ -201,6 +201,10 @@ export class ResultsListComponent extends BaseComponent implements OnInit {
     });
   }
 
+  removeHtmlTags(str) {
+    return str.replace(/<[^>]*>/g, '');
+  }
+
   discard() {
     this.query = undefined;
     this.router.navigate(['/td', this.version.id, 'results']);

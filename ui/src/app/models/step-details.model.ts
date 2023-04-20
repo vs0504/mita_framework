@@ -19,7 +19,7 @@ export class StepDetails extends Base implements Deserializable {
   public conditionType: TestStepConditionType;
   @serializable
   public action: String;
-  @serializable
+  @serializable(alias('position', custom(() => SKIP, (v) => v)))
   public order_id: Number;
   @serializable
   public priority: TestStepPriority;
@@ -89,7 +89,7 @@ export class StepDetails extends Base implements Deserializable {
   }
 
   get testDataValue(): String {
-    return this.dataMap && this.dataMap.testData || this.testDataParameterValue;
+    return this.testDataParameterValue;
   }
 
   get isMajor(): boolean{

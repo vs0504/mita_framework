@@ -45,6 +45,7 @@ export class TestCaseDetailsComponent extends BaseComponent implements OnInit {
   public stepsLength: number;
   public entityType: EntityType = EntityType.TEST_CASE;
   public entityExternalMapping: EntityExternalMapping;
+  public enabledStepPresent: boolean;
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -82,6 +83,7 @@ export class TestCaseDetailsComponent extends BaseComponent implements OnInit {
     this.testCaseService.getStepLengthEmitter().subscribe(hasInspectorFeatureres => {
       this.stepsLength = hasInspectorFeatureres;
     })
+    this.testCaseService.enableStepdata$.subscribe(enableStepdata => this.enabledStepPresent = enableStepdata);
   }
 
   fetchUserPreference() {

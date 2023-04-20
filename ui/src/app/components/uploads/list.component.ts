@@ -148,7 +148,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
   checkForLinkedTestCases(testData?,id?,name?) {
     let testCases: InfiniteScrollableDataSource;
-    let query = "workspaceVersionId:" + this.versionId + ",testData:" + encodeURI(testData?.join("#"))
+    let query = "workspaceVersionId:" + this.versionId + ",testDataValue:" + encodeURI(testData?.join("#"))
     query = this.byPassSpecialCharacters(query);
     testCases = new InfiniteScrollableDataSource(this.testCaseService,query);
 
@@ -182,7 +182,7 @@ export class ListComponent extends BaseComponent implements OnInit {
 
 
 
-  checkForLinkedEntities(id, name?: string) {
+  checkForLinkedEntities(id?: number, name?: string) {
     this.checkForLinkedEnvironments(id, name);
   }
   checkForLinkedEnvironments(id, name?: string) {
@@ -196,7 +196,7 @@ export class ListComponent extends BaseComponent implements OnInit {
         setTimeout(() => waitTillRequestResponds(environmentResults, id, name), 100);
       else {
         if (environmentResults.isEmpty)
-          _this.uploadVersionService.findAll("uploadId:" + id).subscribe(res => {
+        _this.uploadVersionService.findAll("uploadId@" + (id ? id : _this.selectedUploads.join("#"))).subscribe(res => {
             let uploadPaths = res.content.map(version =>"mita-storage:/" + version.path)
             _this.checkForLinkedTestCases(uploadPaths,id,name);
           })

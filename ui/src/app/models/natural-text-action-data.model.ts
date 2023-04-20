@@ -8,12 +8,12 @@
  */
 import {Base} from "../shared/models/base.model";
 import {Deserializable} from "../shared/models/deserializable";
-import {deserialize, serializable} from 'serializr';
+import {custom, deserialize, serializable} from 'serializr';
 
 export class NaturalTextActionData extends Base implements Deserializable {
 
-  @serializable
-  public testData: String;
+  @serializable(custom(v=>v, v=>v))
+  public testData: Map<string, string>;
   @serializable
   public element: String;
   @serializable
@@ -22,6 +22,8 @@ export class NaturalTextActionData extends Base implements Deserializable {
   public fromElement: String;
   @serializable
   public toElement: String;
+  @serializable(custom(v=>v, v=>v))
+  public testDataForLoop: Map<string, string>;
 
   deserialize(input: any): this {
     return Object.assign(this, deserialize(NaturalTextActionData, input));

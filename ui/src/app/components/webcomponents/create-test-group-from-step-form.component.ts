@@ -85,6 +85,10 @@ export class CreateTestGroupFromStepFormComponent extends BaseComponent implemen
     })
   }
 
+  navigateToCase(testCaseId: number){
+    window.open('td/cases/'+testCaseId.toString(), '_blank');
+  }
+
   saveAsStepGroup(isReplace?: boolean) {
     this.saving = true;
     let copyStepGroup = {
@@ -96,6 +100,7 @@ export class CreateTestGroupFromStepFormComponent extends BaseComponent implemen
     }
     this.testCaseService.copy(copyStepGroup).subscribe(
       (testCase) => {
+        this.navigateToCase(testCase.id)
         this.translate.get('test_step.copy_as.step_group.success').subscribe((res: string) => {
           this.showNotification(NotificationType.Success, res);
           this.dialogRef.close({testCase: testCase, isReplace: isReplace});

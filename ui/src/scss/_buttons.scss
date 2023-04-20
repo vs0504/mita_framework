@@ -68,6 +68,12 @@ fieldset:disabled a.btn {
   }
 }
 
+.primary-green{
+  color: $primary-green;
+}
+.dark-green{
+  color: $dark-green;
+}
 
 /*Custom buttons*/
 .btn-primary {
@@ -76,8 +82,8 @@ fieldset:disabled a.btn {
   text-shadow: 0 1px 1px #047ab3;
   @extend .rb-medium;
 
-  &:hover, &:active, &:focus {
-    background-color: #02c7e4 !important;
+  &:hover{
+    background-color: $background-green !important;
     border: 1px solid #02c7e4;
   }
 }

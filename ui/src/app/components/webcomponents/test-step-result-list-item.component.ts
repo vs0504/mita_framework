@@ -26,6 +26,7 @@ import {WorkspaceVersion} from "../../models/workspace-version.model";
 import {AddonNaturalTextAction} from "../../models/addon-natural-text-action.model";
 import {NaturalTextActionsService} from "../../services/natural-text-actions.service";
 import {SharedService} from "../../services/shared.service";
+import {TestDataService} from "../../services/test-data.service";
 
 
 @Component({
@@ -78,13 +79,12 @@ import {SharedService} from "../../services/shared.service";
             <span
               *ngIf="testStepResult.isForLoop">
             <i class="fa-power-loop mr-5 text-nowrap"></i>
-            <span [translate]="'step.condition_type.'+testStepResult?.stepDetail?.conditionType"></span>
-            #{{testStepResult.metadata.forLoop.index}} :: {{testStepResult.metadata.forLoop.testDataName}}
-              - {{testStepResult.metadata.forLoop.iteration}}
+            #{{testStepResult.metadata?.forLoop?.index}}
+              ::&nbsp;
           </span>
             <span
               [matTooltip]="'test_step.type.REST_STEP' | translate"
-              *ngIf="testStepResult.isRestStep" class="fa-rest-new text-warning mr-5 text-nowrap"></span>
+              *ngIf="testStepResult.isRestStep" class="fa-rest-new text-warning mr-5 text-nowrap line-height-none fz-16"></span>
             <span
               class="mw-80 lh-1point4"
               [class.text-warning]="testStepResult.testStep &&!testStepResult?.isBreakContinueLoopStep"
@@ -261,7 +261,9 @@ export class TestStepResultListItemComponent extends TestStepListItemComponent i
     private matDialog: MatDialog,
     public router: Router,
     public sharedService : SharedService,
-    public testStepService: TestStepService) {
+    public testStepService: TestStepService,
+    public testDataService: TestDataService
+    ) {
     super(authGuard, notificationsService, translate, toastrService, testStepService,naturalTestActionService, matDialog,sharedService);
   }
 

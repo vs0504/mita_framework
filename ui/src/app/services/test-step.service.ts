@@ -9,6 +9,7 @@ import {catchError, map} from "rxjs/operators";
 import {TestStep} from "../models/test-step.model";
 import {TestStepPriority} from "../enums/test-step-priority.enum";
 import {RestStepEntity} from "../models/rest-step-entity.model";
+import {ForLoopData} from "../models/for-loop-data.model";
 @Injectable({
   providedIn: 'root'
 })
@@ -64,7 +65,7 @@ export class TestStepService {
 
   public create(step: TestStep): Observable<TestStep> {
     if (step.addonTestData){
-      step.addonTemplate.parameters.filter(a=> a.allowedValues.length==0).forEach(p=>{
+      step?.addonTemplate?.parameters.filter(a=> a.allowedValues?.length==0).forEach(p=>{
         let temp = p.reference;
         step.action = step.action.replace(temp, step.addonTestData[temp].value);
       });}
@@ -153,5 +154,16 @@ export class TestStepService {
       map(data => data),
       catchError(() => throwError('Problem while fetching api response'))
     )
+  }
+  findAllForLoopData(filter?: string, sortBy?: string, pageable?: Pageable): Observable<Page<ForLoopData>> {
+    return this.http.get<Page<ForLoopData>>(this.URLConstants.forLoopConditionsUrl, {
+      headers: this.httpHeaders.contentTypeApplication,
+      params: this.httpHeaders.serializeParams(filter, sortBy, pageable)
+    }).pipe(
+      map(data => new Page<ForLoopData>().deserialize(data, ForLoopData),
+        catchError(error => {
+          return throwError("Problem while fetching for loop conditions", error)
+        }))
+    );
   }
 }

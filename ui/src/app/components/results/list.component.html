@@ -93,7 +93,7 @@
             [innerHTML]="(testPlan?.description)"></div>
             <!-- <div
             class="pt-4 text-t-secondary"
-            [matTooltip]="(testPlan?.description?.length>151) ? testPlan?.description : ''"
+            [matTooltip]="(testPlan?.description?.length>151) ? removeHtmlTags(testPlan?.description) : ''"
             [innerHTML]="(testPlan?.description?.length>151) ?
             (testPlan?.description | slice:0:150)+'...':(testPlan?.description) ||
               ('results.list_view.no_description' | translate) "></div> -->

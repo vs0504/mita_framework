@@ -127,14 +127,12 @@ $abbrev in (width: w, height: h) {
 .h-100-40 {
   height: calc(100% - 40px)!important;
 }
-
 .h-24{
   height: 1.5rem;
 }
 .w-24{
   width: 1.5rem;
 }
-
 .h-100-250 {
   height: calc(100% - 250px)!important;
 }
@@ -183,6 +181,9 @@ $abbrev in (width: w, height: h) {
 .w-100p{
   width: 100px !important;
 }
+.w-100{
+  width: 100% !important;
+}
 .w-167p {
   width: 167px
 }
@@ -228,4 +229,3 @@ $abbrev in (width: w, height: h) {
 .max-w-360p{
   min-width: 22.5rem;
 }
-

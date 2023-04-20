@@ -7,6 +7,7 @@ import {ScreenShortOverlayComponent} from "./screen-short-overlay.component";
 import {defaultPageScrollConfig, PageScrollService} from "ngx-page-scroll-core";
 import {DOCUMENT} from "@angular/common";
 import {TestStepResultService} from "../../services/test-step-result.service";
+import {UploadVersionService} from "../../shared/services/upload-version.service";
 import {ElementService} from "../../shared/services/element.service";
 import {BaseComponent} from "../../shared/components/base.component";
 import {AuthenticationGuard} from "../../shared/guards/authentication.guard";
@@ -70,6 +71,7 @@ export class ActionStepResultDetailsComponent extends BaseComponent implements O
     private environmentResultService: TestDeviceResultService,
     private testStepResultService: TestStepResultService,
     private uploadService: UploadService,
+    private uploadVersionService: UploadVersionService,
     private router: ActivatedRoute) {
     super(authGuard, notificationsService, translate, toastrService);
     defaultPageScrollConfig.scrollOffset = 200;
@@ -128,8 +130,7 @@ export class ActionStepResultDetailsComponent extends BaseComponent implements O
   }
 
   getElementDetails() {
-    if (!this.ElementDetails)
-      this.ElementDetails = this.getElements(this.testStepResult?.elementDetails, true);
+    this.ElementDetails = this.getElements(this.testStepResult?.elementDetails, true);
     return this.ElementDetails.length || this.element?.locatorValue;//TODO Fallback element details need to clean
   }
 
@@ -321,10 +322,17 @@ export class ActionStepResultDetailsComponent extends BaseComponent implements O
     if (this.environmentResult.testDeviceSettings.appId)
       json['appId'] = this.environmentResult.testDeviceSettings.appId;
     this.appDetails = json;
-    if (this.environmentResult.testDeviceSettings.appUploadId || this.environmentResult.testDeviceSettings.appId)
-      this.uploadService.find(this.environmentResult.testDeviceSettings.appUploadId || this.environmentResult.testDeviceSettings.appId).subscribe(app => {
-        this.appDetails['appName'] = app.name;
+    if (this.environmentResult.testDeviceSettings.appUploadId || this.environmentResult.testDeviceSettings.appId){
+      this.uploadVersionService.find(this.environmentResult.appUploadVersionId).subscribe(version => {
+        this.appDetails['appName'] = version?.fileName;
+        this.appDetails['appId'] = version?.uploadId;
+        this.appDetails['version'] = version?.name;
+        this.appDetails['versionId'] = version?.id;
+        this.uploadService.find(version?.uploadId).subscribe(upload=> {
+          this.appDetails['appName'] = upload.name;
+        })
       })
+    }
   }
 
   canShowDetails() {

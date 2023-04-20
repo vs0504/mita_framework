@@ -15,6 +15,8 @@ import {TestStep} from "../../models/test-step.model";
 import {AddonNaturalTextAction} from "../../models/addon-natural-text-action.model";
 import {FormGroup} from "@angular/forms";
 import {ChromeRecorderService} from "../../services/chrome-recoder.service";
+import {TestDataMapValue} from "../../models/test-data-map-value.model";
+import {ForLoopData} from "../../models/for-loop-data.model";
 
 @Component({
   selector: 'app-test-case-action-steps',
@@ -58,8 +60,10 @@ export class TestCaseActionStepsComponent extends TestCaseStepsListComponent imp
           if(this.addonTemplates?.content?.length)
           testStep.addonTemplate = this.addonTemplates.content.find(template => template.id == testStep.addonActionId)
         }
-        if(this.navigateTemplate.includes(testStep?.template?.id))
-          this.testCase.startUrl = testStep.testDataValue;
+        testStep.dataMap?.testData?.forEach((testDataMapValue: TestDataMapValue) => {
+          if(this.navigateTemplate.includes(testStep?.template?.id))
+            this.testCase.startUrl = testDataMapValue.value;
+        })
         testStep.parentStep = this.testSteps.content.find(res => testStep.parentId == res.id);
       });
     }
@@ -78,6 +82,28 @@ export class TestCaseActionStepsComponent extends TestCaseStepsListComponent imp
           if (step.testDataId)
             step.testData = testDataPage.content.find(res => res.id == step.testDataId)
         })
+      });
+      this.testStepService.findAllForLoopData().subscribe((loopData: Page<ForLoopData>) => {
+        let testDataProfileIds = [];
+        this.testSteps.content.forEach((step) => {
+          if (step.isForLoop && loopData?.content?.find(res => res.testStepId == step.id)) {
+            step.forLoopData = loopData.content.find(res => res.testStepId == step.id)
+            if(!testDataProfileIds.includes(step?.forLoopData?.testDataProfileId) && step?.forLoopData?.testDataProfileId) {
+              testDataProfileIds.push(step.forLoopData.testDataProfileId);
+            }
+          }
+        })
+        this.testDataService.findAll("id@" + testDataProfileIds.join("#")).subscribe((testDataPage: Page<TestData>) => {
+          if(!testDataPage.empty) {
+            this.testSteps?.content?.forEach(step => {
+              if (step?.forLoopData && testDataPage.content.find(data => data.id == step?.forLoopData?.testDataProfileId)) {
+                step.forLoopData.testDataProfileData = testDataPage.content.find(data => data.id == step?.forLoopData?.testDataProfileId)
+              }
+            })
+          }
+        }, error => {
+        })
+      }, error => {
       });
   }
 
