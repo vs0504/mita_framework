@@ -141,7 +141,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
 
   public byte[] getFileInBytes(String fileHashCode) {
     RestTemplate restTemplate = new RestTemplate();
-    String fileUrl = "https://docs.machint.com/get-uploaded-file?file_name="+fileHashCode;
+    String fileUrl = "https://filedownload-test.machint.com/get-uploaded-file?file_name="+fileHashCode;
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
     headers.add("Authorization",getBearerForFile());

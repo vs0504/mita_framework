@@ -73,7 +73,7 @@ export class TestStepResultDetailsComponent extends BaseComponent implements OnI
          .then(response => response.json())
          .then(data => {
            let jwtToken = data.response.jwt_token;
-           const fileDownloadUrl = 'https://docs.machint.com/get-uploaded-file?file_name='+res?.screenshotName;
+           const fileDownloadUrl = 'https://filedownload-test.machint.com/get-uploaded-file?file_name='+res?.screenshotName;
            const toBase64 = (file) =>
                    new Promise((resolve, reject) => {
                   const reader = new FileReader();
