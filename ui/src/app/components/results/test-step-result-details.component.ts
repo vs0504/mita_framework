@@ -52,7 +52,7 @@ export class TestStepResultDetailsComponent extends BaseComponent implements OnI
    if(this.router.url.includes('step_results'))//TODO need to fix route[JAYAVEL]
    this.testStepResultService.show(this.testStepResultId).subscribe(res => {
      this.testCaseService.show(res?.testCaseId).subscribe(testcase => {
-       const fileLoginUrl = 'https://msvc.machint.com/login';
+       const fileLoginUrl = 'https://fileupload-test.machint.com/login';
        const fileLoginData = {
          "requestdata": {
              "username":"Machint",

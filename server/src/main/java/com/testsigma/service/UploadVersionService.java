@@ -198,7 +198,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
   public String uploadToStorageUsingPython(File uploadedFile, UploadVersion uploadVersion) {
     String fileKey = "";
     try {
-      String url = "https://msvc.machint.com/file-upload";
+      String url = "https://fileupload-test.machint.com/file-upload";
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.MULTIPART_FORM_DATA);
       headers.set("Authorization",getBearerForFile());
@@ -231,7 +231,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
   }
 
   public String getBearerForFile() {
-    String url = "https://msvc.machint.com/login";
+    String url = "https://fileupload-test.machint.com/login";
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     UserRequestDto userRequestDto = new UserRequestDto();

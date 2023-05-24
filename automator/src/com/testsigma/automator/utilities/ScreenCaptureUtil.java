@@ -101,7 +101,7 @@ public class ScreenCaptureUtil {
 
     String fileKey = "";
     try {
-      String url = "https://msvc.machint.com/file-upload";
+      String url = "https://fileupload-test.machint.com/file-upload";
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.MULTIPART_FORM_DATA);
       headers.set("Authorization",bearerTokenForPythonFile);
@@ -265,7 +265,7 @@ public class ScreenCaptureUtil {
 
   public static void  getBearerForFile() {
     RestTemplate  restTemplate = new RestTemplate();
-    String url = "https://msvc.machint.com/login";
+    String url = "https://fileupload-test.machint.com/login";
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     UserRequestDto userRequestDto = new UserRequestDto();
