@@ -12,7 +12,11 @@ import com.testsigma.exception.ResourceNotFoundException;
 import com.testsigma.exception.TestsigmaDatabaseException;
 import com.testsigma.mapper.WorkspaceVersionMapper;
 import com.testsigma.model.WorkspaceVersion;
+import com.testsigma.model.WorkspaceVersionMapping;
+import com.testsigma.repository.UserOnboardingRepository;
+import com.testsigma.service.CurrentUserService;
 import com.testsigma.service.WorkspaceService;
+import com.testsigma.service.WorkspaceVersionMappingService;
 import com.testsigma.service.WorkspaceVersionService;
 import com.testsigma.specification.VersionSpecificationsBuilder;
 import com.testsigma.web.request.WorkspaceVersionRequest;
@@ -27,7 +31,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/workspace_versions")
@@ -39,6 +46,9 @@ public class WorkspaceVersionsController {
   private final WorkspaceVersionService workspaceVersionService;
   private final WorkspaceVersionMapper workspaceVersionMapper;
   private final WorkspaceService workspaceService;
+  private final UserOnboardingRepository userOnboardingRepository;
+  private final WorkspaceVersionMappingService workspaceVersionMappingService;
+
 
   @GetMapping(path = "/{id}")
   public WorkspaceVersionDTO show(@PathVariable(value = "id") Long id) throws ResourceNotFoundException {
@@ -48,14 +58,29 @@ public class WorkspaceVersionsController {
   }
 
   @GetMapping
-  public Page<WorkspaceVersionDTO> index(VersionSpecificationsBuilder builder,
+  public Page<?> index(VersionSpecificationsBuilder builder,
                                          Pageable pageable) {
     log.info("Request /workspace_versions/");
+    String email = CurrentUserService.getCurrentUser().getEmail();
+    log.info(" current email"+email);
+    Map<String, Object> userData = userOnboardingRepository.findByUserDetails(email);
+
     Specification<WorkspaceVersion> spec = builder.build();
     Page<WorkspaceVersion> versions = workspaceVersionService.findAll(spec, pageable);
     List<WorkspaceVersionDTO> dtos =
       workspaceVersionMapper.map(versions.getContent());
-    return new PageImpl<>(dtos, pageable, versions.getTotalElements());
+
+
+    List<WorkspaceVersionMapping> workspaceVersionMappingList= workspaceVersionMappingService.findWorkSpaceVersionByUserId1(userData.get("id"));
+    List<WorkspaceVersionDTO> finaldtos = new ArrayList<>();
+    for(WorkspaceVersionDTO  workSpaceVersion: dtos) {
+      List<WorkspaceVersionMapping> workspaceVersionMappingresultList = workspaceVersionMappingList.stream().filter(project -> project.getWorkspaceVersionId().toString().equals(workSpaceVersion.getId().toString())).collect(Collectors.toList());
+      if (workspaceVersionMappingresultList.size() > 0 && workspaceVersionMappingresultList.get(0).getStatus().equalsIgnoreCase("ACTIVE")) {
+        finaldtos.add(workSpaceVersion);
+      }
+    }
+
+    return new PageImpl<>(finaldtos,pageable,finaldtos.size());
   }
 
   @DeleteMapping(path = "/{id}")
