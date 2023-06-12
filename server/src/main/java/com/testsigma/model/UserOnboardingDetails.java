@@ -60,4 +60,13 @@ public class UserOnboardingDetails {
 
     @Column(name = "google_client_secret")
     private String googleClientSecret;
+
+    @Column(name = "company_id", nullable = false, columnDefinition = "int default 1")
+    private Integer companyId;
+
+    @Column(name = "role")
+    private String role;
+
+    @Column(name= "role_id")
+    private Integer roleId;
 }
