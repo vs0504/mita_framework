@@ -6,6 +6,7 @@ import {AuthenticationConfigService} from "../services/authentication-config.ser
 import {AuthenticationConfig} from "../models/authentication-config.model";
 import {AuthenticationType} from "../shared/enums/authentication-type.enum";
 import {MatSnackBar} from '@angular/material/snack-bar';
+import { PermissionService } from 'app/shared/services/permissions.service';
 
 @Component({
   selector: 'app-login-form',
@@ -26,6 +27,7 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private authConfigService: AuthenticationConfigService,
     private sessionService: SessionService,
+    private permissionService:PermissionService,
     private route: ActivatedRoute,
     private formBuilder: FormBuilder) {
   }
@@ -59,6 +61,12 @@ export class LoginFormComponent implements OnInit {
     ).subscribe(res => {
       console.log("login response---->",res);
       this.inTransit = false;
+      this.permissionService.retrievePermissions().subscribe(res => {
+        sessionStorage.setItem("permissions", JSON.stringify(res));
+      }, err => {
+         this.error = err;
+      console.log("error while permissionService--->",this.error)
+      })
       this.router.navigate(['dashboard']);
     }, err => {
      

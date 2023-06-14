@@ -37,7 +37,7 @@ public class RolePermissionMappingController {
         String email = CurrentUserService.getCurrentUser().getEmail();
         log.info(" current email"+email);
         Map<String, Object> userData = userOnboardingRepository.findByUserDetails(email);
-        List<RolePermissionMapping> rolePermissionMappingsList= rolePermissionMappingService.findRolePermissionsByRoleId(userData.get("roleId"));
+        List<RolePermissionMapping> rolePermissionMappingsList= rolePermissionMappingService.findRolePermissionsByRoleId(userData.get("role_id"));
         List<Permissions> permissions = permissionService.getAllPermissions();
 
         Map<String,Boolean> object = new HashMap<>();

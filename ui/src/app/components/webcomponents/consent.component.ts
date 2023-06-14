@@ -56,6 +56,7 @@ export class ConsentComponent extends BaseComponent implements OnInit {
 
   }
   logout() {
+    sessionStorage.removeItem('permissions');
     this.sessionService.logout().subscribe(()=> this.router.navigate(['login']));
   }
 }

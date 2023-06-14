@@ -42,7 +42,7 @@
             </ul>
           </div>
         </div> -->
-        <a
+        <a *ngIf="permissionsObj.TEST_CASE_CREATION"
           [routerLink]="['/td', versionId, isStepGroup? 'step_groups':'cases', 'create']" [queryParams]="{ isGroup: isStepGroup}"
           class="theme-btn-primary  ml-10"
           [translate]="'btn.common.create'"></a>

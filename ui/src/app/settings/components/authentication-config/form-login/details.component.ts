@@ -112,6 +112,7 @@ export class DetailsComponent extends BaseComponent implements OnInit {
     });
     dialogRef.afterClosed()
       .subscribe((res) => {
+        sessionStorage.removeItem('permissions');
         this.sessionService.logout().subscribe(()=> this.router.navigate(['login']));
       });
   }

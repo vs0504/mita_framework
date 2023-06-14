@@ -54,6 +54,7 @@ export class TestCasesListComponent extends BaseComponent implements OnInit {
   public isFetching: boolean = true;
   public userPreference: UserPreference;
   private resultFilter: string;
+  public permissionsObj: any;
 
   @ViewChild('filterListBtn') public filterListBtn: ElementRef;
 
@@ -83,6 +84,8 @@ export class TestCasesListComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
+    console.log("permissionsObj---", this.permissionsObj);
     this.userPreferenceService.show().subscribe(res => {
       this.userPreference = res;
       this.versionId = this.route.parent.parent.snapshot.params['versionId'];

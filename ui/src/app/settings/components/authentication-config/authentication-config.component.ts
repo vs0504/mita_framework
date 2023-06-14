@@ -155,6 +155,7 @@ export class AuthenticationConfigComponent extends BaseComponent implements OnIn
     });
     dialogRef.afterClosed()
       .subscribe((res) => {
+        sessionStorage.removeItem('permissions');
         this.sessionService.logout().subscribe(()=> this.router.navigate(['login']));
       });
   }
@@ -229,6 +230,7 @@ export class AuthenticationConfigComponent extends BaseComponent implements OnIn
       });
       dialogRef.afterClosed()
         .subscribe((res) => {
+          sessionStorage.removeItem('permissions');
           this.sessionService.logout().subscribe(()=> this.router.navigate(['login']));
         });
     } else {

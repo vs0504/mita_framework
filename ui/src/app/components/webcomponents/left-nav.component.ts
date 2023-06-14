@@ -155,6 +155,7 @@ export class LeftNavComponent extends BaseComponent implements OnInit,OnDestroy 
   }
 
   logout() {
+    sessionStorage.removeItem('permissions');
     this.sessionService.logout().subscribe(()=> this.router.navigate(['login']));
   }
 

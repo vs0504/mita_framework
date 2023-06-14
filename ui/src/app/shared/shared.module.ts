@@ -97,6 +97,7 @@ import {UploadVersionService} from "./services/upload-version.service";
 import {TestsigmaGitHubStarLoveComponent} from "./components/webcomponents/testsigma-github-star-love.component";
 import {DragDirective} from "./directives/dragDrop.directive";
 import {UploadDragAndDropComponent} from "./components/webcomponents/upload-drag-and-drop.component";
+import { PermissionService } from './services/permissions.service';
 
 @NgModule({
     declarations: [
@@ -161,6 +162,7 @@ import {UploadDragAndDropComponent} from "./components/webcomponents/upload-drag
     ElementService,
     NotificationsService,
     TranslateService,
+    PermissionService,
     TestDeviceResultService,
     RequestCache
   ],

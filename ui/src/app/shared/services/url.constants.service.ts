@@ -78,6 +78,7 @@ export class UrlConstantsService {
   public onboardingURL = this.apiBase + '/onboarding';
 
   public agentDownloadTagUrl = this.agentsUrl + "/download_tag";
+  public retrievePermissionsUrl = this.apiBase + "/role_permission_mapping"
   constructor() {
   }
 }
