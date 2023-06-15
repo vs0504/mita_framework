@@ -6,6 +6,7 @@ import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {TranslateService} from '@ngx-translate/core';
 import {UserPreference} from "./models/user-preference.model";
 import {UserPreferenceService} from "./services/user-preference.service";
+import { PermissionService } from './shared/services/permissions.service';
 
 @Component({
   selector: 'app-root',
@@ -16,13 +17,15 @@ export class AppComponent{
   public userPreference: UserPreference;
   previousUrl: string = null;
   currentUrl: string = null;
+  
 
   constructor(public authGuard: AuthenticationGuard,
               public titleService: Title,
               public router: Router,
               private activatedRoute: ActivatedRoute,
               public translate: TranslateService,
-              public userPreferenceService: UserPreferenceService) {
+              public userPreferenceService: UserPreferenceService,
+              private permissionService:PermissionService) {
   }
 
   get isOnboardingRoute() {
@@ -54,6 +57,13 @@ export class AppComponent{
     if (this.authGuard?.session?.user?.id) {
       this.userPreferenceService.show().subscribe(res => {
         this.userPreference = res;
+        this.permissionService.retrievePermissions().subscribe(res => {
+          sessionStorage.setItem("permissions", JSON.stringify(res));
+        }, err => {
+           
+        console.log("error while permissionService--->",err)
+        })
+
       })
     } else {
       setTimeout(() => {
@@ -69,4 +79,6 @@ export class AppComponent{
       return activatedRoute;
     }
   }
+  
+
 }

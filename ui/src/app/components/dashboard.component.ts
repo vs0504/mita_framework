@@ -10,6 +10,8 @@ import {BaseComponent} from "../shared/components/base.component";
 import {OnBoardingSharedService} from "../services/on-boarding-shared.service";
 import {MatDialog} from "@angular/material/dialog";
 import {TelemetryNotificationComponent} from "./webcomponents/telemetry-notification.component";
+import { PermissionService } from 'app/shared/services/permissions.service';
+import { UserPreference } from 'app/models/user-preference.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +21,7 @@ import {TelemetryNotificationComponent} from "./webcomponents/telemetry-notifica
 export class DashboardComponent extends BaseComponent implements OnInit {
   public version: WorkspaceVersion;
   @ViewChild('shareFeedBackBtn') public shareFeedBackBtn: ElementRef;
+
   showTelemetryNotification: boolean;
 
   constructor(
@@ -28,7 +31,8 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     private versionService: WorkspaceVersionService,
     private userPreferenceService: UserPreferenceService,
     public onBoardingSharedService: OnBoardingSharedService,
-    public matModal: MatDialog
+    public matModal: MatDialog,
+    private permissionService:PermissionService
   ) {
     super(authGuard);
     this.route.queryParams.subscribe(params => {
@@ -57,6 +61,13 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       if (res?.versionId) {
         this.versionService.show(res.versionId).subscribe(res => {
           this.version = res;
+          this.permissionService.retrievePermissions().subscribe(res => {
+            sessionStorage.setItem("permissions", JSON.stringify(res));
+          }, err => {
+             
+          console.log("error while permissionService--->",err)
+          })
+  
         }, err => this.loadDemoVersion());
       } else if (res?.projectId) {
         this.versionService.findAll("projectId:" + res.projectId).subscribe(versions => {
