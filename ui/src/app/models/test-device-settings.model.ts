@@ -5,12 +5,7 @@ import {ApplicationPathType} from "../enums/application-path-type.enum";
 import {Platform} from "../enums/platform.enum";
 import {Capability} from "../shared/models/capability.model";
 
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 export class TestDeviceSettings extends Base implements Deserializable {
   @serializable

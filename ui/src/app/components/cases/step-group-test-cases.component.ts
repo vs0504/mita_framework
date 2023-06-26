@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 
 import {Component, OnInit} from '@angular/core';
 import {InfiniteScrollableDataSource} from "../../data-sources/infinite-scrollable-data-source";

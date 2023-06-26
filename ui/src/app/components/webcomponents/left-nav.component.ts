@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AuthenticationGuard} from "../../shared/guards/authentication.guard";

@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {Component, ElementRef, Input, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
 import {TestCaseResult} from "../../models/test-case-result.model";

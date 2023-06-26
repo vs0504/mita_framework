@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.testsigma</groupId>
-  <artifactId>testsigma-server</artifactId>
+  <groupId>com.mita</groupId>
+  <artifactId>mita-server</artifactId>
   <packaging>jar</packaging>
-  <name>Testsigma Server</name>
+  <name>Mita Server</name>
 
   <licenses>
     <license>
@@ -78,9 +78,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.testsigma</groupId>
-      <artifactId>testsigma-automator</artifactId>
-      <version>1.0.0</version>
+     <groupId>com.mita</groupId>
+    <artifactId>mita-automator</artifactId>
+    <version>1.0.0</version>
     </dependency>
 
     <dependency>
@@ -414,7 +414,7 @@
   </dependencies>
 
   <build>
-    <finalName>testsigma-server</finalName>
+    <finalName>mita-server</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -459,7 +459,7 @@
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
             <manifest>
-              <mainClass>com.testsigma.TestsigmaWebApplication</mainClass>
+              <mainClass>com.mita.MitaWebApplication</mainClass>
             </manifest>
           </archive>
         </configuration>

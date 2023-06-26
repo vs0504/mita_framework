@@ -5,7 +5,7 @@
 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.testsigma</groupId>
-  <artifactId>testsigma-agent</artifactId>
+  <artifactId>mita-agent</artifactId>
   <version>1.3.0</version>
   <packaging>jar</packaging>
   <name>Testsigma Agent</name>
@@ -112,7 +112,7 @@
 
     <dependency>
       <groupId>com.testsigma</groupId>
-      <artifactId>testsigma-automator</artifactId>
+      <artifactId>mita-automator</artifactId>
       <version>1.0.0</version>
     </dependency>
 
@@ -274,6 +274,12 @@
           <version>2.11.0</version>
           <scope>compile</scope>
       </dependency>
+    <dependency>
+      <groupId>com.mita</groupId>
+      <artifactId>mita-automator</artifactId>
+      <version>1.0.0</version>
+      <scope>compile</scope>
+    </dependency>
 
   </dependencies>
 
@@ -323,7 +329,7 @@
           <archive>
             <addMavenDescriptor>false</addMavenDescriptor>
             <manifest>
-              <mainClass>com.testsigma.agent.TestsigmaAgent</mainClass>
+              <mainClass>com.mita.agent.MitaAgent</mainClass>
             </manifest>
           </archive>
         </configuration>

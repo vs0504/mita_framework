@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 export enum TestStepType {
   ACTION_TEXT = "ACTION_TEXT",
   STEP_GROUP = "STEP_GROUP",

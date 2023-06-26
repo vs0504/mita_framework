@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {Injectable} from '@angular/core';
 import {HttpHeaders, HttpParams} from "@angular/common/http";

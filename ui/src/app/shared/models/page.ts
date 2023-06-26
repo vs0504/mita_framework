@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {PageObject} from "app/shared/models/page-object";
 import {Pageable} from "app/shared/models/pageable";

@@ -1,11 +1,4 @@
-/*
- *
- * ****************************************************************************
- *  * Copyright (C) 2019 Testsigma Technologies Inc.
- *  * All rights reserved.
- *  ****************************************************************************
- *
- */
+
 
 import {Base} from "../../shared/models/base.model";
 import {MobileElement} from "./mobile-element.model";

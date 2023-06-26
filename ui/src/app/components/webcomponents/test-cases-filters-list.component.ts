@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 
 import {Component, ElementRef, Inject, OnInit, ViewChild} from '@angular/core';
 import {TranslateService} from '@ngx-translate/core';

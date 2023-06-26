@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {HttpHeadersService} from "./http-headers.service";
 import {UrlConstantsService} from "./url.constants.service";

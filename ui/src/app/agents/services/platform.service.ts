@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {HttpHeadersService} from "../../shared/services/http-headers.service";
 import {HttpClient} from '@angular/common/http';

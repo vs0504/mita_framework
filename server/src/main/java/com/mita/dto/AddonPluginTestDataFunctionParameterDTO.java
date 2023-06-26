@@ -1,0 +1,14 @@
+package com.mita.dto;
+
+
+import com.mita.model.AddonPluginTestDataFunctionParameterType;
+import lombok.Data;
+
+@Data
+public class AddonPluginTestDataFunctionParameterDTO {
+  private Long id;
+  private String name;
+  private String reference;
+  private String description;
+  private AddonPluginTestDataFunctionParameterType type;
+}

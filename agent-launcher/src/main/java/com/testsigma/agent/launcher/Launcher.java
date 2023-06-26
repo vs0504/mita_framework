@@ -191,7 +191,7 @@ public class Launcher {
     log.info("Changed Agent status to - " + agentStatus);
     if (this.background)
       return;
-    this.systemTray.setStatus(String.format("Testsigma Agent - %s", agentStatus));
+    this.systemTray.setStatus(String.format("Mita Agent - %s", agentStatus));
   }
 
   private List<String> agentStartCommand(int wrapperPort) throws URISyntaxException {

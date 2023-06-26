@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";

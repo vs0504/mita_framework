@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 
 import {InfiniteScrollableDataSource} from "./infinite-scrollable-data-source";
 import {Pageable} from "../shared/models/pageable";

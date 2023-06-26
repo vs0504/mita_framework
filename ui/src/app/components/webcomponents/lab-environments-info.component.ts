@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {Component, Input, OnInit, SimpleChanges} from '@angular/core';
 import {TestPlan} from "../../models/test-plan.model";

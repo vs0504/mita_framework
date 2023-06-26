@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Page} from "../../shared/models/page";

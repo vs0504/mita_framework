@@ -26,7 +26,7 @@ public class  Application {
   }
 
   private static void start() {
-    log.info("-------------------- Testsigma Agent - START -------------------");
+    log.info("-------------------- Mita Agent - START -------------------");
     try {
       File lockFile = new File(Objects.requireNonNull(Config.getDataDir()) + File.separator + "lock");
       File pidFile = new File(Objects.requireNonNull(Config.getDataDir()) + File.separator + "process.pid");
@@ -37,52 +37,52 @@ public class  Application {
       FileLock fileLock = fileChannel.tryLock();
       if (fileLock != null) {
         try {
-          Thread.currentThread().setName("TestsigmaAgentWrapper");
+          Thread.currentThread().setName("MitaAgentWrapper");
           createPidFile(pidFile);
           Launcher.getInstance().launch().join();
           removePidFile(pidFile);
         } catch (Exception e) {
           log.error(e.getMessage(), e);
         }
-        log.info("Releasing Lock On Testsigma Agent Lock File...");
+        log.info("Releasing Lock On Mita Agent Lock File...");
         fileLock.release();
         fileChannel.close();
         randomAccessFile.close();
         boolean lockDeleted = lockFile.delete();
-        log.info("Testsigma Agent Lock File " + lockFile.getAbsolutePath() + " Deleted " + lockDeleted);
+        log.info("Mita Agent Lock File " + lockFile.getAbsolutePath() + " Deleted " + lockDeleted);
       } else {
-        log.info("Failed To Launch Testsigma Agent - Another Instance Of Testsigma Agent Is Already Running!");
+        log.info("Failed To Launch Mita Agent - Another Instance Of Mita Agent Is Already Running!");
         fileChannel.close();
         randomAccessFile.close();
       }
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
-    log.info("-------------------- Testsigma Agent - STOPPED -------------------");
+    log.info("-------------------- Mita Agent - STOPPED -------------------");
   }
 
   private static void createPidFile(File pidFile) throws IOException {
     removePidFile(pidFile);
     RandomAccessFile pidFileWriter = new RandomAccessFile(pidFile, "rw");
     long processPid = ProcessHandle.current().pid();
-    log.info("Testsigma Agent Main PID - " + processPid);
+    log.info("Mita Agent Main PID - " + processPid);
     pidFileWriter.writeBytes(processPid + "");
     pidFileWriter.close();
   }
 
   private static void removePidFile(File pidFile) {
     if (pidFile.exists()) {
-      log.debug("Testsigma Agent Main PID File Exists - " + pidFile.getAbsolutePath());
+      log.debug("Mita Agent Main PID File Exists - " + pidFile.getAbsolutePath());
       boolean pidFileDeleted = pidFile.delete();
-      log.debug("Testsigma Agent Main PID File " + pidFile.getAbsolutePath() + " Deleted - " + pidFileDeleted);
+      log.debug("Mita Agent Main PID File " + pidFile.getAbsolutePath() + " Deleted - " + pidFileDeleted);
     } else {
-      log.debug("Testsigma Agent Main PID File Doesn't Exists - " + pidFile.getAbsolutePath());
+      log.debug("Mita Agent Main PID File Doesn't Exists - " + pidFile.getAbsolutePath());
     }
   }
 
   private static void stop() {
     try {
-      log.info("Stopping Testsigma Agent Using Stop Command");
+      log.info("Stopping Mita Agent Using Stop Command");
       File pidFile = new File(Objects.requireNonNull(Config.getDataDir()) + File.separator + "process.pid");
       log.info("PID File Location: " + pidFile.getAbsolutePath());
       RandomAccessFile pidFileReader = new RandomAccessFile(pidFile, "r");
@@ -103,15 +103,15 @@ public class  Application {
           if (!processHandle.isAlive()) {
             break;
           } else {
-            log.info("Waiting For Testsigma Agent To Stop");
+            log.info("Waiting For Mita Agent To Stop");
           }
         }
 
         if (processHandle.isAlive()) {
-          log.info("Testsigma Agent Was Not Stopped Gracefully. Shutting It Down Forcefully");
+          log.info("Mita Agent Was Not Stopped Gracefully. Shutting It Down Forcefully");
           stopProcessForcefully(processHandle);
         } else {
-          log.info("Stopped Testsigma Agent Gracefully");
+          log.info("Stopped Mita Agent Gracefully");
         }
         if (pidFile.exists()) {
           removePidFile(pidFile);

@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 
 import {Pageable} from "../shared/models/pageable";
 import {CollectionViewer, DataSource} from '@angular/cdk/collections';

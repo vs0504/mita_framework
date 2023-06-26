@@ -1,11 +1,4 @@
-/*
- *
- *  * *****************************************************************************
- *  *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  *  All rights reserved.
- *  *  ****************************************************************************
- *
- */
+
 
 import {Component, EventEmitter, Inject, OnInit, Output, QueryList, ViewChildren} from "@angular/core";
 import {ResultConstant} from "../../enums/result-constant.enum";

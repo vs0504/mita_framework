@@ -1,0 +1,36 @@
+
+
+package com.mita.model;
+
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
+public enum WorkspaceType {
+  WebApplication,
+  MobileWeb,
+  AndroidNative,
+  IOSWeb,
+  IOSNative,
+  Rest;
+
+  public static boolean isWebApp(WorkspaceType appType) {
+    return appType == WebApplication || appType == MobileWeb;
+  }
+
+  public boolean isMobile() {
+    return (this == MobileWeb) || (this == AndroidNative) || (this == IOSNative);
+  }
+
+  public boolean isMobileWeb() {
+    return this == MobileWeb;
+  }
+
+  public boolean isWeb() {
+    return this == WebApplication;
+  }
+
+  public boolean isRest() {
+    return this == Rest;
+  }
+
+}

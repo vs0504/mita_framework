@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {PageObject} from "../shared/models/page-object";
 import {deserialize, object, serializable, SKIP, custom, optional} from 'serializr';

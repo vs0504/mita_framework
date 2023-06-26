@@ -1,11 +1,4 @@
-/*
- *
- * ****************************************************************************
- *  * Copyright (C) 2019 Testsigma Technologies Inc.
- *  * All rights reserved.
- *  ****************************************************************************
- *
- */
+
 
 import {Deserializable} from "../../shared/models/deserializable";
 import {deserialize, primitive, serializable} from "serializr";

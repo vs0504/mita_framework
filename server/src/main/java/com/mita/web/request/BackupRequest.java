@@ -1,0 +1,26 @@
+
+package com.mita.web.request;
+
+import lombok.Data;
+
+@Data
+public class BackupRequest {
+  private Boolean isTestCaseEnabled;
+  private Boolean isTestStepEnabled;
+  private Boolean isRestStepEnabled;
+  private Boolean isUploadsEnabled;
+  private Boolean isTestCasePriorityEnabled;
+  private Boolean isTestCaseTypeEnabled;
+  private Boolean isElementEnabled;
+  private Boolean isElementScreenNameEnabled;
+  private Boolean isTestDataEnabled;
+  private Boolean isAttachmentEnabled;
+  private Boolean isAgentEnabled;
+  private Boolean isTestPlanEnabled;
+  private Boolean isTestDeviceEnabled;
+  private Boolean isSuitesEnabled;
+  private Boolean isLabelEnabled;
+  private Long filterId;
+  private Long workspaceVersionId;
+  private Boolean skipEntityExists;
+}

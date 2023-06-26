@@ -1,0 +1,97 @@
+
+package com.mita.service;
+
+import com.mita.exception.IntegrationNotFoundException;
+import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.repository.IntegrationsRepository;
+import com.mita.mapper.IntegrationsMapper;
+import com.mita.model.Integrations;
+import com.mita.model.Integration;
+import com.mita.web.request.IntegrationsRequest;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service(value = "integrationsService")
+@AllArgsConstructor(onConstructor = @__(@Autowired))
+@NoArgsConstructor
+public class IntegrationsService {
+
+  IntegrationsRepository integrationsRepository;
+  PrivateGridService privateGridService;
+  IntegrationsMapper mapper;
+
+  /*
+   * Method to create a new external workspace config
+   */
+  public Integrations create(IntegrationsRequest externalApplicationConfigReq) {
+    Integrations integrations = mapper.map(externalApplicationConfigReq);
+    integrations = integrationsRepository.save(integrations);
+    return integrations;
+  }
+
+  /*
+   * Method to update existing external workspace config
+   */
+  public Integrations update(IntegrationsRequest externalApplicationConfigReq, Long id)
+    throws IntegrationNotFoundException, TestsigmaDatabaseException {
+    Integrations integrations = find(id);
+    integrations.setMetadata(externalApplicationConfigReq.getMetadata());
+    integrations.setUsername(externalApplicationConfigReq.getUsername());
+    integrations.setPassword(externalApplicationConfigReq.getPassword());
+    integrations.setToken(externalApplicationConfigReq.getToken());
+    integrations = integrationsRepository.save(integrations);
+    return integrations;
+  }
+
+  /*
+   * Method to update existing external workspace config
+   */
+  public Integrations save(Integrations config) {
+    return integrationsRepository.save(config);
+  }
+
+  /**
+   * @return external workspace config
+   */
+  public Integrations find(Long id)
+    throws IntegrationNotFoundException {
+    return integrationsRepository.findById(id).orElseThrow(() -> new IntegrationNotFoundException("missing with id:" + id));
+  }
+
+  /**
+   * @return
+   */
+  public void destroy(Long id) throws IntegrationNotFoundException {
+    Optional<Integrations> config = integrationsRepository.findByWorkspaceId(id);
+    if (!config.isPresent()) {
+      throw new IntegrationNotFoundException("EXTERNAL APPLICATION CONFIG NOT FOUND");
+    }
+    if (config.get().getWorkspace() == Integration.PrivateGrid)
+          this.privateGridService.cleanTable();
+    integrationsRepository.delete(config.get());
+  }
+
+  /**
+   * @return integrations pages
+   */
+  public Page<Integrations> findAll(Specification<Integrations> specification, Pageable pageable) {
+    return integrationsRepository.findAll(specification, pageable);
+  }
+
+  public Integrations findByApplication(Integration application)
+    throws IntegrationNotFoundException {
+    return this.findOptionalByApplication(application).orElseThrow(() -> new IntegrationNotFoundException(application.name() + " - Integration Not Enabled"));
+  }
+
+  public Optional<Integrations> findOptionalByApplication(Integration application) {
+    return this.integrationsRepository.findByWorkspaceId(application.getId().longValue());
+  }
+
+}

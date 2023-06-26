@@ -1,9 +1,4 @@
-/*
- * *****************************************************************************
- *  Copyright (C) 2020 Testsigma Technologies Inc.
- *  All rights reserved.
- *  ****************************************************************************
- */
+
 
 import {Component, OnInit, Optional} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
