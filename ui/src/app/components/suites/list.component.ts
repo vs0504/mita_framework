@@ -43,6 +43,8 @@ export class ListComponent extends BaseComponent implements OnInit {
   currentPage = new Pageable();
   fetchingCompleted: boolean;
   isFiltered: boolean;
+  public permissionsObj: any;
+
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -64,6 +66,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.route.parent.params.subscribe((params: Params) => {
       this.versionId = params.versionId;
       this.fetchVersion();

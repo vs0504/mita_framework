@@ -194,12 +194,13 @@ import {SharedService} from "../../services/shared.service";
                 class="action-icon py-10 more-btn">
               </a>
               <a
-                *ngIf="!testStep.isConditionalElse && !testStep.isWhileLoop && isBreakContinueLoopStep"
+                *ngIf="!testStep.isConditionalElse && !testStep.isWhileLoop && isBreakContinueLoopStep && permissionsObj.TEST_STEP_ACTION_EDIT"
                 (click)="editStep(testStep)"
                 [matTooltip]="'hint.message.common.edit' | translate"
                 class="action-icon py-10 fa-pencil-on-paper">
               </a>
               <a
+              *ngIf="permissionsObj.TEST_STEP_ACTION_DELETE"
                 (click)="indexTestStepsHavingPrerequisiteSteps(testStep)"
                 href="javascript:void(0);"
                 [matTooltip]="'hint.message.common.delete' | translate"
@@ -288,6 +289,7 @@ export class ActionTestStepListItemComponent extends TestStepListItemComponent i
   @Input() stepRecorderView?: boolean;
   @Input()public stepForm: FormGroup = new FormGroup({});
 
+  public permissionsObj: any;
 
   get conditionChildStep() {
     return this.testStep.isForLoop && this.testStep.parentId || !this.testStep.isForLoop &&
@@ -311,6 +313,7 @@ export class ActionTestStepListItemComponent extends TestStepListItemComponent i
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
   }
 
   showDetails(testStep: TestStep) {

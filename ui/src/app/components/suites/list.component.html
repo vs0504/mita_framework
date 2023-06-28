@@ -115,12 +115,14 @@
         </div>
         <div class="ts-col-50 text-center action-icons my-auto">
           <a
+            *ngIf="permissionsObj.EDIT_TEST_SUITE"
             [matTooltip]="'pagination.edit' | translate"
             [routerLink]="['/td', versionId, 'suites', testSuite.id, 'edit']"
             class="fa-pencil-on-paper action-icon"
             data-placement="bottom"
             href="javascript:void(0)"></a>
           <a
+            *ngIf="permissionsObj.DELETE_TEST_SUITE"
             (click)="fetchLinkedPlans([testSuite.id], testSuite.name)" [matTooltip]="'pagination.delete' | translate"
             class="fa-trash-thin action-icon"
             data-placement="bottom"

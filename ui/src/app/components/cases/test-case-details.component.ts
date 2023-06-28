@@ -44,6 +44,8 @@ export class TestCaseDetailsComponent extends BaseComponent implements OnInit {
   public stepsLength: number;
   public entityType: EntityType = EntityType.TEST_CASE;
   public entityExternalMapping: EntityExternalMapping;
+  public permissionsObj: any;
+
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -70,6 +72,7 @@ export class TestCaseDetailsComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.route.params.subscribe((params: Params) => {
       this.pushToParent(this.route, params);
       this.testCaseId = params.testCaseId;

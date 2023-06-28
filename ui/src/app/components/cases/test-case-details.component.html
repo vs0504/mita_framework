@@ -49,7 +49,7 @@
             class="btn icon-btn border-rds-2 ml-14">
             <i class="fa-copy-new"></i>
           </button-->
-          <a
+          <!-- <a
             *ngIf="!testCase?.deleted"
             [routerLink]="['/td', testCase.workspaceVersionId, testCase.isStepGroup? 'step_groups':'cases', testCaseId, 'edit']"
             [matTooltip]="'hint.message.common.edit' | translate"
@@ -62,7 +62,21 @@
             [matTooltip]="'hint.message.common.delete' | translate"
             class="btn icon-btn border-rds-2 ml-14">
             <i class="fa-trash-thin"></i>
-          </button>
+          </button> -->
+          <a
+          *ngIf="permissionsObj.TEST_CASE_UPDATION"
+          [routerLink]="['/td', testCase.workspaceVersionId, testCase.isStepGroup? 'step_groups':'cases', testCaseId, 'edit']"
+          [matTooltip]="'hint.message.common.edit' | translate"
+          class="btn icon-btn border-rds-2 ml-14">
+          <i class="fa-pencil-on-paper"></i>
+        </a>
+        <button
+          *ngIf="permissionsObj.TEST_CASE_DELETION"
+          (click)="deleteTestCase()"
+          [matTooltip]="'hint.message.common.delete' | translate"
+          class="btn icon-btn border-rds-2 ml-14">
+          <i class="fa-trash-thin"></i>
+        </button>
           <button
             *ngIf="testCase?.deleted"
             (click)="restore()"

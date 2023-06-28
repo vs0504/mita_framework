@@ -173,10 +173,11 @@
            [matTooltip]="'elements.filter.form.label.labels' | translate"
            (click)="addLabelsDialog(element.id)"></i>
 
-        <i class="fa-pencil-on-paper action-icon"
+        <i *ngIf="permissionsObj.EDIT_ELEMENT"
+           class="fa-pencil-on-paper action-icon"
            [matTooltip]="'btn.common.edit' | translate"
            (click)="openAddEditElement(element.id)"></i>
-        <i class="fa-trash-thin action-icon" (click)="checkForLinkedTestCases(element)"
+        <i *ngIf="permissionsObj.DELETE_ELEMENT" class="fa-trash-thin action-icon" (click)="checkForLinkedTestCases(element)"
            [matTooltip]="'hint.message.common.delete' | translate"></i>
       </div>
     </a>
@@ -202,5 +203,3 @@
     </div>
   </div>
 </div>
-
-
