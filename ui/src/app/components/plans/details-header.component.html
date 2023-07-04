@@ -25,6 +25,7 @@
              <i class="fa-refresh-thick"></i>
           </button>
           <app-run-now-button
+            *ngIf="permissionsObj.TEST_PLAN_RUN"
             class="pr-10"
             [displayText]="('runs.list_view.run_now' | translate)"
             (onStart)="fetchTestPlan()"
@@ -33,18 +34,22 @@
             [testPlanResult]="testPlan?.lastRun">
           </app-run-now-button>
           <app-schedule-form-button
+            *ngIf="permissionsObj.TEST_PLAN_SCHEDULE"
             class="pr-10"
             [testPlan]="testPlan"></app-schedule-form-button>
           <app-reports-button
+            *ngIf="permissionsObj.TEST_PLAN_REPORTS"
             class="pr-10"
             [testPlan]="testPlan"></app-reports-button>
           <button
+            *ngIf="permissionsObj.TEST_PLAN_EDIT"
             [matTooltip]="'hint.message.common.edit' | translate"
             [disabled]="testPlan?.lastRun?.isExecuting"
             [routerLink]="['/td', 'plans', testPlan?.id, 'edit']"
             class="btn icon-btn fa-pencil-on-paper text-t-secondary">
           </button>
           <button
+            *ngIf="permissionsObj.TEST_PLAN_DELETE"
             [matTooltip]="'hint.message.common.delete' | translate"
             [disabled]="testPlan?.lastRun?.isExecuting"
             (click)="testPlan?.lastRun?.isExecuting? '' : deleteConfirmation()"

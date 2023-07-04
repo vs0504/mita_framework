@@ -124,11 +124,14 @@
         </div>
         <div class="ts-col-15 d-flex align-items-center">
           <app-schedule-form-button
+            *ngIf="permissionsObj.RUN_RESULT_SCHEDULE"
             [testPlan]="testPlan"></app-schedule-form-button>
           <app-reports-button
+            *ngIf="permissionsObj.RUN_RESULTS_REPORTS"
             class="ml-10"
             [testPlan]="testPlan"></app-reports-button>
           <app-run-now-button
+            *ngIf="permissionsObj.RUN_RESULTS_RUN"
             class="ml-10"
             [testPlan]="testPlan"
             (onStart)="fetchTestPlans()"

@@ -31,6 +31,7 @@
       <i class="fa-refresh-thick"></i>
     </button>
     <button
+      *ngIf="permissionsObj.TEST_PLAN_CREATE"
       [routerLink]="['/td', versionId, 'plans','new']"
       class="theme-btn-primary ml-14"
       [textContent]="'+ '+('test_plan.title'| translate)">
@@ -121,14 +122,18 @@
           </span>
         </div>
         <div class="ts-col-30 d-flex align-items-center ml-auto justify-content-end execution-list">
-          <app-schedule-form-button class=""
+          <app-schedule-form-button 
+          *ngIf="permissionsObj.TEST_PLAN_SCHEDULE"
+            class=""
             [displayText]="('schedule.plan.btn' | translate)"
             [testPlan]="testPlan"></app-schedule-form-button>
           <app-reports-button
+            *ngIf="permissionsObj.TEST_PLAN_REPORTS"
             class="ml-10"
             [displayText]="('btn.common.reports' | translate)"
             [testPlan]="testPlan"></app-reports-button>
           <app-run-now-button
+            *ngIf="permissionsObj.TEST_PLAN_RUN"
             class="ml-10"
             [displayText]="('btn.common.run' | translate)"
             [testPlan]="testPlan"

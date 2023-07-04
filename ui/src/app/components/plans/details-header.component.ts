@@ -30,6 +30,7 @@ export class DetailsHeaderComponent extends BaseComponent implements OnInit {
   public isFetchingCompleted: Boolean;
   public entityType: EntityType = EntityType.TEST_PLAN;
   public entityExternalMapping: EntityExternalMapping;
+  public permissionsObj: any;
 
   constructor(
     private testPlanService: TestPlanService,
@@ -48,6 +49,7 @@ export class DetailsHeaderComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.testPlanId = this.route.snapshot.params.testPlanId;
     this.pushToParent(this.route, this.route.snapshot.params);
     this.fetchTestPlan();

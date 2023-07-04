@@ -9,10 +9,10 @@
       <button *ngIf="!isDemo" class="btn icon-btn border-rds-2 ml-14" (click)="clone()"
               [matTooltip]="'version.copy.title'|translate">
         <i class="fa-copy-new"></i></button>
-      <button class="btn icon-btn border-rds-2 ml-14" [routerLink]="[fullScreenDetails?'../edit':'edit']"
+      <button *ngIf="permissionsObj.EDIT_WORKSPACE" class="btn icon-btn border-rds-2 ml-14" [routerLink]="[fullScreenDetails?'../edit':'edit']"
               [matTooltip]="'hint.message.common.edit'|translate">
         <i class="fa-pencil-on-paper"></i></button>
-      <button *ngIf="!isDemo" class="btn icon-btn border-rds-2 ml-14" (click)="deleteIfMoreThanOne(version.id)"
+      <button *ngIf="!isDemo && permissionsObj.DELETE_WORKSPACE" class="btn icon-btn border-rds-2 ml-14" (click)="deleteIfMoreThanOne(version.id)"
               [matTooltip]="'hint.message.common.delete' | translate">
         <i class="fa-trash-thin"></i></button>
     </div>

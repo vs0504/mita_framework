@@ -22,6 +22,7 @@
     <app-toggle-search-button
       (searchAction)="search($event)"></app-toggle-search-button>
     <button
+    *ngIf="permissionsObj.CREATE_TEST_SUITE"
       [routerLink]="['new']"
       [translate]="'btn.common.create'"
       class="theme-btn-primary ml-14 ">

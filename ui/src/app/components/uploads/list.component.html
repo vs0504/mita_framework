@@ -7,7 +7,7 @@
   </div>
 
   <div class="d-flex align-items-center ml-auto"
-       *ngIf="selectedUploads.length">
+       *ngIf="selectedUploads.length && permissionsObj.DELETE_IMAGE">
     <button (click)="openDeleteDialog()"
             [matTooltip]="'hint.message.common.delete_selected' | translate"
             class="btn icon-btn border-rds-2 ml-14"
@@ -22,6 +22,7 @@
     <app-toggle-search-button
       (searchAction)="search($event)"></app-toggle-search-button>
     <button
+      *ngIf="permissionsObj.UPLOAD_IMAGE"
       (click)="openSaveUploadForm()"
       class="theme-btn-primary ml-14 "
       [translate]="'btn.common.upload'">
@@ -91,17 +92,19 @@
             <span class="ml-auto text-center action-icons mr-20"
                   *ngIf="!selectedUploads || !selectedUploads.length">
             <a
+              *ngIf="permissionsObj.EDIT_IMAGE"
               data-placement="bottom"
               [matTooltip]="'pagination.edit' | translate"
               href="javascript:void(0)"
               (click)="openSaveUploadForm(upload)"
               class="fa-pencil-on-paper action-icon"></a>
             <a
+              *ngIf="permissionsObj.DELETE_IMAGE"
               data-placement="bottom" (click)="checkForLinkedEntities(upload.id, upload.name)"
               [matTooltip]="'pagination.delete' | translate"
               href="javascript:void(0)"
               class="fa-trash-thin action-icon"></a>
-            <a *ngIf="upload.latestVersion?.id"
+            <a *ngIf="upload.latestVersion?.id && permissionsObj.DOWNLOAD_IMAGE"
               data-placement="bottom"
               [matTooltip]="'hint.message.common.download' | translate"
               [href]="'/api/upload_versions/'+upload.latestVersion?.id+'/download'"

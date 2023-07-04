@@ -14,6 +14,8 @@ import {NavigationService} from "../services/navigation.service";
 export class TestDevelopmentComponent extends BaseComponent implements OnInit {
   public versionId: Number;
   public version: WorkspaceVersion;
+  public permissionsObj: any;
+
 
   constructor(
     public route: ActivatedRoute,
@@ -26,6 +28,7 @@ export class TestDevelopmentComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.route.params.subscribe((params) => {
       this.pushToParent(this.route, params);
       this.versionId = params.versionId | this.data?.versionId;

@@ -53,7 +53,9 @@
               (click)="closeDialog()"
               *ngIf="!version?.workspace?.isRest" [routerLink]="['/td', versionId, 'uploads']"
               [routerLinkActive]="'active'">
-        <a [routerLink]="['/td', versionId, 'uploads']"
+        <a 
+           *ngIf="permissionsObj.UPLOADS"
+           [routerLink]="['/td', versionId, 'uploads']"
            [routerLinkActive]="'active'"
            class="nav-items">
           <i class="fa-uploads-alt"></i>
@@ -92,6 +94,7 @@
         [class.active]="detailsAliasName == 'runs' || detailsAliasName == 'test_case_results' || detailsAliasName == 'suite_results' || detailsAliasName == 'machine_results'"
         [routerLink]="['/td', versionId, 'results']" [routerLinkActive]="'active'">
         <a
+          *ngIf="permissionsObj.RUN_RESULTS"
           [class.active]="detailsAliasName == 'runs' || detailsAliasName == 'test_case_results' || detailsAliasName == 'suite_results' || detailsAliasName == 'machine_results'"
           class="nav-items"
           [routerLink]="['/td', versionId,'results']"

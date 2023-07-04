@@ -34,6 +34,7 @@ export class TestPlanListComponent extends BaseComponent implements OnInit {
   public sortedBy: string = 'name';
   public direction: string = ",asc";
   public query: string;
+  public permissionsObj: any;
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -49,6 +50,7 @@ export class TestPlanListComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.route.parent.parent.params.subscribe((params: Params) => {
       this.versionId = params.versionId;
       this.route.params.subscribe((params) => {

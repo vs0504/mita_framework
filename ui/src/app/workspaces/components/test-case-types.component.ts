@@ -28,6 +28,7 @@ export class TestCaseTypesComponent extends BaseComponent implements OnInit {
   @ViewChild('testCaseTypeNameField', {static: false}) testCaseTypeNameField: ElementRef;
   private workspaceId: number;
   public isFiltered: boolean;
+  public permissionsObj: any;
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -42,6 +43,7 @@ export class TestCaseTypesComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.workspaceId = this.route.parent.snapshot.params.workspaceId;
     this.fetchTestCaseTypes();
   }

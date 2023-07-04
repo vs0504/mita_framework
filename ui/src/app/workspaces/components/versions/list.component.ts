@@ -13,6 +13,7 @@ export class ListComponent implements OnInit {
   public workspaceId: number;
   public versions: InfiniteScrollableDataSource;
   public isDemo:Boolean;
+  public permissionsObj: any;
 
   constructor(
     private route: ActivatedRoute,
@@ -21,6 +22,7 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.route.params.subscribe(res => {
       if (res?.versionId) {
         this.versionService.show(res.versionId).subscribe(res1 => {

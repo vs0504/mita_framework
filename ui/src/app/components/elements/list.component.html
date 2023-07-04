@@ -53,6 +53,7 @@
         [translate]="(!elementCapture)?'elements.btn.record':'elements.btn.stop'"></button> -->
     </div>
     <button
+    *ngIf="permissionsObj.CREATE_ELEMENT"
       (click)="openAddEditElement(null)"
       class="theme-btn-primary ml-14  my-auto"
       [translate]="'btn.common.create'"></button>

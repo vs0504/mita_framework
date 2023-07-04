@@ -99,7 +99,7 @@
         class="empty-text"
         [translate]="isFiltered ? 'message.common.search.not_found' : 'environments.list.not_created'"></div>
       <button
-        *ngIf="!isFiltered"
+        *ngIf="!isFiltered && permissionsObj.CREATE_ENVIRONMENTS"
         [routerLink]="['new']" target="_parent"
         class="theme-btn-primary">
         +

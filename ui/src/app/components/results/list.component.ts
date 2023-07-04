@@ -38,6 +38,7 @@ export class ResultsListComponent extends BaseComponent implements OnInit {
   public sortedBy = "name";
   public sortByColumns = ["name", "executionType", "createdDate", "updatedDate","lastRun"];
   public query: string;
+  public permissionsObj: any;
 
   constructor(
     private testPlanService: TestPlanService,
@@ -50,6 +51,7 @@ export class ResultsListComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.route.parent.params.subscribe((res: Params) => {
       this.pushToParent(this.route, res);
       this.versionId = res.versionId;

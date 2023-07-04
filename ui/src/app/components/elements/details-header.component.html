@@ -5,10 +5,10 @@
       [translate]="'element.details.title'">
     </div>
     <div class="ml-auto">
-      <button class="theme-btn-clear-default py-3 px-10" (click)="openAddEditElement()">
+      <button *ngIf="permissionsObj.EDIT_ELEMENT" class="theme-btn-clear-default py-3 px-10" (click)="openAddEditElement()">
         <span class="fa-pencil-on-paper"></span>
       </button>
-      <button class="theme-btn-clear-default py-3 px-10 mr-25" (click)="checkForLinkedTestCases()">
+      <button *ngIf="permissionsObj.DELETE_ELEMENT" class="theme-btn-clear-default py-3 px-10 mr-25" (click)="checkForLinkedTestCases()">
         <span class="fa-trash-thin"></span>
       </button>
       <button

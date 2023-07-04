@@ -28,6 +28,7 @@ export class TestCasePrioritiesComponent extends BaseComponent implements OnInit
   @ViewChild('priorityNameField', {static: false}) priorityNameField: ElementRef;
   private workspaceId: number;
   public isFiltered: boolean;
+  public permissionsObj: any;
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -42,6 +43,7 @@ export class TestCasePrioritiesComponent extends BaseComponent implements OnInit
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.workspaceId = this.route.parent.snapshot.params.workspaceId;
     this.fetchTestCasePriorities();
   }

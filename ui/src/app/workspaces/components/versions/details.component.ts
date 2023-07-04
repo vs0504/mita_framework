@@ -28,6 +28,7 @@ export class DetailsComponent extends BaseComponent implements OnInit {
   public showComments = false;
   public isDemo:Boolean = false;
   public userPreference: UserPreference;
+  public permissionsObj: any;
 
   constructor(
     private dialog: MatDialog,
@@ -44,6 +45,7 @@ export class DetailsComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.userPreferenceService.show().subscribe(res => {
       this.userPreference = res;
     });

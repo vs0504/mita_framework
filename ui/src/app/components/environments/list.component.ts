@@ -36,6 +36,8 @@ export class ListComponent extends BaseComponent implements OnInit {
   public fetchingCompleted: Boolean = false;
   public isFiltered: Boolean = false;
   private projectId: number;
+  public permissionsObj: any;
+
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -57,6 +59,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   };
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.route.parent.parent.params.subscribe((params: Params) => {
       this.versionId = params.versionId;
       this.pushToParent(this.route, params);

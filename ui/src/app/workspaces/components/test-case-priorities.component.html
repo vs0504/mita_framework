@@ -6,6 +6,7 @@
       [class.visibility-hidden]="!testCasePriorities?.totalElements && !isFiltered"
       (searchAction)="fetchTestCasePriorities($event)"></app-toggle-search-button>
     <button
+      *ngIf="permissionsObj.CREATE_TEST_CASE_PRIORITY"
       [class.visibility-hidden]="newRow || (!testCasePriorities?.totalElements && !isFiltered)"
       (click)="addRow()"
       class="theme-btn-clear-default">
@@ -25,9 +26,11 @@
         <div class="ts-col-90 d-flex text-truncate pl-7 rb-medium" [textContent]="testCasePriority.name"></div>
         <div class="action-icons ts-col-10" *ngIf="!editMode">
           <i
+            *ngIf="permissionsObj.EDIT_TEST_CASE_PRIORITY"
             class="fa-pencil-on-paper action-icon" [matTooltip]="'btn.common.edit' | translate"
             (click)="editTestCasePriority(i)"></i>
           <i
+            *ngIf="permissionsObj.DELETE_TEST_CASE_PRIORITY"
             class="fa-trash-thin action-icon" (click)="openDeleteDialog(testCasePriority.id)"
             [matTooltip]="'btn.common.remove' | translate"></i>
         </div>

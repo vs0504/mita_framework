@@ -32,6 +32,7 @@ export class DetailsComponent extends BaseComponent implements OnInit {
   public testCases: InfiniteScrollableDataSource;
   public entityType: EntityType = EntityType.TEST_SUITE;
   public entityExternalMapping: EntityExternalMapping;
+  public permissionsObj: any;
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -49,6 +50,7 @@ export class DetailsComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.testSuiteId = this.route.snapshot.params.testSuiteId;
     this.pushToParent(this.route, this.route.snapshot.params);
     this.fetchTestsuiteDetails();

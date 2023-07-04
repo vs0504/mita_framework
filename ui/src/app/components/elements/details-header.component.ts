@@ -27,6 +27,8 @@ export class DetailsHeaderComponent extends BaseComponent implements OnInit {
   public activeTab: String = 'details';
   public elementTag:any;
   public elementId: number;
+  public permissionsObj: any;
+
   constructor(
     public authGuard: AuthenticationGuard,
     public notificationsService: NotificationsService,
@@ -46,6 +48,7 @@ export class DetailsHeaderComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.fetchElement();
   }
 
