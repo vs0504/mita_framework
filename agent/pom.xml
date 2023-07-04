@@ -4,11 +4,11 @@
          xmlns="http://maven.apache.org/POM/4.0.0">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.testsigma</groupId>
+  <groupId>com.mita</groupId>
   <artifactId>mita-agent</artifactId>
   <version>1.3.0</version>
   <packaging>jar</packaging>
-  <name>Testsigma Agent</name>
+  <name>Mita Agent</name>
   <parent>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
@@ -111,7 +111,7 @@
     </dependency>
 
     <dependency>
-      <groupId>com.testsigma</groupId>
+      <groupId>com.mita</groupId>
       <artifactId>mita-automator</artifactId>
       <version>1.0.0</version>
     </dependency>
