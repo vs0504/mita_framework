@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -38,7 +38,7 @@ public class BugZillaService {
   @Setter
   private Integrations integrations;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("summary", mapping.getFields().get("summary").toString());
     payload.put("description", mapping.getFields().get("description").toString());
@@ -51,50 +51,50 @@ public class BugZillaService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating BugZilla issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating BugZilla issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(String.valueOf(response.getResponseEntity().get("id")));
     return mapping;
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("comment", "Linked to testsigma results [" + config.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
     HttpResponse<String> response = httpClient.post(integrations.getUrl() + "/rest/bug/" + mapping.getExternalId() + "/comment?api_key=" + this.integrations.getToken(), getHeaders(), payload, new TypeReference<String>() {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking BugZilla issue with ::" + mapping.getExternalId());
+      throw new MitaException("Problem while Linking BugZilla issue with ::" + mapping.getExternalId());
     }
     return mapping;
   }
 
-  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("comment", "Unlinked from testsigma results [" + config.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
     HttpResponse<String> response = httpClient.post(integrations.getUrl() + "/rest/bug/" + mapping.getExternalId() + "/comment?api_key=" + this.integrations.getToken(), getHeaders(), payload, new TypeReference<String>() {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while unLinking BugZilla issue with ::" + mapping.getExternalId());
+      throw new MitaException("Problem while unLinking BugZilla issue with ::" + mapping.getExternalId());
     }
     return mapping;
   }
 
-  public JsonNode getIssuesList(String project, String issueType, String version) throws TestsigmaException {
+  public JsonNode getIssuesList(String project, String issueType, String version) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/rest/bug?project=" + project + "&component=" + issueType + "&version=" + version, getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssue(Long issueId) throws TestsigmaException {
+  public JsonNode getIssue(Long issueId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/rest/bug/" + issueId, getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
   //projects
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/rest/product_accessible?api_key=" + integrations.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
     JsonNode projectIds = response.getResponseEntity().get("ids");
@@ -110,7 +110,7 @@ public class BugZillaService {
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
 
     HttpResponse<JsonNode> response = httpClient.get(testAuth.getUrl()
       + "/rest/product_accessible?api_key=" + testAuth.getToken(), getHeaders(), new TypeReference<JsonNode>() {

@@ -1,7 +1,7 @@
 package com.mita.util;
 
 import com.mita.exception.ExceptionErrorCodes;
-import com.mita.exception.TestsigmaValidationException;
+import com.mita.exception.MitaValidationException;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -23,23 +23,23 @@ public class ReadExcel {
     public static String FILE_TYPE_XLSX = "xlsx";
 
     public static Workbook getExcelWorkBook(MultipartFile multiPartFile)
-            throws IOException, TestsigmaValidationException {
+            throws IOException, MitaValidationException {
         Workbook workbook = null;
         InputStream exelFileInputStream = multiPartFile.getInputStream();
         if (multiPartFile.getOriginalFilename().endsWith(FILE_TYPE_XLS)) {
             try {
                 workbook = new HSSFWorkbook(exelFileInputStream);
             } catch (Exception e) {
-                throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, multiPartFile.getOriginalFilename());
+                throw new MitaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, multiPartFile.getOriginalFilename());
             }
         } else if (multiPartFile.getOriginalFilename().endsWith(FILE_TYPE_XLSX)) {
             try {
                 workbook = new XSSFWorkbook(exelFileInputStream);
             } catch (Exception e) {
-                throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, multiPartFile.getOriginalFilename());
+                throw new MitaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, multiPartFile.getOriginalFilename());
             }
         } else {
-            throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, multiPartFile.getOriginalFilename());
+            throw new MitaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, multiPartFile.getOriginalFilename());
         }
         return workbook;
     }
@@ -53,7 +53,7 @@ public class ReadExcel {
         } else if (path.endsWith(FILE_TYPE_XLSX)) {
             workbook = new XSSFWorkbook(is);
         } else {
-            throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, path);
+            throw new MitaValidationException(ExceptionErrorCodes.MSG_INVALID_EXCEL_FILE_TYPE, path);
         }
         return workbook;
     }
@@ -73,7 +73,7 @@ public class ReadExcel {
                 if (row != null) {
                     numberOfColumns = row.getPhysicalNumberOfCells();
                 } else {
-                    throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_ROW_NULL, j + "");
+                    throw new MitaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_ROW_NULL, j + "");
                 }
                 ArrayList<Object> singleRow = new ArrayList<Object>();
                 for (int k = 0; k < numberOfColumns; k++) {
@@ -91,7 +91,7 @@ public class ReadExcel {
                 sheetListData.add(sheetData);
         }
         if (errormessage.length() > 1) {
-            throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_CELL_NULL, errormessage + "::" + "contains null");
+            throw new MitaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_CELL_NULL, errormessage + "::" + "contains null");
         }
         return sheetListData;
     }
@@ -130,13 +130,13 @@ public class ReadExcel {
                 sheetListData.add(sheetData);
         }
         if (errormessage.length() > 1) {
-            throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_CELL_NULL, errormessage + "::" + "contains null");
+            throw new MitaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_CELL_NULL, errormessage + "::" + "contains null");
         }
         return sheetListData;
     }
 
 
-    public static Map<String, List<Object>> getExelFieldNames(Workbook testDataWorkBook) throws TestsigmaValidationException, UnsupportedEncodingException {
+    public static Map<String, List<Object>> getExelFieldNames(Workbook testDataWorkBook) throws MitaValidationException, UnsupportedEncodingException {
         int noOfSheets = testDataWorkBook.getNumberOfSheets();
         Map<String, List<Object>> sheetData = new HashMap<>();
         if (noOfSheets == 1) {
@@ -151,7 +151,7 @@ public class ReadExcel {
                     for (int k = 0; k < numberOfColumns; k++) {
                         Cell cell = row.getCell(k);
                         if (cell.getCellType() == Cell.CELL_TYPE_BLANK && org.apache.commons.lang3.StringUtils.isEmpty(cell.getStringCellValue())) {
-                            throw new TestsigmaValidationException(ExceptionErrorCodes.TEST_DATA_HEADER_INVALID);
+                            throw new MitaValidationException(ExceptionErrorCodes.TEST_DATA_HEADER_INVALID);
                         } else {
                             singleRow.add(cellToObject(row.getCell(k), false));
                         }
@@ -160,7 +160,7 @@ public class ReadExcel {
                 }
             }
         } else {
-            throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_MULTIPLE_EXECEL_FILE, "Sheets::" + testDataWorkBook.getNumberOfSheets());
+            throw new MitaValidationException(ExceptionErrorCodes.MSG_MULTIPLE_EXECEL_FILE, "Sheets::" + testDataWorkBook.getNumberOfSheets());
         }
 
         return sheetData;

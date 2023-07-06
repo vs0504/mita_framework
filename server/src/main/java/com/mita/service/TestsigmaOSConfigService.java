@@ -2,7 +2,7 @@ package com.mita.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.TestsigmaOSConfigRepository;
 import com.mita.config.ApplicationConfig;
@@ -64,7 +64,7 @@ public class TestsigmaOSConfigService {
     return testsigmaOSConfig;
   }
 
-  public void createAccount(OnboardingRequest request) throws TestsigmaException {
+  public void createAccount(OnboardingRequest request) throws MitaException {
     TestsigmaAccountRequest testsigmaAccountRequest = new TestsigmaAccountRequest();
     Server server = serverService.findOne();
     testsigmaAccountRequest.setFirstName(request.getFirstName());
@@ -86,7 +86,7 @@ public class TestsigmaOSConfigService {
     }
   }
 
-  public void getOTP(OnboardingRequest request) throws TestsigmaException {
+  public void getOTP(OnboardingRequest request) throws MitaException {
     TestsigmaAccountRequest testsigmaAccountRequest = new TestsigmaAccountRequest();
     Server server = serverService.findOne();
     testsigmaAccountRequest.setEmail(request.getEmail());
@@ -108,11 +108,11 @@ public class TestsigmaOSConfigService {
         });
     if (response.getStatusCode() != HttpStatus.CREATED.value()) {
       log.error("Problem while creating account : " + response.getResponseText());
-      throw new TestsigmaException("Problem while sending OTP");
+      throw new MitaException("Problem while sending OTP");
     }
   }
 
-  public void activate(String otp) throws TestsigmaException {
+  public void activate(String otp) throws MitaException {
     HttpResponse<String> response =
       httpClient.get(this.getUrl() + "/api_public/accounts/activate/" + otp, getHeaders(),
         new TypeReference<>() {
@@ -120,10 +120,10 @@ public class TestsigmaOSConfigService {
     int status = response.getStatusCode();
     if (status == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
       log.error("Wrong OTP  : " + response.getResponseText());
-      throw new TestsigmaException("Wrong OTP");
+      throw new MitaException("Wrong OTP");
     } else if (status != HttpStatus.ACCEPTED.value() && status != HttpStatus.OK.value()) {
       log.error("Problem while activating account : " + response.getResponseText());
-      throw new TestsigmaException("Problem while activating account");
+      throw new MitaException("Problem while activating account");
     }
     String token = response.getResponseText();
     TestsigmaOSConfig testsigmaOSConfig = this.find();

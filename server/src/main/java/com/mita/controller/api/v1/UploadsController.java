@@ -5,7 +5,7 @@ package com.mita.controller.api.v1;
 import com.mita.specification.UploadSpecificationsBuilder;
 import com.mita.dto.api.APIUploadDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.UploadMapper;
 import com.mita.model.Upload;
 import com.mita.service.UploadService;
@@ -34,7 +34,7 @@ public class UploadsController {
 
   @RequestMapping(method = RequestMethod.POST)
   public APIUploadDTO create(@ModelAttribute @Valid UploadRequest uploadRequest)
-    throws TestsigmaException {
+    throws MitaException {
     if(uploadRequest.getVersion() == null)
       uploadRequest.setVersion(uploadRequest.getName());
     Upload upload = uploadService.create(uploadRequest);
@@ -56,7 +56,7 @@ public class UploadsController {
 
   @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
   public APIUploadDTO update(@PathVariable("id") Long id, @ModelAttribute UploadRequest uploadRequest)
-    throws TestsigmaException {
+    throws MitaException {
     Upload upload = uploadService.find(id);
     if(uploadRequest.getVersion() == null)
       uploadRequest.setVersion(upload.getLatestVersion().getName()+".1");

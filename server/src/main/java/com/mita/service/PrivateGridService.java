@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.PrivateGridNodeRepository;
 import com.mita.config.ApplicationConfig;
@@ -51,7 +51,7 @@ public class PrivateGridService {
     @Setter
     private Integrations applicationConfig;
 
-    private void fetchBrowsersFromNode(String proxy, String gridURL) throws TestsigmaException {
+    private void fetchBrowsersFromNode(String proxy, String gridURL) throws MitaException {
         HttpResponse<JsonNode> response = httpClient.get(gridURL + "/grid/api/proxy?id=" + proxy, getHeaders(), new TypeReference<JsonNode>() {
         });
         try {
@@ -77,19 +77,19 @@ public class PrivateGridService {
             request.setBrowserList(List.of(browsersList));
             PrivateGridNode node = nodeMapper.map(request);
             if (node.getBrowserList().size()<1)
-                throw new TestsigmaException("Node configuration is not correct! may be unsupported browsers and platforms are added");
+                throw new MitaException("Node configuration is not correct! may be unsupported browsers and platforms are added");
             this.create(node);
         } catch (Exception e) {
             log.error(e.getMessage());
             e.printStackTrace();
-            if (e instanceof TestsigmaException)
-                throw new TestsigmaException(e.getMessage());
+            if (e instanceof MitaException)
+                throw new MitaException(e.getMessage());
             else
-            throw new TestsigmaException("Unable extract and save the node configurations from your private grid");
+            throw new MitaException("Unable extract and save the node configurations from your private grid");
         }
     }
 
-    public List<String> ParseProxyIds(String gridUrl) throws TestsigmaException {
+    public List<String> ParseProxyIds(String gridUrl) throws MitaException {
         HttpResponse<JsonNode> response = httpClient.get(gridUrl + "/grid/console", getHeaders(), new TypeReference<JsonNode>() {
         });
 
@@ -114,16 +114,16 @@ public class PrivateGridService {
             }
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            if (e instanceof TestsigmaException)
-                throw new TestsigmaException(e.getMessage());
+            if (e instanceof MitaException)
+                throw new MitaException(e.getMessage());
             else
-                throw new TestsigmaException(" : URLs extraction failed - " + e.getMessage());
+                throw new MitaException(" : URLs extraction failed - " + e.getMessage());
         }
         return parsedURLs;
     }
 
 
-    public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+    public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
         HttpResponse<JsonNode> response = httpClient.get(testAuth.getUrl(), getHeaders(), new TypeReference<JsonNode>() {
         });
 

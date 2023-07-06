@@ -1,7 +1,7 @@
 package com.mita.automator.mobile.ios;
 
 import com.mita.automator.exceptions.AutomatorException;
-import com.mita.automator.exceptions.TestsigmaException;
+import com.mita.automator.exceptions.MitaException;
 import com.mita.automator.utilities.PathUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,9 +31,9 @@ public class IosDeviceCommandExecutor {
     }
   }
 
-  public String getIdbExecutablePath() throws TestsigmaException {
+  public String getIdbExecutablePath() throws MitaException {
     if (SystemUtils.IS_OS_WINDOWS) {
-      throw new TestsigmaException("Idb is not supported for Windows platform");
+      throw new MitaException("Idb is not supported for Windows platform");
     } else {
       return IDB_EXECUTABLE;
     }

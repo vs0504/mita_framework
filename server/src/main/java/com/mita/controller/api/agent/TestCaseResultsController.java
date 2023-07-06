@@ -3,7 +3,7 @@
 package com.mita.controller.api.agent;
 
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestCaseResultMapper;
 import com.mita.service.TestCaseResultService;
 import com.mita.web.request.TestCaseResultRequest;
@@ -30,7 +30,7 @@ public class TestCaseResultsController {
   @RequestMapping(method = RequestMethod.PUT, consumes = "application/json;charset=UTF-8")
   public ResponseEntity<String> update(@PathVariable("id") Long id,
                                        @RequestBody TestCaseResultRequest testCaseResultRequest)
-    throws UnsupportedEncodingException, TestsigmaException {
+    throws UnsupportedEncodingException, MitaException {
     testCaseResultService.updateResult(testCaseResultRequest);
     return new ResponseEntity<>(HttpStatus.OK);
   }

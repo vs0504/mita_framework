@@ -1,6 +1,6 @@
 package com.mita.agent.config;
 
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.utils.PathUtil;
 import lombok.Data;
 import lombok.ToString;
@@ -47,17 +47,17 @@ public class AgentConfig {
       this.UUID = properties.getProperty("agent.UUID");
       this.jwtApiKey = properties.getProperty("agent.jwtApiKey");
       log.info("Loaded agent config properties - " + this);
-    } catch (FileNotFoundException | TestsigmaException e) {
+    } catch (FileNotFoundException | MitaException e) {
       log.error(e.getMessage(), e);
     }
   }
 
-  public static Properties loadProperties(InputStream is) throws TestsigmaException {
+  public static Properties loadProperties(InputStream is) throws MitaException {
     Properties prop = new Properties();
     try {
       prop.load(is);
     } catch (final IOException e) {
-      throw new TestsigmaException("Bad InputStream, failed to load properties from file", e);
+      throw new MitaException("Bad InputStream, failed to load properties from file", e);
     }
     return prop;
 
@@ -78,9 +78,9 @@ public class AgentConfig {
   }
 
   /**
-   * @throws TestsigmaException
+   * @throws MitaException
    */
-  public void saveConfig() throws TestsigmaException {
+  public void saveConfig() throws MitaException {
 
     FileOutputStream fileOut = null;
     touchConfigFile();
@@ -103,23 +103,23 @@ public class AgentConfig {
       fileOut = new FileOutputStream(propertiesPath);
       properties.store(fileOut, "Agent configuration");
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (fileOut != null) {
         try {
           fileOut.flush();
           fileOut.close();
         } catch (IOException e) {
-          throw new TestsigmaException("Failed to flush/close file out stream", e);
+          throw new MitaException("Failed to flush/close file out stream", e);
         }
       }
     }
   }
 
   /**
-   * @throws TestsigmaException
+   * @throws MitaException
    */
-  public void removeConfig() throws TestsigmaException {
+  public void removeConfig() throws MitaException {
 
     FileOutputStream fileOut = null;
     touchConfigFile();
@@ -133,14 +133,14 @@ public class AgentConfig {
       fileOut = new FileOutputStream(propertiesPath);
       properties.store(fileOut, "Agent configuration");
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (fileOut != null) {
         try {
           fileOut.flush();
           fileOut.close();
         } catch (IOException e) {
-          throw new TestsigmaException("Failed to flush/close file out stream", e);
+          throw new MitaException("Failed to flush/close file out stream", e);
         }
       }
     }

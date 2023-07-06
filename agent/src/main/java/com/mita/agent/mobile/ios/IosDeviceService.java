@@ -4,7 +4,7 @@ import com.dd.plist.NSArray;
 import com.dd.plist.NSObject;
 import com.mita.agent.constants.DeviceStatus;
 import com.mita.agent.constants.MobileOs;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mobile.MobileDevice;
 import com.mita.agent.config.AgentConfig;
 import com.mita.agent.http.WebAppHttpClient;
@@ -97,7 +97,7 @@ public class IosDeviceService {
     return deviceAttachMessage;
   }
 
-  public List<MobileDevice> simulatorDeviceList() throws AutomatorException, TestsigmaException {
+  public List<MobileDevice> simulatorDeviceList() throws AutomatorException, MitaException {
     log.info("Fetching iOS simulator list");
     List<MobileDevice> deviceList = new ArrayList<>();
     IosDeviceCommandExecutor iosDeviceCommandExecutor = new IosDeviceCommandExecutor();
@@ -118,7 +118,7 @@ public class IosDeviceService {
     return deviceList;
   }
 
-  public JSONObject getDeviceProperties(String uniqueId) throws TestsigmaException {
+  public JSONObject getDeviceProperties(String uniqueId) throws MitaException {
     try {
       log.info("Fetching device properties for device uniqueID - " + uniqueId);
       IosDeviceCommandExecutor iosDeviceCommandExecutor = new IosDeviceCommandExecutor();
@@ -129,19 +129,19 @@ public class IosDeviceService {
       log.info("Fetched device properties for device - " + uniqueId + ", json format - " + devicePropertiesJson);
       return devicePropertiesJson;
     } catch(Exception e) {
-      throw new TestsigmaException(e.getMessage());
+      throw new MitaException(e.getMessage());
     }
   }
 
-  public JSONObject getSimulatorProperties(String deviceJson) throws TestsigmaException {
+  public JSONObject getSimulatorProperties(String deviceJson) throws MitaException {
     try {
       return new JSONObject(deviceJson);
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage());
+      throw new MitaException(e.getMessage());
     }
   }
 
-  public void setupWda(MobileDevice device) throws TestsigmaException, AutomatorException {
+  public void setupWda(MobileDevice device) throws MitaException, AutomatorException {
     log.info("Setting up WDA on device - " + device.getName());
     try {
       wdaService.installWdaToDevice(device);
@@ -153,7 +153,7 @@ public class IosDeviceService {
       log.error("Error while setting up wda and starting it. Error - ");
       log.error(e.getMessage(), e);
       cleanupWda(device);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
@@ -161,7 +161,7 @@ public class IosDeviceService {
     log.info("Cleaning up WDA on device - " + device.getName());
     try {
       wdaService.stopWdaOnDevice(device);
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error(e.getMessage(), e);
     }
   }
@@ -170,7 +170,7 @@ public class IosDeviceService {
     return new AppInstaller(httpClient).installApp(device.getName(), device.getUniqueId(), appUrl, isEmulator);
   }
 
-  public MobileDevice getSimulatorDevice(String udid) throws AutomatorException, TestsigmaException {
+  public MobileDevice getSimulatorDevice(String udid) throws AutomatorException, MitaException {
     IosDeviceCommandExecutor iosDeviceCommandExecutor = new IosDeviceCommandExecutor();
     Process p = iosDeviceCommandExecutor.runDeviceCommand(new String[]{"describe", "--udid", udid, "--json"}, false);
     String deviceDescriptionJson = iosDeviceCommandExecutor.getProcessStreamResponse(p);

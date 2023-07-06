@@ -1,7 +1,7 @@
 package com.mita.os.stats.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.os.stats.config.UrlConstants;
 import com.mita.os.stats.entity.*;
@@ -35,7 +35,7 @@ public class TestsigmaOsStatsService {
   private final TestStepService testStepService;
   private final TestDataParameterUpdateTaskHandler testDataParameterUpdateTaskHandler;
 
-  public void sendTestCaseStats(TestCase testCase, EventType eventType) throws TestsigmaException {
+  public void sendTestCaseStats(TestCase testCase, EventType eventType) throws MitaException {
     TestCaseStatEntity testCaseStatEntity = new TestCaseStatEntity();
     Server server = serverService.findOne();
     testCaseStatEntity.setEventType(eventType);
@@ -46,7 +46,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendTestSuiteStats(TestSuite testSuite, EventType eventType) throws TestsigmaException {
+  public void sendTestSuiteStats(TestSuite testSuite, EventType eventType) throws MitaException {
     TestSuiteStatEntity testSuiteStatEntity = new TestSuiteStatEntity();
     Server server = serverService.findOne();
     testSuiteStatEntity.setServerUuid(server.getServerUuid());
@@ -57,7 +57,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendTestStepStats(TestStep testStep, EventType eventType) throws TestsigmaException {
+  public void sendTestStepStats(TestStep testStep, EventType eventType) throws MitaException {
     TestStepStatEntity testStepStatEntity = new TestStepStatEntity();
     Server server = serverService.findOne();
     testStepStatEntity.setServerUuid(server.getServerUuid());
@@ -69,7 +69,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendTestDataStats(TestData testData, EventType eventType) throws TestsigmaException {
+  public void sendTestDataStats(TestData testData, EventType eventType) throws MitaException {
     TestDataStatEntity testDataStatEntity = new TestDataStatEntity();
     Server server = serverService.findOne();
     testDataStatEntity.setServerUuid(server.getServerUuid());
@@ -80,7 +80,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendElementStats(Element element, EventType eventType) throws TestsigmaException {
+  public void sendElementStats(Element element, EventType eventType) throws MitaException {
     ElementStatEntity elementStatEntity = new ElementStatEntity();
     Server server = serverService.findOne();
     elementStatEntity.setServerUuid(server.getServerUuid());
@@ -91,7 +91,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendEnvironmentStats(Environment environment, EventType eventType) throws TestsigmaException {
+  public void sendEnvironmentStats(Environment environment, EventType eventType) throws MitaException {
     EnvironmentStatEntity environmentStatEntity = new EnvironmentStatEntity();
     Server server = serverService.findOne();
     environmentStatEntity.setServerUuid(server.getServerUuid());
@@ -102,7 +102,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendUploadStats(Upload upload, EventType eventType) throws TestsigmaException {
+  public void sendUploadStats(Upload upload, EventType eventType) throws MitaException {
     UploadStatEntity uploadStatEntity = new UploadStatEntity();
     Server server = serverService.findOne();
     uploadStatEntity.setServerUuid(server.getServerUuid());
@@ -114,7 +114,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendTestPlanStats(TestPlan testPlan, EventType eventType) throws TestsigmaException {
+  public void sendTestPlanStats(TestPlan testPlan, EventType eventType) throws MitaException {
     TestPlanStatEntity testPlanStatEntity = new TestPlanStatEntity();
     Server server = serverService.findOne();
     testPlanStatEntity.setServerUuid(server.getServerUuid());
@@ -126,7 +126,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendTestPlanRunStats(TestPlanResult testPlanRun, EventType eventType) throws TestsigmaException {
+  public void sendTestPlanRunStats(TestPlanResult testPlanRun, EventType eventType) throws MitaException {
     TestPlanRunStatEntity testPlanRunStatEntity = new TestPlanRunStatEntity();
     Server server = serverService.findOne();
     testPlanRunStatEntity.setServerUuid(server.getServerUuid());
@@ -144,7 +144,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendAgentStats(Agent agent, EventType eventType) throws TestsigmaException {
+  public void sendAgentStats(Agent agent, EventType eventType) throws MitaException {
     AgentStatEntity agentStatEntity = new AgentStatEntity();
     Server server = serverService.findOne();
     agentStatEntity.setServerUuid(server.getServerUuid());
@@ -156,7 +156,7 @@ public class TestsigmaOsStatsService {
     });
   }
 
-  public void sendAgentDeviceStats(AgentDevice agentDevice, EventType eventType) throws TestsigmaException {
+  public void sendAgentDeviceStats(AgentDevice agentDevice, EventType eventType) throws MitaException {
     AgentDeviceStatEntity agentDeviceStatEntity = new AgentDeviceStatEntity();
     Server server = serverService.findOne();
     agentDeviceStatEntity.setServerUuid(server.getServerUuid());

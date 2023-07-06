@@ -3,7 +3,7 @@ package com.mita.service;
 
 
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.StorageServiceFactory;
 import com.mita.dto.BackupDTO;
 import com.mita.model.TestCase;
@@ -105,7 +105,7 @@ public class ImportAffectedTestCaseXLSExportService {
     row.getCell(7).setCellStyle(linkStyle);
   }
 
-  public void uploadImportFileToStorage(Workbook workbook, BackupDTO importDTO) throws TestsigmaException {
+  public void uploadImportFileToStorage(Workbook workbook, BackupDTO importDTO) throws MitaException {
     String fileName = System.currentTimeMillis() + ".xls";
     String filePath = "/export_xlsx/" + importDTO.getId() + File.separator + fileName;
     log.info(String.format("Uploading affected Testcase import file to storage path %s", filePath));

@@ -1,6 +1,6 @@
 package com.mita.config;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.AuthenticationType;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
@@ -45,12 +45,12 @@ public class AdditionalPropertiesConfig {
   @Value("${ts.root.dir}")
   private String testsigmaDataPath;
 
-  public static Properties loadProperties(InputStream is) throws TestsigmaException {
+  public static Properties loadProperties(InputStream is) throws MitaException {
     Properties prop = new Properties();
     try {
       prop.load(is);
     } catch (final IOException e) {
-      throw new TestsigmaException("Bad InputStream, failed to load properties from file", e);
+      throw new MitaException("Bad InputStream, failed to load properties from file", e);
     }
     return prop;
 
@@ -84,7 +84,7 @@ public class AdditionalPropertiesConfig {
     }
   }
 
-  public void saveConfig() throws TestsigmaException {
+  public void saveConfig() throws MitaException {
 
     FileOutputStream fileOut = null;
     touchConfigFile();
@@ -105,20 +105,20 @@ public class AdditionalPropertiesConfig {
       fileOut = new FileOutputStream(propertiesPath);
       properties.store(fileOut, "Authentication configuration");
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (fileOut != null) {
         try {
           fileOut.flush();
           fileOut.close();
         } catch (IOException e) {
-          throw new TestsigmaException("Failed to flush/close file out stream", e);
+          throw new MitaException("Failed to flush/close file out stream", e);
         }
       }
     }
   }
 
-  private void populateMissingValues(Properties properties) throws TestsigmaException, FileNotFoundException {
+  private void populateMissingValues(Properties properties) throws MitaException, FileNotFoundException {
     if (properties != null) {
       userName = properties.getProperty("authentication.form.username", this.defaultUserName);
       password = properties.getProperty("authentication.form.password", this.defaultPassword);

@@ -1,7 +1,7 @@
 package com.mita.service;
 
 import com.mita.constants.TSCapabilityType;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ public class AndroidCapabilities extends MobileCapabilities {
   public void setTestsigmaLabCapabilities(TestDevice testDevice,
                                           Integrations integrations,
                                           List<WebDriverCapability> capabilities)
-    throws TestsigmaException {
+    throws MitaException {
     capabilities.add(new WebDriverCapability(TSCapabilityType.PLATFORM_NAME, Platform.Android.name()));
     if (testDevice.getAppPathType() != null)
       setTestsigmaLabAppCapability(testDevice, testDevice.getAppPathType(),
@@ -25,7 +25,7 @@ public class AndroidCapabilities extends MobileCapabilities {
 
   public void setHybridAppCapability(TestDevice testDevice, AppPathType appPathType,
                                      List<WebDriverCapability> capabilities)
-    throws TestsigmaException {
+    throws MitaException {
     if (AppPathType.UPLOADS == appPathType) {
       capabilities.add(new WebDriverCapability(TSCapabilityType.APP, getPreSignedUrl(testDevice)));
       Upload upload = uploadService.findById(Long.valueOf(testDevice.getAppUploadId()));
@@ -51,7 +51,7 @@ public class AndroidCapabilities extends MobileCapabilities {
                                     Integrations integrations,
                                     List<WebDriverCapability> capabilities,
                                     TestPlanLabType testPlanLabType)
-    throws TestsigmaException {
+    throws MitaException {
     capabilities.add(new WebDriverCapability(TSCapabilityType.PLATFORM_NAME, Platform.Android.name()));
     capabilities.add(new WebDriverCapability("automationName", "UiAutomator2"));
     if (testDevice.getAppPathType() != null)

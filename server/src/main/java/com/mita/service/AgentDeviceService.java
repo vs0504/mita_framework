@@ -3,7 +3,7 @@
 package com.mita.service;
 
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.repository.AgentDeviceRepository;
 import com.mita.dto.AgentDeviceDTO;
 import com.mita.event.AgentDeviceEvent;
@@ -42,33 +42,33 @@ public class AgentDeviceService {
     return agentDeviceRepository.findAllByAgentIdAndIsOnline(agentId, true, pageable);
   }
 
-  public AgentDevice create(AgentDevice agentDevice) throws TestsigmaDatabaseException {
+  public AgentDevice create(AgentDevice agentDevice) throws MitaDatabaseException {
     try {
       agentDevice = agentDeviceRepository.save(agentDevice);
       profileDeviceService.updateAgentDevice(agentDevice);
       publishEvent(agentDevice, EventType.CREATE);
       return agentDevice;
     } catch (Exception e) {
-      throw new TestsigmaDatabaseException(e.getMessage());
+      throw new MitaDatabaseException(e.getMessage());
     }
   }
 
-  public AgentDevice update(AgentDevice agentDevice) throws TestsigmaDatabaseException {
+  public AgentDevice update(AgentDevice agentDevice) throws MitaDatabaseException {
     try {
       agentDevice = agentDeviceRepository.save(agentDevice);
       publishEvent(agentDevice, EventType.UPDATE);
       return agentDevice;
     } catch (Exception e) {
-      throw new TestsigmaDatabaseException(e.getMessage());
+      throw new MitaDatabaseException(e.getMessage());
     }
   }
 
-  public void destroy(AgentDevice agentDevice) throws TestsigmaDatabaseException {
+  public void destroy(AgentDevice agentDevice) throws MitaDatabaseException {
     try {
       agentDeviceRepository.delete(agentDevice);
       publishEvent(agentDevice, EventType.DELETE);
     } catch (Exception e) {
-      throw new TestsigmaDatabaseException(e.getMessage());
+      throw new MitaDatabaseException(e.getMessage());
     }
   }
 
@@ -78,11 +78,11 @@ public class AgentDeviceService {
     ));
   }
 
-  public void updateDevicesStatus(Long agentId) throws TestsigmaDatabaseException {
+  public void updateDevicesStatus(Long agentId) throws MitaDatabaseException {
     try {
       agentDeviceRepository.updateAgentDevice(agentId);
     } catch (Exception e) {
-      throw new TestsigmaDatabaseException(e.getMessage());
+      throw new MitaDatabaseException(e.getMessage());
     }
   }
 

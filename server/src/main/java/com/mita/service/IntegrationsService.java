@@ -2,7 +2,7 @@
 package com.mita.service;
 
 import com.mita.exception.IntegrationNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.repository.IntegrationsRepository;
 import com.mita.mapper.IntegrationsMapper;
 import com.mita.model.Integrations;
@@ -40,7 +40,7 @@ public class IntegrationsService {
    * Method to update existing external workspace config
    */
   public Integrations update(IntegrationsRequest externalApplicationConfigReq, Long id)
-    throws IntegrationNotFoundException, TestsigmaDatabaseException {
+    throws IntegrationNotFoundException, MitaDatabaseException {
     Integrations integrations = find(id);
     integrations.setMetadata(externalApplicationConfigReq.getMetadata());
     integrations.setUsername(externalApplicationConfigReq.getUsername());

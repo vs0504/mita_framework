@@ -3,7 +3,7 @@ package com.mita.service.testproject;
 import com.mita.constants.MessageConstants;
 import com.mita.exception.ResourceNotFoundException;
 import com.mita.exception.TestProjectImportException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.service.*;
 import com.mita.web.request.testproject.TestProjectGlobalParametersRequest;
@@ -38,7 +38,7 @@ public class ProjectImportService extends BaseImportService<TestProjectYamlReque
 
     private static final String DEFAULT_TESTPROJECT_DESCRIPTION = "Created from TestProject import";
 
-    public BackupDetail createBackupDetailEntry(MultipartFile file) throws IOException, TestsigmaException {
+    public BackupDetail createBackupDetailEntry(MultipartFile file) throws IOException, MitaException {
         BackupDetail backupDetail = new BackupDetail();
         backupDetail.setWorkspaceVersion(this.workspaceVersion);
         backupDetail.setWorkspaceVersionId(this.workspaceVersion.getId());

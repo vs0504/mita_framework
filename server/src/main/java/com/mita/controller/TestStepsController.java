@@ -6,7 +6,7 @@ import com.mita.specification.TestStepSpecificationsBuilder;
 import com.mita.dto.RestStepResponseDTO;
 import com.mita.dto.TestStepDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestStepMapper;
 import com.mita.model.TestStep;
 import com.mita.model.TestStepPriority;
@@ -68,7 +68,7 @@ public class TestStepsController {
 
   @PutMapping(path = "/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public TestStepDTO update(@PathVariable(value = "id") Long id, @RequestBody TestStepRequest request) throws TestsigmaException {
+  public TestStepDTO update(@PathVariable(value = "id") Long id, @RequestBody TestStepRequest request) throws MitaException {
     log.debug("PUT /test_steps with id::" + id + " request::" + request);
     TestStep testStep = this.service.find(id);
     mapper.merge(request, testStep);
@@ -79,7 +79,7 @@ public class TestStepsController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TestStepDTO create(@RequestBody TestStepRequest request) throws TestsigmaException {
+  public TestStepDTO create(@RequestBody TestStepRequest request) throws MitaException {
     log.debug("POST /test_steps with request::" + request);
     TestStep testStep = mapper.map(request);
     testStep.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -113,7 +113,7 @@ public class TestStepsController {
 
   @PutMapping(value = "/bulk_update")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void bulkUpdate(@RequestBody List<TestStepRequest> testStepRequests) throws TestsigmaException {
+  public void bulkUpdate(@RequestBody List<TestStepRequest> testStepRequests) throws MitaException {
     log.debug("PUT /test_steps/bulk_update with body::" + testStepRequests);
     for (TestStepRequest request : testStepRequests) {
       TestStep step = this.mapper.map(request);

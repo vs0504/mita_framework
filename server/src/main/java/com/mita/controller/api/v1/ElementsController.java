@@ -5,8 +5,8 @@ package com.mita.controller.api.v1;
 import com.mita.specification.ElementSpecificationsBuilder;
 import com.mita.dto.api.APIElementDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ElementMapper;
 import com.mita.model.Element;
 import com.mita.model.LocatorType;
@@ -58,7 +58,7 @@ public class ElementsController {
 
   @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
   public APIElementDTO update(@PathVariable("id") Long id, @RequestBody ElementRequest elementRequest)
-          throws ResourceNotFoundException, TestsigmaDatabaseException {
+          throws ResourceNotFoundException, MitaDatabaseException {
     Element element = elementService.find(id);
     String oldName = element.getName();
     String previousLocatorValue = element.getLocatorValue();
@@ -71,7 +71,7 @@ public class ElementsController {
 
   @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.OK)
-  public void delete(@PathVariable("id") Long id) throws TestsigmaException, IOException {
+  public void delete(@PathVariable("id") Long id) throws MitaException, IOException {
     elementService.delete(elementService.find(id));
   }
 }

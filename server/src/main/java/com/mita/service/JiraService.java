@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.config.StorageServiceFactory;
 import com.mita.model.EntityExternalMapping;
@@ -57,7 +57,7 @@ public class JiraService {
   @Setter
   private Integrations integrations;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.putPOJO("fields", mapping.getFields());
@@ -65,7 +65,7 @@ public class JiraService {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating jira issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating jira issue with ::" + mapping.getFields());
     }
     uploadVideo(mapping);
     uploadScreenshots(mapping);
@@ -74,7 +74,7 @@ public class JiraService {
     return mapping;
   }
 
-  public void unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public void unlink(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.putPOJO("body", "Unlinked from testsigma results [" + applicationConfig.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
@@ -82,11 +82,11 @@ public class JiraService {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while unlinking jira issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while unlinking jira issue with ::" + mapping.getFields());
     }
   }
 
-  public List<JiraProjectDTO> getIssueFields(String projectId, String issueType) throws TestsigmaException, EncoderException {
+  public List<JiraProjectDTO> getIssueFields(String projectId, String issueType) throws MitaException, EncoderException {
     String query = "?expand=projects.issuetypes.fields";
     if (projectId != null)
       query += "&projectKeys=" + new URLCodec().encode(projectId);
@@ -110,7 +110,7 @@ public class JiraService {
     return jiraProjectDTOS;
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     String authHeader = HttpClient.getBasicAuthString(testAuth.getUsername() + ":" + testAuth.getPassword());
     Header authentication = new BasicHeader(HttpHeaders.AUTHORIZATION, "Basic " + authHeader);
@@ -126,13 +126,13 @@ public class JiraService {
     return status;
   }
 
-  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws MitaException {
     HttpResponse<Map<String, Object>> response = httpClient.get(integrations.getUrl() + "/rest/api/2/issue/" + mapping.getExternalId() + "?expand=names,renderedFields", getHeaders(), new TypeReference<>() {
     });
     return response.getResponseEntity();
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.putPOJO("body", "Linked to testsigma results [" + applicationConfig.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
@@ -140,12 +140,12 @@ public class JiraService {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking jira issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking jira issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public JsonNode getIssuesList(String projectId, String issueType, String summary) throws TestsigmaException {
+  public JsonNode getIssuesList(String projectId, String issueType, String summary) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     {

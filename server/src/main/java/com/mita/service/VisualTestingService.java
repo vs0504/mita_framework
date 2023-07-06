@@ -5,7 +5,7 @@ package com.mita.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.StorageServiceFactory;
 import com.mita.config.URLConstants;
 import com.mita.model.*;
@@ -232,7 +232,7 @@ public class VisualTestingService {
     return this.stepResultScreenshotComparisonService.create(result);
   }
 
-  private void postImageAnalysisRequest(TestStepResult testStepResult, StepResultScreenshotComparison stepResultScreenshotComparison, TestStepScreenshot baseScreenshot) throws TestsigmaException {
+  private void postImageAnalysisRequest(TestStepResult testStepResult, StepResultScreenshotComparison stepResultScreenshotComparison, TestStepScreenshot baseScreenshot) throws MitaException {
     VisualAnalysisRequest requestBean = new VisualAnalysisRequest();
     requestBean.setScreenshotResultId(stepResultScreenshotComparison.getId());
     requestBean.setAction("COMPARE");

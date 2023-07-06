@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.TestCase;
 import com.mita.model.Upload;
 import com.mita.model.UploadVersion;
@@ -74,7 +74,7 @@ public class UploadService extends XMLExportImportService<Upload> {
     return this.uploadRepository.findById(id).orElse(null);
   }
 
-  public Upload create(UploadRequest uploadRequest) throws TestsigmaException {
+  public Upload create(UploadRequest uploadRequest) throws MitaException {
     Upload upload = new Upload();
     upload.setName(uploadRequest.getName());
     upload.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -90,7 +90,7 @@ public class UploadService extends XMLExportImportService<Upload> {
     return this.save(upload);
   }
 
-  public Upload update(Upload upload, UploadRequest uploadRequest) throws TestsigmaException {
+  public Upload update(Upload upload, UploadRequest uploadRequest) throws MitaException {
     upload.setName(uploadRequest.getName());
     upload.setSupportedDeviceType(uploadRequest.getSupportedDeviceType());
     upload.setUpdatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -102,7 +102,7 @@ public class UploadService extends XMLExportImportService<Upload> {
 
   }
 
-  public Upload update(Upload upload) throws TestsigmaException {
+  public Upload update(Upload upload) throws MitaException {
     upload = this.uploadRepository.save(upload);
     publishEvent(upload, EventType.UPDATE);
     return upload;

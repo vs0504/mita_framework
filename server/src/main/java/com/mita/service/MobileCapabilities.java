@@ -2,7 +2,7 @@ package com.mita.service;
 
 import com.mita.constants.TSCapabilityType;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.StorageServiceFactory;
 import com.mita.model.*;
 import com.mita.tasks.PlatformAppUploader;
@@ -48,7 +48,7 @@ public abstract class MobileCapabilities extends Capabilities {
     return newPreSignedURL.get().toString();
   }
 
-  public String copyUploadToLocal(TestDevice testDevice) throws TestsigmaException {
+  public String copyUploadToLocal(TestDevice testDevice) throws MitaException {
     UploadVersion upload = this.uploadVersionService.find(testDevice.getAppUploadVersionId());
     return storageServiceFactory.getStorageService().downloadToLocal(upload.getPath(),
       StorageAccessLevel.READ);
@@ -57,7 +57,7 @@ public abstract class MobileCapabilities extends Capabilities {
 
   public void setTestsigmaLabAppCapability(TestDevice testDevice, AppPathType pathType,
                                            Integrations integrations,
-                                           List<WebDriverCapability> capabilities) throws TestsigmaException {
+                                           List<WebDriverCapability> capabilities) throws MitaException {
     AppPathType appPathType = pathType;
     String platformAppId = null;
     String appLocalPath;
@@ -85,7 +85,7 @@ public abstract class MobileCapabilities extends Capabilities {
                                     Integrations integrations,
                                     List<WebDriverCapability> capabilities,
                                     TestPlanLabType testPlanLabType)
-    throws TestsigmaException {
+    throws MitaException {
 
   }
 
@@ -93,7 +93,7 @@ public abstract class MobileCapabilities extends Capabilities {
   public void setTestsigmaLabCapabilities(TestDevice testDevice,
                                           Integrations integrations,
                                           List<WebDriverCapability> capabilities)
-    throws TestsigmaException {
+    throws MitaException {
 
   }
 }

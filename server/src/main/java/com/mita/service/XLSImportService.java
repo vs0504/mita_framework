@@ -1,7 +1,7 @@
 package com.mita.service;
 
 import com.mita.exception.ExceptionErrorCodes;
-import com.mita.exception.TestsigmaValidationException;
+import com.mita.exception.MitaValidationException;
 import com.mita.config.StorageServiceFactory;
 import com.mita.util.XLSUtil;
 import lombok.Getter;
@@ -53,7 +53,7 @@ public abstract class XLSImportService {
             }
         }
         if (errormessage.length() > 1) {
-            throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_CELL_NULL,
+            throw new MitaValidationException(ExceptionErrorCodes.MSG_EXECEL_FILE_CELL_NULL,
                     errormessage + "::" + "contains null");
         }
         return sheetListData;

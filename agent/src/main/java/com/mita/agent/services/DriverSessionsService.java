@@ -3,7 +3,7 @@
 package com.mita.agent.services;
 
 import com.mita.agent.constants.MobileOs;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mobile.*;
 import com.mita.automator.AutomatorConfig;
 import com.mita.automator.entity.*;
@@ -80,7 +80,7 @@ public class DriverSessionsService {
   }
 
   private WebDriverSettingsDTO fetchWebDriverSettings(DriverSessionRequest driverSessionRequest)
-    throws IOException, TestsigmaException {
+    throws IOException, MitaException {
     HttpResponse<WebDriverSettingsDTO> response;
     String authHeader = null;
     if (agentConfig.getJwtApiKey() == null) {
@@ -91,7 +91,7 @@ public class DriverSessionsService {
     response = httpClient.post(ServerURLBuilder.webDriverSettingsURL(), driverSessionRequest, new TypeReference<>() {
     }, authHeader);
     if (response.getStatusCode() != HttpStatus.OK.value()) {
-      throw new TestsigmaException("Could not fetch web driver settings from server "
+      throw new MitaException("Could not fetch web driver settings from server "
         + response.getStatusCode() + " - " + response.getStatusMessage());
     }
     return response.getResponseEntity();
@@ -128,7 +128,7 @@ public class DriverSessionsService {
   }
 
   private void handleLocalDevice(List<WebDriverCapability> caps, DriverSessionRequest driverSessionRequest)
-    throws TestsigmaException, AutomatorException {
+    throws MitaException, AutomatorException {
     if (driverSessionRequest.getExecutionLabType().equals(ExecutionLabType.Hybrid)) {
       appendChromeDriverExecutable(caps, driverSessionRequest);
       if (driverSessionRequest.getWorkspaceType() == WorkspaceType.IOSNative) {
@@ -138,7 +138,7 @@ public class DriverSessionsService {
   }
 
   private void appendChromeDriverExecutable(List<WebDriverCapability> caps, DriverSessionRequest driverSessionRequest)
-    throws TestsigmaException {
+    throws MitaException {
     MobileDevice device = deviceContainer.getDevice(driverSessionRequest.getUniqueId());
     if (device.getBrowserList() != null && device.getBrowserList().size() > 0) {
       AgentBrowser browser = device.getBrowserList().get(0);
@@ -154,7 +154,7 @@ public class DriverSessionsService {
   }
 
   public void setupIosDevice(List<WebDriverCapability> caps, DriverSessionRequest driverSessionRequest)
-    throws TestsigmaException, AutomatorException {
+    throws MitaException, AutomatorException {
     MobileDevice device = deviceContainer.getDevice(driverSessionRequest.getUniqueId());
     iosDeviceService.setupWda(device);
     WebDriverCapability bundleIdCapability = caps.stream().filter(cap -> cap.getCapabilityName()
@@ -242,7 +242,7 @@ public class DriverSessionsService {
     log.debug(mobileInspectionResponse.getStatusCode() + " - " + mobileInspectionResponse.getResponseText());
   }
 
-  public File driverExecutableExists(String browserNameKey, String browserMajorVersion) throws TestsigmaException {
+  public File driverExecutableExists(String browserNameKey, String browserMajorVersion) throws MitaException {
     try {
       String driversFolderPath = PathUtil.getInstance().getDriversPath();
       String driverPath = AutomatorConfig.getInstance().getAppBridge().getDriverExecutablePath(browserNameKey,
@@ -252,7 +252,7 @@ public class DriverSessionsService {
       return driverFile.exists() ? driverFile : null;
     } catch (AutomatorException e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 }

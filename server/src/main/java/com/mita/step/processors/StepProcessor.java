@@ -8,7 +8,7 @@ import com.mita.constants.NaturalTextActionConstants;
 import com.mita.dto.*;
 import com.mita.exception.ExceptionErrorCodes;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ElementMapper;
 import com.mita.mapper.TestStepMapper;
 import com.mita.model.*;
@@ -77,7 +77,7 @@ public class StepProcessor {
     this.addonService = (ProxyAddonService) webApplicationContext.getBean("proxyAddonService");
   }
 
-  protected void processDefault(TestCaseStepEntityDTO exeTestStepEntity) throws TestsigmaException {
+  protected void processDefault(TestCaseStepEntityDTO exeTestStepEntity) throws MitaException {
     exeTestStepEntity.setId(testStepDTO.getId());
     exeTestStepEntity.setType(testStepDTO.getType());
     exeTestStepEntity.setTestCaseId(testStepDTO.getTestCaseId());
@@ -94,7 +94,7 @@ public class StepProcessor {
     populateStepDetails(testStepDTO, exeTestStepEntity);
   }
 
-  public TestCaseStepEntityDTO processStep() throws TestsigmaException {
+  public TestCaseStepEntityDTO processStep() throws MitaException {
     TestCaseStepEntityDTO exeTestStepEntity = new TestCaseStepEntityDTO();
     exeTestStepEntity.setId(testStepDTO.getId());
     exeTestStepEntity.setType(testStepDTO.getType());
@@ -158,7 +158,7 @@ public class StepProcessor {
     }
   }
 
-  public void setElementMap(TestCaseStepEntityDTO exeTestStepEntity) throws TestsigmaException {
+  public void setElementMap(TestCaseStepEntityDTO exeTestStepEntity) throws MitaException {
     Map<String, ElementPropertiesDTO> elementsMap = new HashMap<>();
     if (testStepDTO.getAddonActionId() != null) {
       Map<String, AddonElementData> elements = testStepDTO.getAddonElements();
@@ -189,7 +189,7 @@ public class StepProcessor {
     exeTestStepEntity.setElementsMap(elementsMap);
   }
 
-  public void setTestDataMap(TestCaseStepEntityDTO exeTestStepEntity) throws TestsigmaException {
+  public void setTestDataMap(TestCaseStepEntityDTO exeTestStepEntity) throws MitaException {
     LinkedHashMap<String, TestDataPropertiesEntity> testDatasMap = new LinkedHashMap<>();
     if (testStepDTO.getAddonActionId() != null || testStepDTO.getAddonTestData() != null) {
       Map<String, AddonTestStepTestData> testDataMap = testStepDTO.getAddonTestData();
@@ -239,11 +239,11 @@ public class StepProcessor {
     exeTestStepEntity.setAttributesMap(attributesMap);
   }
 
-  private ElementPropertiesDTO getElementEntityDTO(String elementName) throws TestsigmaException {
+  private ElementPropertiesDTO getElementEntityDTO(String elementName) throws MitaException {
     Element element = elementMap.get(elementName.toLowerCase());
     ElementDTO elementDTO = elementMapper.map(element);
     if (element == null) {
-      throw new TestsigmaException(ExceptionErrorCodes.ELEMENT_NOT_FOUND,
+      throw new MitaException(ExceptionErrorCodes.ELEMENT_NOT_FOUND,
         MessageConstants.getMessage(MessageConstants.ELEMENT_WITH_THE_NAME_IS_NOT_AVAILABLE, elementName));
     }
     String locatorValue = updateElement(element, testDataSet, environmentParameters);
@@ -259,17 +259,17 @@ public class StepProcessor {
     private TestDataPropertiesEntity getTestDataEntityDTO(String testDataName, String testDataValue,
                                                           String testDataType, AddonTestStepTestData
                                                                                                  addonTestStepTestData, TestCaseStepEntityDTO testCaseStepEntityDTO)
-    throws TestsigmaException {
+    throws MitaException {
     TestDataPropertiesEntity testDataPropertiesEntity = new TestDataPropertiesEntity();
     testDataPropertiesEntity.setTestDataType(testDataType);
 
     switch (TestDataType.getTypeFromName(testDataType)) {
       case global:
         if ((environmentParameters == null)) {
-          throw new TestsigmaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETERS_NOT_CONFIGURED,
+          throw new MitaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETERS_NOT_CONFIGURED,
             MessageConstants.getMessage(MessageConstants.MSG_UNKNOWN_ENVIRONMENT_DATA_SET));
         } else if (environmentParameters.get(testDataValue) == null) {
-          throw new TestsigmaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETER_NOT_FOUND,
+          throw new MitaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETER_NOT_FOUND,
             MessageConstants.getMessage(MessageConstants.MSG_UNKNOWN_ENVIRONMENT_PARAMETER_IN_TEST_STEP, testDataValue,
               testCaseEntityDTO.getTestCaseName(), environmentParamSetName));
         }
@@ -397,7 +397,7 @@ public class StepProcessor {
 
   private void populateDefaultDataGeneratorsEntity(TestDataPropertiesEntity testDataPropertiesEntity,
                                                    AddonTestStepTestData addonTestStepTestData, TestCaseStepEntityDTO exeTestStepEntity)
-    throws TestsigmaException {
+    throws MitaException {
     DefaultDataGeneratorsEntity defaultDataGeneratorsEntity = new DefaultDataGeneratorsEntity();
     try {
       if (testStepDTO.getAddonActionId() != null) {
@@ -407,7 +407,7 @@ public class StepProcessor {
       }
       testDataPropertiesEntity.setDefaultDataGeneratorsEntity(defaultDataGeneratorsEntity);
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
   private void populateTestDataFunctionDetailsFromId(DefaultDataGeneratorsEntity testDataFunctionEntity,
@@ -440,7 +440,7 @@ public class StepProcessor {
   }
 
   private void populateTestDataFunctionDetailsFromMap(DefaultDataGeneratorsEntity defaultDataGeneratorsEntity, TestCaseStepEntityDTO exeTestStepEntity)
-    throws TestsigmaException {
+    throws MitaException {
     TestStepDataMap testStepDataMap = testStepDTO.getDataMapBean();
     if (testStepDataMap != null) {
       if (testStepDataMap.getAddonTDF() != null) {
@@ -454,7 +454,7 @@ public class StepProcessor {
       }
     }
     if (testStepDTO.getTestDataFunctionId() == null) {
-      throw new TestsigmaException(ExceptionErrorCodes.TEST_DATA_NOT_FOUND_TEST_STEP,
+      throw new MitaException(ExceptionErrorCodes.TEST_DATA_NOT_FOUND_TEST_STEP,
         MessageConstants.getMessage(MessageConstants.INVALID_TEST_DATA));
     }
     DefaultDataGenerator defaultDataGenerator = defaultDataGeneratorService.find(testStepDTO.getTestDataFunctionId());
@@ -503,7 +503,7 @@ public class StepProcessor {
             }else {
               String errorMessage = MessageConstants.getMessage(
                 MessageConstants.MSG_UNKNOWN_ENVIRONMENT_PARAMETER_IN_ELEMENT, dataMap.get(NaturalTextActionConstants.TEST_STEP_DATA_MAP_KEY_TEST_DATA), this.testCaseEntityDTO.getTestCaseName(), element.getName());
-                throw new TestsigmaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETER_NOT_FOUND, errorMessage);
+                throw new MitaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETER_NOT_FOUND, errorMessage);
             }
           }
           //TODO: Handle null and exception cases..
@@ -514,7 +514,7 @@ public class StepProcessor {
         }
       }
     }
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.info(e.getMessage(),e);
     }
     return locatorValue;

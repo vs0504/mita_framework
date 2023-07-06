@@ -3,7 +3,7 @@
 package com.mita.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.HttpRequestMethod;
 import com.mita.service.ObjectMapperService;
 import com.mita.dto.RestStepResponseDTO;
@@ -179,7 +179,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> post(String url, Object data,
                                                 TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a post request to " + url + " | with data - " + data.toString());
@@ -189,7 +189,7 @@ public class HttpClient {
       HttpResponse res = client.execute(postRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -199,7 +199,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> patch(String url, List<Header> httpHeaders, Object data,
                                                  TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a patch request to " + url + " | with data - " + data.toString());
@@ -211,7 +211,7 @@ public class HttpClient {
       HttpResponse res = client.execute(patchRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -221,7 +221,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> postAndStoreCookies(String url, List<Header> httpHeaders, Object data,
                                                                TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a post request to " + url + " | with data - " + data.toString());
@@ -237,7 +237,7 @@ public class HttpClient {
       List<Cookie> cookies = cookieStore.getCookies();
       return new com.mita.util.HttpResponse<>(res, typeReference, cookies);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -247,13 +247,13 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> post(String url, List<Header> httpHeaders, Object data,
                                                 TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     return this.post(url, httpHeaders, data, typeReference, null);
   }
 
   public <T> com.mita.util.HttpResponse<T> formPost(String url, List<Header> httpHeaders, HashMap<String, String> data,
                                                     TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a post request to " + url + " | with data - " + data.toString());
@@ -265,7 +265,7 @@ public class HttpClient {
       HttpResponse res = client.execute(postRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -275,7 +275,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> put(String url, List<Header> httpHeaders, Object data,
                                                TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a put request to " + url + " | with data - " + data.toString());
@@ -287,7 +287,7 @@ public class HttpClient {
       HttpResponse res = client.execute(putRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -297,7 +297,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> get(List<Header> httpHeaders, URIBuilder builder,
                                                TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       Header[] itemsArray = new Header[httpHeaders.size()];
@@ -307,7 +307,7 @@ public class HttpClient {
       HttpResponse res = client.execute(getRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException | URISyntaxException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -317,19 +317,19 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> get(String url, List<Header> httpHeaders,
                                                TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     return this.get(url, httpHeaders, typeReference, null);
   }
 
   public <T> com.mita.util.HttpResponse<T> delete(String url, List<Header> httpHeaders,
                                                   TypeReference<T> typeReference)
-    throws TestsigmaException {
+    throws MitaException {
     return this.delete(url, httpHeaders, typeReference, null);
   }
 
   public <T> com.mita.util.HttpResponse<T> delete(String url, List<Header> httpHeaders,
                                                   TypeReference<T> typeReference, BasicCookieStore cookieStore)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a delete request to " + url + " | with headers - " + httpHeaders);
@@ -346,7 +346,7 @@ public class HttpClient {
         res = client.execute(delRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -356,7 +356,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> post(String url, List<Header> httpHeaders, Object data,
                                                 TypeReference<T> typeReference, BasicCookieStore cookieStore)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a post request to " + url + " | with data - " + data.toString());
@@ -374,7 +374,7 @@ public class HttpClient {
         res = client.execute(postRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -384,7 +384,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> get(String url, List<Header> httpHeaders,
                                                TypeReference<T> typeReference, BasicCookieStore cookieStore)
-    throws TestsigmaException {
+    throws MitaException {
     CloseableHttpClient client = getClient();
     try {
       log.info("Making a Get request to " + url + " | with headers - " + httpHeaders);
@@ -401,7 +401,7 @@ public class HttpClient {
         res = client.execute(getRequest);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);
@@ -411,7 +411,7 @@ public class HttpClient {
 
   public <T> com.mita.util.HttpResponse<T> post(String url, List<Header> httpHeaders,
                                                 String fileName, InputStream is,
-                                                TypeReference<T> typeReference, BasicCookieStore cookieStore) throws TestsigmaException {
+                                                TypeReference<T> typeReference, BasicCookieStore cookieStore) throws MitaException {
     log.info("Making a Post request to " + url + " | with file - " + fileName);
     CloseableHttpClient client = getClient();
     try {
@@ -435,7 +435,7 @@ public class HttpClient {
       HttpResponse res = client.execute(httpPost);
       return new com.mita.util.HttpResponse<T>(res, typeReference);
     } catch (IOException e) {
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     } finally {
       if (client != null) {
         closeConnection(client);

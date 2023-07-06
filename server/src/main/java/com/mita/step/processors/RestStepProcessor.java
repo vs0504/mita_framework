@@ -4,7 +4,7 @@ import com.mita.constants.MessageConstants;
 import com.mita.constants.NaturalTextActionConstants;
 import com.mita.dto.*;
 import com.mita.exception.ExceptionErrorCodes;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.model.TestDataSet;
 import com.mita.service.ObjectMapperService;
@@ -35,7 +35,7 @@ public class RestStepProcessor extends StepProcessor {
       environmentParams, testCaseEntityDTO, environmentParamSetName, dataProfile, dataSetIndex);
   }
 
-  public void process() throws TestsigmaException {
+  public void process() throws MitaException {
     TestCaseStepEntityDTO testCaseStepEntityDTO = new TestCaseStepEntityDTO();
     testCaseStepEntityDTO.setId(testStepDTO.getId());
     processDefault(testCaseStepEntityDTO);
@@ -70,12 +70,12 @@ public class RestStepProcessor extends StepProcessor {
         testCaseStepEntityDTO.setAdditionalData(testStepDTO.getDataMapJson());
       }
 
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error(e.getMessage(), e);
       throw e;
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e.getMessage());
+      throw new MitaException(e.getMessage(), e.getMessage());
     }
     testCaseStepEntityDTO.setStepGroupId(testStepDTO.getStepGroupId());
     testCaseStepEntityDTO.setParentId(testStepDTO.getParentId());
@@ -107,12 +107,12 @@ public class RestStepProcessor extends StepProcessor {
   }
 
   private JSONObject replaceTestDataAndEnvironmentParams(JSONObject requestString)
-    throws TestsigmaException {
+    throws MitaException {
     return new JSONObject(replaceTestDataAndEnvironmentParams(requestString.toString()));
   }
 
   private String replaceTestDataAndEnvironmentParams(String requestString)
-    throws TestsigmaException {
+    throws MitaException {
     String testDataReplacedString = replaceTestDataParams(requestString, testDataSet,
       testCaseEntityDTO.getTestCaseName(), dataProfile);
     return replaceEnvironmentDataParams(testDataReplacedString, environmentParameters, environmentParamSetName,
@@ -121,7 +121,7 @@ public class RestStepProcessor extends StepProcessor {
 
   protected String replaceTestDataParams(String inputString, TestDataSet dataSet, String testCaseName,
                                          String testDataName)
-    throws TestsigmaException {
+    throws MitaException {
     if (inputString == null) {
       return null;
     }
@@ -136,14 +136,14 @@ public class RestStepProcessor extends StepProcessor {
       if (dataSet == null) {
         String errorMessage = MessageConstants.getMessage(
           MessageConstants.MSG_UNKNOWN_TEST_DATA_DATA, testCaseName);
-        throw new TestsigmaException(ExceptionErrorCodes.TEST_DATA_SET_NOT_FOUND, errorMessage);
+        throw new MitaException(ExceptionErrorCodes.TEST_DATA_SET_NOT_FOUND, errorMessage);
       }
       String parameter = ObjectUtils.defaultIfNull(dataSet.getData(), new JSONObject()).optString(data);
 
       if (StringUtils.isEmpty(parameter)) {
         String errorMessage = MessageConstants.getMessage(
           MessageConstants.MSG_UNKNOWN_TEST_DATA_PARAMETER_NOTIN_TEST_STEP, data, testDataName);
-        throw new TestsigmaException(ExceptionErrorCodes.TEST_DATA_NOT_FOUND, errorMessage);
+        throw new MitaException(ExceptionErrorCodes.TEST_DATA_NOT_FOUND, errorMessage);
       }
       inputString = inputString.replaceAll(NaturalTextActionConstants.REST_DATA_PARAM_START_ESCAPED_PATTERN
         + Pattern.quote(data) + NaturalTextActionConstants.REST_DATA_PARAM_END_ESCAPED_PATTERN, parameter);
@@ -156,7 +156,7 @@ public class RestStepProcessor extends StepProcessor {
   }
 
   private String replaceEnvironmentDataParams(String inputString, Map<String, String> environmentDataSet, String environmentDataName,
-                                              String testCaseName) throws TestsigmaException {
+                                              String testCaseName) throws MitaException {
 
     if (inputString == null) {
       return null;
@@ -173,14 +173,14 @@ public class RestStepProcessor extends StepProcessor {
       if (environmentDataSet == null) {
         String errorMessage = MessageConstants.getMessage(
           MessageConstants.MSG_UNKNOWN_ENVIRONMENT_DATA_SET);
-        throw new TestsigmaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETERS_NOT_CONFIGURED, errorMessage);
+        throw new MitaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETERS_NOT_CONFIGURED, errorMessage);
       }
 
       String parameter = environmentDataSet.getOrDefault(data, "");
       if (StringUtils.isEmpty(parameter)) {
         String errorMessage = MessageConstants.getMessage(
           MessageConstants.MSG_UNKNOWN_ENVIRONMENT_PARAMETER_IN_TEST_STEP, parameter, testCaseName, environmentDataName);
-        throw new TestsigmaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETER_NOT_FOUND, errorMessage);
+        throw new MitaException(ExceptionErrorCodes.ENVIRONMENT_PARAMETER_NOT_FOUND, errorMessage);
       }
 
       inputString = inputString.replaceAll(NaturalTextActionConstants.REST_DATA_ENVIRONMENT_PARAM_START_ESCAPED_PATTERN + Pattern.quote(data)

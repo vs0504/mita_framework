@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.constants.MessageConstants;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.BackupActionType;
 import com.mita.model.BackupDetail;
 import com.mita.model.BackupStatus;
@@ -157,7 +157,7 @@ public class BackupDetailService extends XMLExportImportService<BackupDetail> {
     return null;
   }
 
-  public void export(BackupRequest request) throws IOException, TestsigmaException {
+  public void export(BackupRequest request) throws IOException, MitaException {
     BackupDTO backupDTORequest = exportBackupEntityMapper.map(request);
     BackupDetail backupDetailRequest = exportBackupEntityMapper.map(backupDTORequest);
     final BackupDetail backupDetail = create(backupDetailRequest);
@@ -205,7 +205,7 @@ public class BackupDetailService extends XMLExportImportService<BackupDetail> {
     }).start();
   }
 
-  public void importBackup(BackupDetail importOp) throws IOException, TestsigmaException {
+  public void importBackup(BackupDetail importOp) throws IOException, MitaException {
     log.debug("initiating import - " + importOp.getId());
     final BackupDTO importDTO = exportBackupEntityMapper.mapTo(importOp);
     new Thread(() -> {

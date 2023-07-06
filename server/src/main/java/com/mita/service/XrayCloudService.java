@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import com.mita.exception.IntegrationNotFoundException;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.web.request.*;
 import com.mita.util.HttpClient;
@@ -50,7 +50,7 @@ public class XrayCloudService implements XrayService {
     public final static String XRAY_CLOUD_IMPORT_EXECUTION = XRAY_CLOUD_URL + "import/execution";
     public final static String XRAY_GRAPHQL = "https://xray.cloud.getxray.app/api/v2/graphql";
 
-    public void link(EntityExternalMapping mapping) throws TestsigmaException {
+    public void link(EntityExternalMapping mapping) throws MitaException {
         Optional<Integrations> jiraConfig = this.externalConfigService.findOptionalByApplication(Integration.Jira);
         if(jiraConfig.isPresent()){
             this.jiraService.setIntegrations(jiraConfig.get());
@@ -61,7 +61,7 @@ public class XrayCloudService implements XrayService {
     }
 
     @Override
-    public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+    public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
         XrayClientRequest request = new XrayClientRequest();
         request.setClientId(testAuth.getUsername());
         request.setClientSecret(testAuth.getPassword());
@@ -75,13 +75,13 @@ public class XrayCloudService implements XrayService {
         return status;
     }
 
-    private HttpResponse<String> authenticate(XrayClientRequest request) throws TestsigmaException {
+    private HttpResponse<String> authenticate(XrayClientRequest request) throws MitaException {
         return httpClient.post(XRAY_CLOUD_AUTHENTICATE, getHeaders(null), request, new TypeReference<>() {
 
         });
     }
 
-    public Integrations reGenerateApiToken() throws TestsigmaException {
+    public Integrations reGenerateApiToken() throws MitaException {
         Integrations integrations = this.externalConfigService.findOptionalByApplication(Integration.XrayCloud).get();
         XrayClientRequest request = new XrayClientRequest();
         request.setClientId(integrations.getUsername());
@@ -155,7 +155,7 @@ public class XrayCloudService implements XrayService {
             } catch (ResourceNotFoundException e) {
                 log.info("Failed to push the results to Xray for suite result Id: " + suiteResultId);
                 log.error(e.getMessage(), e);
-            } catch (TestsigmaException e) {
+            } catch (MitaException e) {
                 log.info("Failed to push the results to Xray for suite result Id: " + suiteResultId);
                 log.error(e.getMessage(), e);
             }
@@ -164,7 +164,7 @@ public class XrayCloudService implements XrayService {
 
     private void postRequestToXray(XrayCloudRequest payload, EntityExternalMapping mapping,
                                    Integrations xrayConfig,
-                                   Boolean reTry) throws TestsigmaException {
+                                   Boolean reTry) throws MitaException {
         if (reTry)
             xrayConfig = this.reGenerateApiToken();
         HttpResponse<XrayResponse> response = httpClient.post(XRAY_CLOUD_IMPORT_EXECUTION, getHeaders(xrayConfig.getToken()),
@@ -199,7 +199,7 @@ public class XrayCloudService implements XrayService {
 
     private void pushEnvironmentsToXray(XrayResponse response,
                                         Integrations xrayConfig,
-                                        EntityExternalMapping mapping) throws TestsigmaException {
+                                        EntityExternalMapping mapping) throws MitaException {
         List<String> environments = populateEnvironments(mapping.getEntityId());
         if(!environments.isEmpty()) {
             XrayGraphQLVariables variables = new XrayGraphQLVariables();
@@ -223,7 +223,7 @@ public class XrayCloudService implements XrayService {
         }
     }
 
-    private List<String> populateEnvironments(Long suiteResultId) throws TestsigmaException {
+    private List<String> populateEnvironments(Long suiteResultId) throws MitaException {
         List<String> environments = new ArrayList<>();
         TestSuiteResult suiteResult = this.testSuiteResultService.find(suiteResultId);
         TestDeviceResult environmentResult = this.environmentResultService.find(suiteResult.getEnvironmentResultId());

@@ -123,13 +123,13 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
       agentExecutionService.checkTestCaseIsInReadyState(testCase);
       agentExecutionService
         .loadTestCase(testDataSetName, testCaseEntityDTO, testPlan, testDevice, workspace);
-    } catch (TestsigmaNoMinsAvailableException e) {
+    } catch (MitaNoMinsAvailableException e) {
       log.debug("======= Testcase Error=========");
       log.error(e.getMessage(), e);
       testCaseEntityDTO.setMessage(e.getMessage());
       testCaseEntityDTO.setErrorCode(ExceptionErrorCodes.ERROR_MINS_VALIDATION_FAILURE);
       return testCaseEntityDTO;
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.debug("======= Testcase Error=========");
       log.error(e.getMessage(), e);
       if (e.getErrorCode() != null) {
@@ -159,7 +159,7 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
     return testCaseEntityDTO;
   }
 
-  public TestCase create(TestCaseRequest testCaseRequest) throws TestsigmaException, SQLException {
+  public TestCase create(TestCaseRequest testCaseRequest) throws MitaException, SQLException {
     TestCase testCase = testCaseMapper.map(testCaseRequest);
     testCase.setIsActive(true);
     testCase.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -184,7 +184,7 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
     return testCase;
   }
 
-  public TestCase update(TestCaseRequest testCaseRequest, Long id) throws TestsigmaException, SQLException {
+  public TestCase update(TestCaseRequest testCaseRequest, Long id) throws MitaException, SQLException {
     TestCase testCase = testCaseRepository.findById(id).get();
     Long oldPreRequisite = testCase.getPreRequisite();
     testCase.setUpdatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
@@ -203,15 +203,15 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
     return testCase;
   }
 
-  private void validatePreRequisiteIsValid(TestCase testCase, List<Long> preReqList) throws TestsigmaException {
+  private void validatePreRequisiteIsValid(TestCase testCase, List<Long> preReqList) throws MitaException {
     Long preRequisiteId = testCase.getPreRequisite();
     if (preRequisiteId != null) {
       if (preReqList.size() > 5) {
         log.debug("Testcase Prerequisite hierarchy is more than 5,Prerequisite IDs:" + preReqList);
-        throw new TestsigmaException("Prerequisite hierarchy crossed the allowed limit of 5");
+        throw new MitaException("Prerequisite hierarchy crossed the allowed limit of 5");
       } else if (preReqList.contains(testCase.getPreRequisite())) {
         log.debug("Cyclic dependency for Testsuite prerequisites found for Testsuite:" + testCase);
-        throw new TestsigmaException("Prerequisite to the TestCase is not valid. This prerequisite causes cyclic dependencies for TestCase.");
+        throw new MitaException("Prerequisite to the TestCase is not valid. This prerequisite causes cyclic dependencies for TestCase.");
       }
       preReqList.add(preRequisiteId);
       TestCase preRequisiteTestCase = find(preRequisiteId);
@@ -226,7 +226,7 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
 
 
   //TODO:need to revisit this code[chandra]
-  private void setStatusTimeAndBy(TestCaseRequest testCaseRequest, TestCase testcase) throws ResourceNotFoundException, TestsigmaDatabaseException, SQLException {
+  private void setStatusTimeAndBy(TestCaseRequest testCaseRequest, TestCase testcase) throws ResourceNotFoundException, MitaDatabaseException, SQLException {
     TestCaseStatus status = testCaseRequest.getStatus();
     Timestamp at = new Timestamp(System.currentTimeMillis());
     if (status.equals(TestCaseStatus.DRAFT)) {
@@ -252,7 +252,7 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
     testCaseRepository.markAsRestored(id);
   }
 
-  public void destroy(Long id) throws TestsigmaException, IOException {
+  public void destroy(Long id) throws MitaException, IOException {
     TestCase testcase = this.find(id);
     testCaseRepository.delete(testcase);
     Optional<Integrations> testProjectIntegration = integrationsService.findOptionalByApplication(Integration.TestProjectImport);
@@ -286,7 +286,7 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
     return this.testCaseRepository.breakUpByType(versionId);
   }
 
-  public TestCase copy(TestCaseCopyRequest testCaseRequest) throws TestsigmaException, SQLException {
+  public TestCase copy(TestCaseCopyRequest testCaseRequest) throws MitaException, SQLException {
     TestCase parentCase = this.find(testCaseRequest.getTestCaseId());
     TestCase testCase = this.testCaseMapper.copy(parentCase);
     testCase.setStatus(parentCase.getStatus());
@@ -337,7 +337,7 @@ public class TestCaseService extends XMLExportImportService<TestCase> {
     return testCase;
   }
 
-  private void createAndReplace(List<TestStep> steps, TestCase testCase, TestCase currentTestCase) throws TestsigmaException, SQLException {
+  private void createAndReplace(List<TestStep> steps, TestCase testCase, TestCase currentTestCase) throws MitaException, SQLException {
     TestStep step = new TestStep();
     step.setPosition(steps.get(0).getPosition());
     step.setTestCaseId(currentTestCase.getId());

@@ -5,7 +5,7 @@ package com.mita.service;
 import com.mita.constants.AutomatorMessages;
 import com.mita.constants.MessageConstants;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.TestSuiteResultRepository;
 import com.mita.mapper.TestSuiteResultMapper;
@@ -180,7 +180,7 @@ public class TestSuiteResultService {
       testSuiteResult.getId(), status);
   }
 
-  public void updateResult(TestSuiteResultRequest testSuiteResultRequest) throws TestsigmaException {
+  public void updateResult(TestSuiteResultRequest testSuiteResultRequest) throws MitaException {
     TestSuiteResult testCaseGroupResult = find(testSuiteResultRequest.getId());
     testSuiteResultMapper.merge(testSuiteResultRequest, testCaseGroupResult);
     TestSuiteResult testSuiteResult = update(testCaseGroupResult);
@@ -192,7 +192,7 @@ public class TestSuiteResultService {
 
   }
 
-  public void updateConsolidatedResults(TestSuiteResult testSuiteResult) throws TestsigmaException {
+  public void updateConsolidatedResults(TestSuiteResult testSuiteResult) throws MitaException {
     try {
       Integer pendingTestCaseResultCount = testCaseResultService
         .countAllBySuiteResultIdAndStatusIsNot(testSuiteResult.getId(), StatusConstant.STATUS_COMPLETED);
@@ -219,7 +219,7 @@ public class TestSuiteResultService {
           + "] are still pending. Waiting for them to finish before updating the final result");
       }
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 

@@ -4,7 +4,7 @@ package com.mita.agent.mobile;
 
 import com.mita.agent.exception.DeviceContainerException;
 import com.mita.agent.exception.NativeBridgeException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mappers.MobileDeviceMapper;
 import com.mita.agent.mobile.android.AdbBridge;
 import com.mita.agent.mobile.android.CommandExecutor;
@@ -78,11 +78,11 @@ public abstract class DeviceListener implements Runnable {
     this.addDevice(device);
   }
 
-  public abstract void getInitialDeviceList() throws TestsigmaException, DeviceContainerException, AutomatorException;
+  public abstract void getInitialDeviceList() throws MitaException, DeviceContainerException, AutomatorException;
 
-  public abstract void initializeNativeBridge() throws TestsigmaException, NativeBridgeException;
+  public abstract void initializeNativeBridge() throws MitaException, NativeBridgeException;
 
-  public abstract void addDeviceListenerCallback() throws TestsigmaException;
+  public abstract void addDeviceListenerCallback() throws MitaException;
 
   public boolean shouldListen() {
     boolean listen = true;

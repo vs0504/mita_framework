@@ -223,8 +223,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.PRECONDITION_FAILED);
   }
 
-  @ExceptionHandler({TestsigmaRunTimeDataNotException.class})
-  public ResponseEntity<Object> handleRuntime(final TestsigmaRunTimeDataNotException ex) {
+  @ExceptionHandler({MitaRunTimeDataNotException.class})
+  public ResponseEntity<Object> handleRuntime(final MitaRunTimeDataNotException ex) {
     log.error(ex.getMessage(), ex);
     final APIErrorDTO apiError = new APIErrorDTO();
     apiError.setError(ex.getMessage());
@@ -239,8 +239,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(apiError, new HttpHeaders(), HttpStatus.PRECONDITION_FAILED);
   }
 
-  @ExceptionHandler({TestsigmaException.class})
-  public ResponseEntity<Object> handleTestsigmaException(final TestsigmaException ex, final WebRequest request) {
+  @ExceptionHandler({MitaException.class})
+  public ResponseEntity<Object> handleMitaException(final MitaException ex, final WebRequest request) {
     logger.error(ex.getMessage(), ex);
     final APIErrorDTO apiError = new APIErrorDTO();
     apiError.setCode(ex.getErrorCode());
@@ -249,8 +249,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler({IntegrationNotFoundException.class})
-  public ResponseEntity<Object> handleTestsigmaException(final IntegrationNotFoundException ex,
-                                                         final WebRequest request) {
+  public ResponseEntity<Object> handleMitaException(final IntegrationNotFoundException ex,
+                                                    final WebRequest request) {
     logger.error(ex.getMessage(), ex);
     final APIErrorDTO apiError = new APIErrorDTO();
     apiError.setCode(ex.getErrorCode());
@@ -302,8 +302,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler({InvalidStorageCredentialsException.class})
-  public ResponseEntity<Object> handleTestsigmaException(final InvalidStorageCredentialsException ex,
-                                                         final WebRequest request) {
+  public ResponseEntity<Object> handleMitaException(final InvalidStorageCredentialsException ex,
+                                                    final WebRequest request) {
     logger.error(ex.getMessage(), ex);
     final APIErrorDTO apiError = new APIErrorDTO();
     apiError.setCode(ex.getErrorCode());

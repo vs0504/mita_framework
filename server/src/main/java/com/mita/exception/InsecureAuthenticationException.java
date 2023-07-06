@@ -1,7 +1,7 @@
 
 package com.mita.exception;
 
-public class InsecureAuthenticationException extends TestsigmaWebException {
+public class InsecureAuthenticationException extends MitaWebException {
 
   /**
    * @param errorCode

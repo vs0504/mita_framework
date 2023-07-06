@@ -1,6 +1,6 @@
 package com.mita.agent.mobile.ios;
 
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.automator.http.HttpResponse;
 import com.mita.agent.config.AgentConfig;
 import com.mita.agent.dto.IosDeveloperImageDTO;
@@ -51,7 +51,7 @@ public class DeveloperImageService {
     return Paths.get(PathUtil.getInstance().getIosPath(), "DeviceSupport").toString();
   }
 
-  public void mountDeveloperImage(MobileDevice device) throws TestsigmaException, AutomatorException {
+  public void mountDeveloperImage(MobileDevice device) throws MitaException, AutomatorException {
     log.info("Trying to mount developer image onto the device");
     if (!isDeveloperImageAvailable(device.getOsVersion())) {
       IosDeveloperImageDTO iosDeveloperImageDTO = fetchDeveloperImageLinks(device.getOsVersion());
@@ -71,22 +71,22 @@ public class DeveloperImageService {
     log.info("Response from mount developer image on device - " + mountCommandOutput);
 
     if (mountCommandOutput.contains("PairingDialogResponsePending")) {
-      throw new TestsigmaException("Device is not yet paired. Triggered the trust dialogue. Please accept and try again",
+      throw new MitaException("Device is not yet paired. Triggered the trust dialogue. Please accept and try again",
         "Device is not yet paired. Triggered the trust dialogue. Please accept and try again");
     } else if (mountCommandOutput.contains("DeveloperImage already mounted")) {
       log.info("Developer image is already mounted in the device");
     } else if (mountCommandOutput.contains("DeveloperImage mounted successfully")) {
       log.info("Developer image is mounted successfully on the device");
     } else if (mountCommandOutput.contains("DeviceLocked")) {
-      throw new TestsigmaException("Device is locked with a passcode. Please unlock and try again",
+      throw new MitaException("Device is locked with a passcode. Please unlock and try again",
         "Device is locked with a passcode. Please unlock and try again");
     } else {
-      throw new TestsigmaException("Unknown error while mounting developer image to the device",
+      throw new MitaException("Unknown error while mounting developer image to the device",
         "Unknown error while mounting developer image to the device");
     }
   }
 
-  public IosDeveloperImageDTO fetchDeveloperImageLinks(String osVersion) throws TestsigmaException {
+  public IosDeveloperImageDTO fetchDeveloperImageLinks(String osVersion) throws MitaException {
     IosDeveloperImageDTO iosDeveloperImageDTO;
     log.info("Fetching developer image URL's from testsigma servers...");
     try {
@@ -101,17 +101,17 @@ public class DeveloperImageService {
       } else {
         String errorMsg = String.format("Error while fetching developer image - [%s] - [%s] ", response.getStatusCode(),
           response.getStatusMessage());
-        throw new TestsigmaException(errorMsg, errorMsg);
+        throw new MitaException(errorMsg, errorMsg);
       }
       log.info("Response from device developer image urls for os version - " + osVersion + " is - " + iosDeveloperImageDTO);
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
     return iosDeveloperImageDTO;
   }
 
   public void downloadDeveloperImage(String deviceOsVersion, IosDeveloperImageDTO iosDeveloperImageDTO)
-    throws TestsigmaException {
+    throws MitaException {
     try {
       log.info("Downloading developer image files for os version - " + deviceOsVersion);
 
@@ -127,7 +127,7 @@ public class DeveloperImageService {
       FileUtils.copyURLToFile(new URL(iosDeveloperImageDTO.getDeveloperImageSignatureUrl()),
               deviceDeveloperImageSigFilePath, (60 * 1000), (60 * 1000));
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 

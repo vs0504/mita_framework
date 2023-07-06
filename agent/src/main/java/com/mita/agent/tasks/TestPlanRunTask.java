@@ -2,7 +2,7 @@ package com.mita.agent.tasks;
 
 import com.mita.agent.exception.DeviceNotConnectedException;
 import com.mita.agent.exception.MobileLibraryInstallException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.http.WebAppHttpClient;
 import com.mita.agent.mobile.DeviceContainer;
 import com.mita.agent.mobile.MobileAutomationServerService;
@@ -80,13 +80,13 @@ public class TestPlanRunTask extends AbstractTestPlanRunTask {
       }
       environment.setEnvSettings(testDeviceSettings);
       mobileAutomationServerService.installDrivers(this.mobileDevice.getOsName(), this.mobileDevice.getUniqueId());
-    } catch (TestsigmaException | DeviceNotConnectedException | MobileLibraryInstallException e) {
+    } catch (MitaException | DeviceNotConnectedException | MobileLibraryInstallException e) {
       log.error(e.getMessage(), e);
       throw new AutomatorException(e.getMessage(), e);
     }
   }
 
-  private void checkDeviceAvailability() throws DeviceNotConnectedException, TestsigmaException {
+  private void checkDeviceAvailability() throws DeviceNotConnectedException, MitaException {
     mobileDevice = deviceContainer.getDevice(environment.getAgentDeviceUuid());
     if (this.mobileDevice == null || !this.mobileDevice.getIsOnline()) {
       environmentRunResult.setErrorCode(ErrorCodes.DEVICE_NOT_FOUND);

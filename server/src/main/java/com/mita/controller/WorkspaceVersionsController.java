@@ -6,7 +6,7 @@ import com.mita.repository.UserOnboardingRepository;
 import com.mita.specification.VersionSpecificationsBuilder;
 import com.mita.dto.WorkspaceVersionDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.mapper.WorkspaceVersionMapper;
 import com.mita.model.WorkspaceVersion;
 import com.mita.model.WorkspaceVersionMapping;
@@ -112,7 +112,7 @@ public class WorkspaceVersionsController {
 
   @PostMapping(path = "/clone")
   @ResponseStatus(HttpStatus.CREATED)
-  public WorkspaceVersionDTO clone(@RequestBody WorkspaceVersionRequest request) throws ResourceNotFoundException, TestsigmaDatabaseException {
+  public WorkspaceVersionDTO clone(@RequestBody WorkspaceVersionRequest request) throws ResourceNotFoundException, MitaDatabaseException {
     WorkspaceVersion version = this.workspaceVersionMapper.map(request);
     version = this.workspaceVersionService.copy(version, request.getId());
     version = this.workspaceVersionService.find(version.getId());

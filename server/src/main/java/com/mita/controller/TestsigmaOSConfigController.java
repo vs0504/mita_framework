@@ -4,7 +4,7 @@ package com.mita.controller;
 
 import com.mita.dto.OpensourceDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestsigmaOSConfigMapper;
 import com.mita.model.TestsigmaOSConfig;
 import com.mita.service.TestsigmaOSConfigService;
@@ -50,14 +50,14 @@ public class TestsigmaOSConfigController {
 
   @RequestMapping(value = "/otp", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void getOTP(@RequestBody OnboardingRequest onboardingRequest) throws TestsigmaException {
+  public void getOTP(@RequestBody OnboardingRequest onboardingRequest) throws MitaException {
     service.getOTP(onboardingRequest);
   }
 
   @RequestMapping(value = "/activate/{otp}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.ACCEPTED)
   public void activate(@PathVariable("otp") String otp)
-    throws TestsigmaException {
+    throws MitaException {
     service.activate(otp);
   }
 }

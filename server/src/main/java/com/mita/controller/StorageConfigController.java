@@ -3,7 +3,7 @@ package com.mita.controller;
 import com.mita.config.StorageServiceFactory;
 import com.mita.dto.StorageConfigDTO;
 import com.mita.exception.InvalidStorageCredentialsException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.StorageConfigMapper;
 import com.mita.model.StorageConfig;
 import com.mita.service.StorageConfigService;
@@ -33,7 +33,7 @@ public class StorageConfigController {
   }
 
   @RequestMapping(method = RequestMethod.PUT)
-  public StorageConfigDTO update(@RequestBody StorageConfigRequest storageConfigRequest) throws TestsigmaException {
+  public StorageConfigDTO update(@RequestBody StorageConfigRequest storageConfigRequest) throws MitaException {
     StorageConfig storageConfig = storageConfigMapper.map(storageConfigRequest);
     try {
       storageServiceFactory.validateCredentials(storageConfig);

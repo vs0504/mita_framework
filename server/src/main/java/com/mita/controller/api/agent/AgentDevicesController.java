@@ -11,8 +11,8 @@ import com.mita.model.StorageAccessLevel;
 import com.mita.dto.AgentDeviceDTO;
 import com.mita.dto.IosDeveloperImageDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.AgentDeviceMapper;
 import com.mita.model.Agent;
 import com.mita.model.AgentDevice;
@@ -52,7 +52,7 @@ public class AgentDevicesController {
   private final ResignService resignWdaService;
 
   @RequestMapping(value = "/status", method = RequestMethod.PUT)
-  public void syncInitialDeviceStatus(@PathVariable("agentUuid") String agentUuid) throws TestsigmaDatabaseException,
+  public void syncInitialDeviceStatus(@PathVariable("agentUuid") String agentUuid) throws MitaDatabaseException,
     ResourceNotFoundException {
     log.info(String.format("Received a PUT request api/agents/%s/devices/status ", agentUuid));
     Agent agent = agentService.findByUniqueId(agentUuid);
@@ -71,7 +71,7 @@ public class AgentDevicesController {
   @RequestMapping(method = RequestMethod.POST)
   public AgentDeviceDTO create(@PathVariable("agentUuid") String agentUuid,
                                @RequestBody AgentDeviceRequest agentDeviceRequest)
-    throws TestsigmaDatabaseException, ResourceNotFoundException {
+    throws MitaDatabaseException, ResourceNotFoundException {
     log.info(String.format("Received a POST request api/agents/%s/devices . Request body is [%s]  ",
       agentUuid, agentDeviceRequest));
     Agent agent = agentService.findByUniqueId(agentUuid);
@@ -85,7 +85,7 @@ public class AgentDevicesController {
   public AgentDeviceDTO update(@PathVariable("agentUuid") String agentUuid,
                                @PathVariable("uniqueId") String uniqueId,
                                @RequestBody AgentDeviceRequest agentDeviceRequest)
-    throws TestsigmaDatabaseException, ResourceNotFoundException {
+    throws MitaDatabaseException, ResourceNotFoundException {
     log.info(String.format("Received a PUT request api/agents/%s/devices/%s . Request body is [%s]  ",
       agentUuid, uniqueId, agentDeviceRequest));
     Agent agent = agentService.findByUniqueId(agentUuid);
@@ -98,7 +98,7 @@ public class AgentDevicesController {
   @RequestMapping(value = "/{uniqueId}", method = RequestMethod.DELETE)
   public AgentDeviceDTO delete(@PathVariable("agentUuid") String agentUuid,
                                @PathVariable("uniqueId") String uniqueId)
-    throws TestsigmaDatabaseException, ResourceNotFoundException {
+    throws MitaDatabaseException, ResourceNotFoundException {
     log.info(String.format("Received a DELETE request api/agents/%s/devices/%s", agentUuid, uniqueId));
     Agent agent = agentService.findByUniqueId(agentUuid);
     AgentDevice agentDevice = agentDeviceService.findAgentDeviceByUniqueId(agent.getId(), uniqueId);
@@ -108,7 +108,7 @@ public class AgentDevicesController {
 
   @RequestMapping(value = "/developer/{osVersion}/", method = RequestMethod.GET)
   public IosDeveloperImageDTO developer(@PathVariable("agentUuid") String agentUuid,
-                                        @PathVariable("osVersion") String deviceOsVersion) throws TestsigmaException {
+                                        @PathVariable("osVersion") String deviceOsVersion) throws MitaException {
     log.info(String.format("Received a GET request api/agents/%s/devices/developer/%s", agentUuid, deviceOsVersion));
     HttpResponse<IosDeveloperImageDTO> response = httpClient.get(testsigmaOSConfigService.getUrl() +
       URLConstants.TESTSIGMA_OS_PUBLIC_IOS_IMAGE_FILES_URL + "/" + deviceOsVersion, getHeaders(), new TypeReference<>() {
@@ -121,7 +121,7 @@ public class AgentDevicesController {
 
   @RequestMapping(value = "/{deviceUuid}/wda_real_device", method = RequestMethod.GET)
   public IosWdaResponseDTO deviceWdaUrl(@PathVariable String agentUuid, @PathVariable String deviceUuid)
-          throws TestsigmaException, MalformedURLException {
+          throws MitaException, MalformedURLException {
     log.info(String.format("Received a GET request api/agents/%s/devices/%s/wda", agentUuid, deviceUuid));
     IosWdaResponseDTO iosWdaResponseDTO = new IosWdaResponseDTO();
     Agent agent = agentService.findByUniqueId(agentUuid);
@@ -129,7 +129,7 @@ public class AgentDevicesController {
     String presignedUrl;
     ProvisioningProfileDevice profileDevice = provisioningProfileDeviceService.findByAgentDeviceId(agentDevice.getId());
     if(profileDevice == null) {
-      throw new TestsigmaException("could not find a provisioning profile for this device. Unable to fetch WDA");
+      throw new MitaException("could not find a provisioning profile for this device. Unable to fetch WDA");
     }
     presignedUrl = storageServiceFactory.getStorageService().generatePreSignedURL("wda/"
             + profileDevice.getProvisioningProfileId() + "/wda.ipa", StorageAccessLevel.READ, 180).toString();
@@ -140,7 +140,7 @@ public class AgentDevicesController {
 
   @RequestMapping(value = "/wda_emulator", method = RequestMethod.GET)
   public IosWdaResponseDTO deviceWdaEmulatorUrl(@PathVariable String agentUuid)
-          throws TestsigmaException, MalformedURLException {
+          throws MitaException, MalformedURLException {
     log.info(String.format("Received a GET request api/agents/%s/devices/wda_emulator", agentUuid));
     IosWdaResponseDTO iosWdaResponseDTO = new IosWdaResponseDTO();
 
@@ -158,7 +158,7 @@ public class AgentDevicesController {
 
     @RequestMapping(value = "/xctest", method = RequestMethod.GET)
   public IosXCTestResponseDTO deviceXCTestLocalPath(@PathVariable String agentUuid)
-            throws IOException, TestsigmaException {
+            throws IOException, MitaException {
     log.info(String.format("Received a GET request api/agents/%s/devices/xctest", agentUuid));
     ArrayList<Header> headers = new ArrayList<>();
     headers.add(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));

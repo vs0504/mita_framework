@@ -3,7 +3,7 @@ package com.mita.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.AddonPluginTestDataFunctionParameterRepository;
 import com.mita.repository.AddonPluginTestDataFunctionParameterService;
@@ -152,7 +152,7 @@ public class ProxyAddonService {
       if (response != null) {
         loginToken = new URL(response.getResponseEntity());
       }
-    } catch (TestsigmaException | MalformedURLException e) {
+    } catch (MitaException | MalformedURLException e) {
       log.error("Unable to generate Pre-Signed URL - " + e.getMessage(), e);
     }
     return loginToken;

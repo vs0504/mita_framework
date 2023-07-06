@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.repository.AgentRepository;
 import com.mita.specification.AgentSpecificationsBuilder;
 import com.mita.specification.SearchCriteria;
@@ -75,13 +75,13 @@ public class AgentService extends XMLExportImportService<Agent> {
     return agent;
   }
 
-  public Agent create(@NonNull AgentRequest agentRequest) throws TestsigmaException {
+  public Agent create(@NonNull AgentRequest agentRequest) throws MitaException {
     Agent agent = mapper.map(agentRequest);
     agent = create(agent);
     return agent;
   }
 
-  public void createLocalAgent(Agent agent) throws TestsigmaException {
+  public void createLocalAgent(Agent agent) throws MitaException {
     agent = create(agent);
     String url = applicationConfig.getLocalAgentUrl() +"/api/v1/" + agent.getUniqueId() + "/register?jwtApiKey="
       + agent.generateJwtApiKey(jwtTokenService.getServerUuid());

@@ -5,7 +5,7 @@ import com.mita.model.*;
 import com.mita.service.*;
 import com.mita.specification.SearchCriteria;
 import com.mita.specification.TestCaseSpecificationsBuilder;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestCaseMapper;
 import com.mita.mapper.recorder.TestDataMapper;
 import lombok.RequiredArgsConstructor;
@@ -84,7 +84,7 @@ public class TestCasesRecorderController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public com.mita.model.recorder.TestCaseDTO show(@PathVariable("id") Long id) throws TestsigmaException {
+    public com.mita.model.recorder.TestCaseDTO show(@PathVariable("id") Long id) throws MitaException {
         TestCase testCase = testCaseService.find(id);
         TestCaseDTO testCaseDTO = testCaseMapper.mapTo(testCase);
         testCaseDTO.setTags(tagService.list(TagType.TEST_CASE, id));

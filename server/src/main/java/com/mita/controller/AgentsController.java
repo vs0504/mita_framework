@@ -7,7 +7,7 @@ import com.mita.config.ApplicationConfig;
 import com.mita.constants.MessageConstants;
 import com.mita.dto.AgentDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.AgentMapper;
 import com.mita.model.Agent;
 import com.mita.model.TestDevice;
@@ -59,7 +59,7 @@ public class AgentsController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  public AgentDTO create(@RequestBody @Valid AgentRequest agentRequest) throws TestsigmaException {
+  public AgentDTO create(@RequestBody @Valid AgentRequest agentRequest) throws MitaException {
     Agent agent = agentService.create(agentRequest);
     AgentDTO agentDTO = agentMapper.map(agent);
     agentDTO.setJwtApiKey(agent.generateJwtApiKey(jwtTokenService.getServerUuid()));

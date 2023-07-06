@@ -1,6 +1,6 @@
 package com.mita.exception;
 
-public class NotLocalAgentRegistrationException extends TestsigmaException {
+public class NotLocalAgentRegistrationException extends MitaException {
   public NotLocalAgentRegistrationException(String errorCode) {
     super(errorCode);
   }

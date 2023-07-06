@@ -4,7 +4,7 @@ package com.mita.service;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
@@ -45,7 +45,7 @@ public class ProvisioningProfileParserService {
     provisioningUrl = osService.getTestsigmaOsProxyUrl() + "/api_public/ios/provisioning/";
   }
 
-  public List<String> parseDevices(File provisioningProfile) throws TestsigmaException, IOException {
+  public List<String> parseDevices(File provisioningProfile) throws MitaException, IOException {
     String parsedProfileString = parseProvisioningProfile(provisioningProfile);
     try {
       List<String> deviceUDIDs = new ArrayList<>();
@@ -59,11 +59,11 @@ public class ProvisioningProfileParserService {
 
       return deviceUDIDs;
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage());
+      throw new MitaException(e.getMessage());
     }
   }
 
-  public String getTeamId(File provisioningProfile) throws IOException, TestsigmaException {
+  public String getTeamId(File provisioningProfile) throws IOException, MitaException {
     String parsedProfileString = parseProvisioningProfile(provisioningProfile);
     try {
       log.info("response while parsing provisioned profile - " + parsedProfileString);
@@ -77,11 +77,11 @@ public class ProvisioningProfileParserService {
       }
       return teamId;
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage());
+      throw new MitaException(e.getMessage());
     }
   }
 
-  public String parseProvisioningProfile(File provisioningProfile) throws IOException, TestsigmaException {
+  public String parseProvisioningProfile(File provisioningProfile) throws IOException, MitaException {
     MultipartEntityBuilder builder = MultipartEntityBuilder.create();
     //Creating this temp file, because while executing postRequest the .mobileprovision file in /tmp is deleting
     //So creating a temp file and using that file for sending http request
@@ -100,7 +100,7 @@ public class ProvisioningProfileParserService {
       br.close();
       return sb.toString();
     } else {
-      throw new TestsigmaException("Error while parsing Provisioning Profile");
+      throw new MitaException("Error while parsing Provisioning Profile");
     }
   }
 

@@ -2,7 +2,7 @@ package com.mita.service;
 
 
 import com.mita.constants.TSCapabilityType;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class SafariCapabilities extends Capabilities {
   public void setHybridCapabilities(TestDevice testDevice,
                                     Integrations integrations,
                                     List<WebDriverCapability> capabilities,
-                                    TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                    TestPlanLabType testPlanLabType) throws MitaException {
     capabilities.add(new WebDriverCapability(TSCapabilityType.BROWSER_NAME, TSCapabilityType.BROWSER_NAME_SAFARI));
     PlatformOsVersion platformOsVersion = platformsService.getPlatformOsVersion(testDevice.getPlatformOsVersionId(), testDevice.getTestPlanLabType());
     capabilities.add(new WebDriverCapability(TSCapabilityType.OS_VERSION, Platform.Mac + "" + platformOsVersion.getVersion().substring(0, 5)));

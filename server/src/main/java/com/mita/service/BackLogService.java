@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -37,7 +37,7 @@ public class BackLogService {
   @Setter
   private Integrations integrations;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("summary", mapping.getFields().get("summary").toString());
     payload.put("description", mapping.getFields().get("description").toString());
@@ -48,44 +48,44 @@ public class BackLogService {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating BackLog issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating BackLog issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(String.valueOf(response.getResponseEntity().get("id")));
     return mapping;
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("content", "Linked to testsigma results [" + config.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
     HttpResponse<String> response = httpClient.formPost(integrations.getUrl() + "/api/v2/issues/" + mapping.getExternalId() + "/comments?apiKey=" + this.integrations.getToken(), getHeaders(), payload, new TypeReference<String>() {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking BackLog issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking BackLog issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("content", "Unlinked from testsigma results [" + config.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
     HttpResponse<String> response = httpClient.formPost(integrations.getUrl() + "/api/v2/issues/" + mapping.getExternalId() + "/comments?apiKey=" + this.integrations.getToken(), getHeaders(), payload, new TypeReference<String>() {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking BackLog issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking BackLog issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/projects?apiKey=" + this.integrations.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
 
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssuesList(Long projectId, Long issueTypeId, Long priorityId, String keyWord) throws TestsigmaException {
+  public JsonNode getIssuesList(Long projectId, Long issueTypeId, Long priorityId, String keyWord) throws MitaException {
     if (keyWord == null)
       keyWord = "";
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/issues?keyword=" + keyWord + "&apiKey=" + this.integrations.getToken() + "&projectId[]=" + projectId + "&issueTypeId[]=" + issueTypeId + "&priorityId[]=" + priorityId, getHeaders(), new TypeReference<JsonNode>() {
@@ -93,25 +93,25 @@ public class BackLogService {
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssue(Long issueId) throws TestsigmaException {
+  public JsonNode getIssue(Long issueId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/issues?apiKey=" + this.integrations.getToken() + "&id[]=" + issueId, getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
-  public JsonNode getPriorities() throws TestsigmaException {
+  public JsonNode getPriorities() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/priorities?apiKey=" + this.integrations.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssueTypes(Long projectId) throws TestsigmaException {
+  public JsonNode getIssueTypes(Long projectId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/projects/" + projectId + "/issueTypes?apiKey=" + this.integrations.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(testAuth.getUrl() + "/api/v2/projects?apiKey=" + testAuth.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
     JsonNodeFactory jnf = JsonNodeFactory.instance;

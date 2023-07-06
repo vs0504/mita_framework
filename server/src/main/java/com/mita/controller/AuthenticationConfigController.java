@@ -2,7 +2,7 @@ package com.mita.controller;
 
 import com.mita.config.AdditionalPropertiesConfig;
 import com.mita.dto.AuthenticationConfigDTO;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.AuthenticationConfigMapper;
 import com.mita.model.AuthenticationType;
 import com.mita.service.JWTTokenService;
@@ -29,7 +29,7 @@ public class AuthenticationConfigController {
   }
 
   @RequestMapping(method = RequestMethod.PUT, path = "")
-  public AuthenticationConfigDTO update(@RequestBody AuthenticationConfigRequest request) throws TestsigmaException {
+  public AuthenticationConfigDTO update(@RequestBody AuthenticationConfigRequest request) throws MitaException {
 
     mapper.merge(request, authConfig);
     authConfig.saveConfig();
@@ -38,7 +38,7 @@ public class AuthenticationConfigController {
 
 
   @PutMapping("/regenerate/{type}")
-  public void regenerateKey(@PathVariable("type") String typeString) throws TestsigmaException {
+  public void regenerateKey(@PathVariable("type") String typeString) throws MitaException {
     AuthenticationType type = AuthenticationType.valueOf(typeString);
     String randomKey = String.valueOf(UUID.randomUUID()).replace("-", "");
     if (type == AuthenticationType.API) {

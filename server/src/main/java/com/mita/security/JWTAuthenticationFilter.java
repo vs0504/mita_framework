@@ -48,8 +48,8 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
   private final RequestMatcher onboardingMatcher = new AntPathRequestMatcher("/onboarding/**");
   private final RequestMatcher authConfigMatcher = new AntPathRequestMatcher("/auth_config");
   private final RequestMatcher localAgentMatcher = new AntPathRequestMatcher("/local/agents/**");
-
-
+  private final RequestMatcher userPreferenceMatcher = new AntPathRequestMatcher("/user_preferences");
+  private final RequestMatcher deleteFileMatcher = new AntPathRequestMatcher("/deleteFile");
   @Autowired
   AuthenticationManager authenticationManager;
   @Autowired
@@ -137,8 +137,10 @@ public class JWTAuthenticationFilter extends AbstractAuthenticationProcessingFil
       && !isAPIRequest(request) && !isAgentAPIRequest(request)
       && !isOAuth2LoginRequest(request) && !isAgentCertificateRequest(request)
       && !isPresignedStorageRequest(request) && !isAuthConfigRequest(request) && !isServerRequest(request) &&
-      !isOnboardingRequest(request) && !isLocalAgentRequest(request);
+      !isOnboardingRequest(request) && !isLocalAgentRequest(request) && !isDeleteFileMatcher(request);
   }
+
+  private boolean isDeleteFileMatcher(HttpServletRequest request){return deleteFileMatcher.matches(request);}
 
   private boolean isOnboardingRequest(HttpServletRequest request) {
     return onboardingMatcher.matches(request);

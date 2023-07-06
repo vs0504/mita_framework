@@ -3,7 +3,7 @@
 package com.mita.controller.api.agent;
 
 import com.mita.dto.WebDriverSettingsDTO;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.service.WebDriverSettingsService;
 import com.mita.web.request.WebDriverSettingsRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class WebDriverSettingsController {
   private final WebDriverSettingsService webDriverSettingsService;
 
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public WebDriverSettingsDTO create(@RequestBody WebDriverSettingsRequest webDriverSettingsRequest) throws TestsigmaException,
+  public WebDriverSettingsDTO create(@RequestBody WebDriverSettingsRequest webDriverSettingsRequest) throws MitaException,
     SQLException, IOException {
     log.info("Received /api/agents/webdriver-settings request with data - " + webDriverSettingsRequest);
     WebDriverSettingsDTO webDriverSettingsDTO = webDriverSettingsService.getWebDriverSettings(webDriverSettingsRequest);
@@ -34,7 +34,7 @@ public class WebDriverSettingsController {
   }
 
   @GetMapping(value = "/capabilities/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-  public WebDriverSettingsDTO capabilities(@PathVariable("id") long id) throws TestsigmaException,
+  public WebDriverSettingsDTO capabilities(@PathVariable("id") long id) throws MitaException,
     SQLException, IOException {
     log.info(String.format("Received /api/agents/webdriver-settings/capabilities/%s request", id));
     WebDriverSettingsDTO webDriverSettingsDTO = webDriverSettingsService.getCapabilities(id);

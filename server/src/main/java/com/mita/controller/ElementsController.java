@@ -9,8 +9,8 @@ import com.mita.specification.SearchCriteria;
 import com.mita.specification.SearchOperation;
 import com.mita.dto.ElementDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ElementMapper;
 import com.mita.web.request.ElementRequest;
 import com.mita.web.request.ElementScreenNameRequest;
@@ -52,7 +52,7 @@ public class ElementsController {
   };
 
   @RequestMapping(method = RequestMethod.POST)
-  public ElementDTO create(@RequestBody @Valid ElementRequest elementRequest) throws SQLException, ResourceNotFoundException, TestsigmaDatabaseException {
+  public ElementDTO create(@RequestBody @Valid ElementRequest elementRequest) throws SQLException, ResourceNotFoundException, MitaDatabaseException {
     Element element = elementMapper.map(elementRequest);
     element = elementService.create(element);
     return elementMapper.map(element);
@@ -109,7 +109,7 @@ public class ElementsController {
   public ElementDTO update(@PathVariable("id") Long id,
                            @RequestBody ElementRequest elementRequest,
                            @RequestParam(value = "reviewSubmittedFrom", required = false) String reviewSubmittedFrom)
-    throws ResourceNotFoundException, TestsigmaDatabaseException, SQLException {
+    throws ResourceNotFoundException, MitaDatabaseException, SQLException {
     Element element = elementService.find(id);
     String oldName = element.getName();
     String previousLocatorValue = element.getLocatorValue();
@@ -122,14 +122,14 @@ public class ElementsController {
 
   @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
   @ResponseStatus(HttpStatus.OK)
-  public void delete(@PathVariable("id") Long id) throws TestsigmaException, IOException {
+  public void delete(@PathVariable("id") Long id) throws MitaException, IOException {
     elementService.delete(elementService.find(id));
   }
 
   @RequestMapping(method = RequestMethod.POST, path = "/bulk")
-  public List<ElementDTO> bulkCreate(@RequestBody @Valid List<ElementRequest> elementRequestList) throws TestsigmaException {
+  public List<ElementDTO> bulkCreate(@RequestBody @Valid List<ElementRequest> elementRequestList) throws MitaException {
     if (elementRequestList.size() > 25)
-      throw new TestsigmaException("List is too big to process actual size is ::" + elementRequestList.size() + " and allowed is:: 25");
+      throw new MitaException("List is too big to process actual size is ::" + elementRequestList.size() + " and allowed is:: 25");
     List<ElementDTO> list = new ArrayList<>();
     for (ElementRequest elementRequest : elementRequestList) {
       Element element = elementMapper.map(elementRequest);

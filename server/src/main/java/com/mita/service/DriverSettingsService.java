@@ -2,7 +2,7 @@ package com.mita.service;
 
 import com.mita.constants.TSCapabilityType;
 import com.mita.exception.IntegrationNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.dto.WebDriverSettingsDTO;
 import com.mita.factory.CapabilitiesFactory;
 import com.mita.model.*;
@@ -32,7 +32,7 @@ public abstract class DriverSettingsService {
                                              TestPlanLabType testPlanLabType,
                                              Integrations integrations,
                                              WebApplicationContext webApplicationContext)
-    throws IOException, TestsigmaException, SQLException {
+    throws IOException, MitaException, SQLException {
     WebDriverSettingsDTO webDriverSettings = new WebDriverSettingsDTO();
     workspaceType = testDevice.getWorkspaceVersion().getWorkspace().getWorkspaceType();
     webDriverSettings.setWebDriverCapabilities(getCapabilities(testDevice, workspaceType, testPlanLabType,
@@ -45,7 +45,7 @@ public abstract class DriverSettingsService {
                                                    WorkspaceType workspaceType, TestPlanLabType testPlanLabType,
                                                    Integrations integrations,
                                                    WebApplicationContext webApplicationContext)
-    throws TestsigmaException, IOException {
+    throws MitaException, IOException {
     CapabilitiesFactory capabilitiesFactory = new CapabilitiesFactory(webApplicationContext);
     Capabilities capabilities;
     if (testDevice.getBrowser() != null)
@@ -62,7 +62,7 @@ public abstract class DriverSettingsService {
   public void setWebCapabilities(TestDevice testDevice,
                                  Integrations integrations,
                                  WebDriverSettingsDTO webDriverSettings)
-    throws MalformedURLException, TestsigmaException {
+    throws MalformedURLException, MitaException {
     List<WebDriverCapability> capabilities = webDriverSettings.getWebDriverCapabilities();
     capabilities = capabilities == null ? new ArrayList<WebDriverCapability>() : capabilities;
     String resolution = this.platformsService.getPlatformScreenResolution(testDevice.getPlatformScreenResolutionId(), testDevice.getTestPlanLabType()).getResolution();
@@ -78,7 +78,7 @@ public abstract class DriverSettingsService {
                                                  WorkspaceType workspaceType,
                                                  Integrations integrations,
                                                  WebDriverSettingsDTO webDriverSettings)
-    throws TestsigmaException, MalformedURLException {
+    throws MitaException, MalformedURLException {
     switch (workspaceType) {
       case WebApplication:
         setWebCapabilities(testDevice, integrations, webDriverSettings);
@@ -97,5 +97,5 @@ public abstract class DriverSettingsService {
   public abstract void setMobileCapabilities(TestDevice testDevice, WorkspaceType workspaceType,
                                              Integrations integrations,
                                              WebDriverSettingsDTO webDriverSettings)
-    throws TestsigmaException, MalformedURLException;
+    throws MitaException, MalformedURLException;
 }

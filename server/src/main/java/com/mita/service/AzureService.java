@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -42,7 +42,7 @@ public class AzureService {
   @Setter
   private Integrations applicationConfig;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ArrayNode payloads = jnf.arrayNode();
     ObjectNode payload = jnf.objectNode();
@@ -65,14 +65,14 @@ public class AzureService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Azure issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Azure issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(response.getResponseEntity().get("id").asText());
     mapping.setMisc(response.getResponseText());
     return mapping;
   }
 
-  public void unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public void unlink(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     ArrayNode payloads = jnf.arrayNode();
@@ -84,7 +84,7 @@ public class AzureService {
   }
 
 
-  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws MitaException {
 
     HttpResponse<Map<String, Object>> response = httpClient.get(applicationConfig.getUrl()
         + "/_apis/wit/workitems?ids=" + mapping.getExternalId() + "&fields=System.Id,System.Title,System.WorkItemType,System.Description,System.CreatedDate,System.AssignedTo,System.State,System.AreaPath,System.ChangedDate",
@@ -94,7 +94,7 @@ public class AzureService {
   }
 
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     ArrayNode payloads = jnf.arrayNode();
@@ -106,7 +106,7 @@ public class AzureService {
     return mapping;
   }
 
-  private void addHistory(EntityExternalMapping mapping, ArrayNode payloads) throws TestsigmaException {
+  private void addHistory(EntityExternalMapping mapping, ArrayNode payloads) throws MitaException {
     Header add = new BasicHeader("X-HTTP-Method-Override", "PATCH");
     List<Header> override = getHeaders(true);
     override.add(add);
@@ -115,11 +115,11 @@ public class AzureService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking Azure issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking Azure issue with ::" + mapping.getFields());
     }
   }
 
-  public JsonNode getIssuesList(String project, String issueType, String title) throws TestsigmaException {
+  public JsonNode getIssuesList(String project, String issueType, String title) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     String payload_input = "Select [System.Id],[System.Title],[System.WorkItemType],[System.Description],[System.CreatedDate]," +
@@ -134,7 +134,7 @@ public class AzureService {
     return response.getResponseEntity();
   }
 
-  public JsonNode fetchIssuesData(String idsString) throws TestsigmaException {
+  public JsonNode fetchIssuesData(String idsString) throws MitaException {
 
     HttpResponse<JsonNode> response = httpClient.get(applicationConfig.getUrl() + "/_apis/wit/workitems?ids=" + idsString + "&fields=System.Id,System.Title,System.WorkItemType,System.Description,System.State,System.AreaPath",
       getHeaders(false), new TypeReference<JsonNode>() {
@@ -142,17 +142,17 @@ public class AzureService {
     return response.getResponseEntity();
   }
 
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(applicationConfig.getUrl() + "/_apis/projects", getHeaders(false), new TypeReference<JsonNode>() {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while fetching the projects ");
+      throw new MitaException("Problem while fetching the projects ");
     }
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     Header authentication = new BasicHeader(HttpHeaders.AUTHORIZATION, "Basic " +
       Base64Utils.encodeToString(String.format("%s:%s", "", testAuth.getToken()).getBytes()));
@@ -168,7 +168,7 @@ public class AzureService {
     return status;
   }
 
-  public JsonNode issueTypes(String project) throws TestsigmaException {
+  public JsonNode issueTypes(String project) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(applicationConfig.getUrl() + "/" + project.replaceAll(" ", " %20") + "/_apis/wit/workitemtypecategories", getHeaders(false), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();

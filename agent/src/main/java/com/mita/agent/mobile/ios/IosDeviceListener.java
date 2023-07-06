@@ -4,7 +4,7 @@ package com.mita.agent.mobile.ios;
 
 import com.mita.agent.constants.MobileOs;
 import com.mita.agent.exception.DeviceContainerException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mappers.MobileDeviceMapper;
 import com.mita.agent.mobile.MobileDevice;
 import com.mita.agent.mobile.android.AdbBridge;
@@ -55,7 +55,7 @@ public class IosDeviceListener extends DeviceListener {
     this.executorService = Executors.newSingleThreadExecutor();
   }
 
-  public void initializeNativeBridge() throws TestsigmaException {
+  public void initializeNativeBridge() throws MitaException {
     if (bridgeInitialized) {
       return;
     }
@@ -64,11 +64,11 @@ public class IosDeviceListener extends DeviceListener {
       bridgeInitialized = true;
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e.getMessage());
+      throw new MitaException(e.getMessage(), e.getMessage());
     }
   }
 
-  public void getInitialDeviceList() throws TestsigmaException, DeviceContainerException {
+  public void getInitialDeviceList() throws MitaException, DeviceContainerException {
     getInitialSimulatorDevices();
     List<Device> devices = iosDeviceService.deviceList();
     for (Device device : devices) {
@@ -145,7 +145,7 @@ public class IosDeviceListener extends DeviceListener {
     }
   }
 
-  public MobileDevice getRealMobileDevice(String uniqueId) throws TestsigmaException {
+  public MobileDevice getRealMobileDevice(String uniqueId) throws MitaException {
     MobileDevice mobileDevice = new MobileDevice();
     mobileDevice.setOsName(MobileOs.IOS);
     mobileDevice.setUniqueId(uniqueId);

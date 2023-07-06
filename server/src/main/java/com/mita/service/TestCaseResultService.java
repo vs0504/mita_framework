@@ -4,7 +4,7 @@ package com.mita.service;
 
 import com.mita.constants.AutomatorMessages;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.model.*;
 import com.mita.repository.TestCaseResultRepository;
 import com.mita.mapper.TestCaseResultMapper;
@@ -165,7 +165,7 @@ public class TestCaseResultService {
   }
 
   public void updateResult(TestCaseResultRequest testCaseResultRequest) throws ResourceNotFoundException,
-          TestsigmaDatabaseException, UnsupportedEncodingException {
+          MitaDatabaseException, UnsupportedEncodingException {
     TestCaseResult testCaseResult = find(testCaseResultRequest.getId());
     if (testCaseResultRequest.getResult() == null || testCaseResultRequest.getResult().equals(ResultConstant.QUEUED)) {
       this.updateTestCaseSteps(testCaseResultRequest);
@@ -187,7 +187,7 @@ public class TestCaseResultService {
     }
   }
 
-  public void updateTestCaseSteps(TestCaseResultRequest testCaseResultRequest) throws TestsigmaDatabaseException,
+  public void updateTestCaseSteps(TestCaseResultRequest testCaseResultRequest) throws MitaDatabaseException,
     UnsupportedEncodingException,
     ResourceNotFoundException {
     TestData testData = null;

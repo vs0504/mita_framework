@@ -2,7 +2,7 @@ package com.mita.service;
 
 import com.mita.constants.TSCapabilityType;
 import com.mita.exception.IntegrationNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.dto.WebDriverSettingsDTO;
 import com.mita.model.*;
 import lombok.extern.log4j.Log4j2;
@@ -38,7 +38,7 @@ public class TestsigmaLabDriverSettingsService extends DriverSettingsService {
                                              TestPlanLabType testPlanLabType,
                                              Integrations integrations,
                                              WebApplicationContext webApplicationContext)
-    throws IOException, TestsigmaException, SQLException {
+    throws IOException, MitaException, SQLException {
     return super.driverSettings(testDevice, workspaceType, testPlanLabType, integrations,
       webApplicationContext);
   }
@@ -67,7 +67,7 @@ public class TestsigmaLabDriverSettingsService extends DriverSettingsService {
   public void setMobileCapabilities(TestDevice testDevice, WorkspaceType workspaceType,
                                     Integrations integrations,
                                     WebDriverSettingsDTO webDriverSettings)
-    throws TestsigmaException, MalformedURLException {
+    throws MitaException, MalformedURLException {
     List<WebDriverCapability> capabilities = new ArrayList<>();
     PlatformDevice device = platformsService.getPlatformDevice(testDevice.getPlatformDeviceId(), testDevice.getTestPlanLabType());
     PlatformOsVersion platformOsVersion = platformsService.getPlatformOsVersion(testDevice.getPlatformOsVersionId(),testDevice.getTestPlanLabType());
@@ -103,7 +103,7 @@ public class TestsigmaLabDriverSettingsService extends DriverSettingsService {
   public void setWebCapabilities(TestDevice testDevice,
                                  Integrations integrations,
                                  WebDriverSettingsDTO webDriverSettings)
-    throws MalformedURLException, TestsigmaException {
+    throws MalformedURLException, MitaException {
     List<WebDriverCapability> capabilities = new ArrayList<>();
 
     PlatformOsVersion platformOsVersion = platformsService.getPlatformOsVersion(testDevice.getPlatformOsVersionId(), testDevice.getTestPlanLabType());

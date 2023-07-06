@@ -4,7 +4,7 @@ package com.mita.agent.mobile.ios;
 
 import com.mita.agent.constants.MobileOs;
 import com.mita.agent.exception.MobileAutomationServerSessionException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mobile.MobileAutomationServerService;
 import com.mita.agent.mobile.DeviceContainer;
 import com.mita.agent.mobile.MobileDevice;
@@ -58,7 +58,7 @@ public class IosMobileAutomationServer {
     }
   }
 
-  public void deleteSession(String uniqueId) throws TestsigmaException {
+  public void deleteSession(String uniqueId) throws MitaException {
     MobileDevice device = deviceContainer.getDevice(uniqueId);
     RemoteWebDriver remoteWebDriver = device.getRemoteWebDriver();
 

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -45,7 +45,7 @@ public class ZepelService {
   @Setter
   private Integrations integrations;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     String squadId = mapping.getFields().get("projectId").toString();
     String listId = mapping.getFields().get("issueTypeId").toString();
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -57,14 +57,14 @@ public class ZepelService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Zepel issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Zepel issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(response.getResponseEntity().get("item").get("id").textValue());
     mapping.setMisc(String.valueOf(response.getResponseEntity().get("item")));
     return mapping;
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException, IOException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException, IOException {
     String squadId = mapping.getFields().get("projectId").toString();
     String listId = mapping.getFields().get("issueTypeId").toString();
     String itemId = mapping.getExternalId();
@@ -75,13 +75,13 @@ public class ZepelService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while unlinking Zepel issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while unlinking Zepel issue with ::" + mapping.getFields());
     }
     mapping.setMisc(String.valueOf(response.getResponseEntity().get("comment")));
     return mapping;
   }
 
-  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws TestsigmaException, IOException {
+  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws MitaException, IOException {
     JsonFactory factory = om.getFactory();
     JsonParser parser = factory.createParser(mapping.getMisc());
     JsonNode miscObj = om.readTree(parser);
@@ -94,13 +94,13 @@ public class ZepelService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while unlinking Zepel issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while unlinking Zepel issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
   //item
-  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws TestsigmaException, IOException {
+  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws MitaException, IOException {
     JsonFactory factory = om.getFactory();
     JsonParser parser = factory.createParser(mapping.getMisc());
     JsonNode miscObj = om.readTree(parser);
@@ -112,28 +112,28 @@ public class ZepelService {
   }
 
   //items
-  public JsonNode getIssuesList(String squadId, String listId) throws TestsigmaException {
+  public JsonNode getIssuesList(String squadId, String listId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/squads/" + squadId + "/lists/" + listId + "/items", getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
   //lists
-  public JsonNode getIssueTypes(String squadId) throws TestsigmaException {
+  public JsonNode getIssueTypes(String squadId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/squads/" + squadId + "/lists", getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
   //squads
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/v2/squads", getHeaders(), new TypeReference<JsonNode>() {
     });
 
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     Header authentication = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + testAuth.getToken());
     List<Header> headers = Lists.newArrayList(contentType, authentication);

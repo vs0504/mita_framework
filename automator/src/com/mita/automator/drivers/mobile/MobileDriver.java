@@ -4,7 +4,7 @@ import com.mita.automator.constants.TSCapabilityType;
 import com.mita.automator.entity.AppPathType;
 import com.mita.automator.entity.WorkspaceType;
 import com.mita.automator.exceptions.AutomatorException;
-import com.mita.automator.exceptions.TestsigmaException;
+import com.mita.automator.exceptions.MitaException;
 import com.mita.automator.runners.EnvironmentRunner;
 import com.mita.automator.drivers.TestsigmaDriver;
 import com.mita.automator.drivers.WebDriverCapability;
@@ -114,14 +114,14 @@ public class MobileDriver extends TestsigmaDriver {
     return false;
   }
 
-  private JSONObject getProperties(String deviceJson) throws TestsigmaException {
+  private JSONObject getProperties(String deviceJson) throws MitaException {
     try {
       log.info("Fetching device properties for device - " + deviceJson);
       JSONObject devicePropertiesJson = new JSONObject(deviceJson);
       log.info("Fetched device properties for device in json format - " + devicePropertiesJson);
       return devicePropertiesJson;
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage());
+      throw new MitaException(e.getMessage());
     }
   }
 }

@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.UploadVersionRepository;
 import com.mita.specification.SearchCriteria;
@@ -143,7 +143,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
     return response.getBody();
   }
 
-  public void uploadFile(File uploadedFile, UploadVersion uploadVersion) throws TestsigmaException {
+  public void uploadFile(File uploadedFile, UploadVersion uploadVersion) throws MitaException {
 
     try {
      // String storageFilePath = uploadVersion.getS3Path();
@@ -160,12 +160,12 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
       publishEvent(uploadVersion, EventType.UPDATE);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
   private void updateUploadWithLatestUploadVersion(UploadVersion uploadVersion,
-                                                   Long uploadId) throws TestsigmaException {
+                                                   Long uploadId) throws MitaException {
     Upload upload = uploadService.findById(uploadId);
     upload.setLatestVersionId(uploadVersion.getId());
     upload.setLatestVersion(uploadVersion);
@@ -263,7 +263,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
     return versions;
   }
 
-  public UploadVersion create(String versionName, Long uploadId, MultipartFile uploadedMultipartFile, UploadType type, Upload upload) throws TestsigmaException {
+  public UploadVersion create(String versionName, Long uploadId, MultipartFile uploadedMultipartFile, UploadType type, Upload upload) throws MitaException {
     UploadVersion uploadVersion = new UploadVersion();
     uploadVersion.setUploadId(uploadId);
     uploadVersion.setName(versionName);
@@ -278,7 +278,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
     return uploadVersion;
   }
 
-  public File copyUploadToTempFile(MultipartFile uploadedFile) throws TestsigmaException {
+  public File copyUploadToTempFile(MultipartFile uploadedFile) throws MitaException {
     try {
       String fileName = uploadedFile.getOriginalFilename().replaceAll("\\+", "_");
       String fileBaseName = FilenameUtils.getBaseName(fileName);
@@ -292,7 +292,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
       return tempFile;
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
@@ -394,7 +394,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
       this.updateUploadWithLatestUploadVersion(present, present.getUploadId());
       uploadFile(new File(downloadPath), present);
       this.uploadVersionRepository.save(present);
-    } catch (IOException | TestsigmaException e) {
+    } catch (IOException | MitaException e) {
       log.error("Failed to upload file", e.getMessage(), e);
     }
     return present;

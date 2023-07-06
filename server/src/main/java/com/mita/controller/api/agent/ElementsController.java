@@ -2,7 +2,7 @@
 
 package com.mita.controller.api.agent;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.service.ElementService;
 import com.mita.web.request.ElementRequest;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ public class ElementsController {
   @RequestMapping(path = "/{versionId}/{name}", method = RequestMethod.PUT)
   public ResponseEntity<String> update(@PathVariable(value = "name") String name,
                                        @RequestBody ElementRequest elementRequest
-  ) throws TestsigmaException, SQLException {
+  ) throws MitaException, SQLException {
     elementService.updateByName(name, elementRequest);
     return new ResponseEntity<>(HttpStatus.OK);
   }

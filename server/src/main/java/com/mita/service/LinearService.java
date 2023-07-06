@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -40,7 +40,7 @@ public class LinearService {
   private Integrations integrations;
 
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException, URISyntaxException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException, URISyntaxException {
     String query = "mutation IssueCreate { issueCreate(input: {title: \"" + mapping.getFields().get("title").toString() + "\", teamId: \"" + mapping.getFields().get("teamId").toString() + "\", projectId: \"" + mapping.getFields().get("projectId").toString() + "\", description: \"" + mapping.getFields().get("description").toString() + "\", } )  {success issue {id title identifier}} }";
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
@@ -49,13 +49,13 @@ public class LinearService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Linear issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Linear issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(String.valueOf(response.getResponseEntity().get("data").get("issueCreate").get("issue").get("identifier").asText()));
     return mapping;
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     String comment = "Linked to testsigma results [" + applicationConfig.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName();
     String query = "mutation CommentCreate {commentCreate(input: {  body: \"" + comment + "\", issueId: \"" + mapping.getExternalId().replace("\"", "") + "\" } ) {lastSyncId}}";
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -65,12 +65,12 @@ public class LinearService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Linear issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Linear issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws MitaException {
     String comment = "UnLinked from testsigma results [" + applicationConfig.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName();
     String query = "mutation CommentCreate {commentCreate(input: {  body: \"" + comment + "\", issueId: \"" + mapping.getExternalId().replace("\"", "") + "\" } ) {lastSyncId}}";
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -80,12 +80,12 @@ public class LinearService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Linear issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Linear issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public JsonNode teams() throws TestsigmaException, URISyntaxException {
+  public JsonNode teams() throws MitaException, URISyntaxException {
     String query = "{teams{ nodes {id name }}}";
     URIBuilder builder = new URIBuilder("https://api.linear.app/graphql");
     builder.setParameter("query", query);
@@ -95,7 +95,7 @@ public class LinearService {
     return response.getResponseEntity();
   }
 
-  public JsonNode projects(String teamId) throws TestsigmaException, URISyntaxException {
+  public JsonNode projects(String teamId) throws MitaException, URISyntaxException {
     String query = "{team(id: \"" + teamId + "\"){ projects {nodes {id name} } }}";
     URIBuilder builder = new URIBuilder("https://api.linear.app/graphql");
     builder.setParameter("query", query);
@@ -104,7 +104,7 @@ public class LinearService {
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssuesList(String projectId) throws TestsigmaException, URISyntaxException {
+  public JsonNode getIssuesList(String projectId) throws MitaException, URISyntaxException {
     String query = "{ project(id: \"" + projectId + "\") {issues { nodes { id title identifier description  priority team { id name}  project{id name} createdAt updatedAt } } }}";
     URIBuilder builder = new URIBuilder("https://api.linear.app/graphql");
     builder.setParameter("query", query);
@@ -113,7 +113,7 @@ public class LinearService {
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssue(String issueId) throws TestsigmaException, URISyntaxException {
+  public JsonNode getIssue(String issueId) throws MitaException, URISyntaxException {
     String query = "{ issue(id: \"" + issueId.replace("\"", "") + "\") {  id title identifier description priority team { id name}  project{id name} createdAt updatedAt} }";
     URIBuilder builder = new URIBuilder("https://api.linear.app/graphql");
     builder.setParameter("query", query);
@@ -122,7 +122,7 @@ public class LinearService {
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException, URISyntaxException, IOException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException, URISyntaxException, IOException {
     URIBuilder builder = new URIBuilder("https://api.linear.app/graphql");
     builder.setParameter("query", "{teams{ nodes {id name }}}");
     HttpResponse<JsonNode> response = httpClient.get(getHeaders(testAuth.getToken()), builder, new TypeReference<JsonNode>() {

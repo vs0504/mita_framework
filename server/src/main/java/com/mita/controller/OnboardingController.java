@@ -2,7 +2,7 @@ package com.mita.controller;
 
 import com.mita.config.AdditionalPropertiesConfig;
 import com.mita.dto.ServerDTO;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ServerMapper;
 import com.mita.model.Server;
 import com.mita.service.OnboardService;
@@ -39,12 +39,12 @@ public class OnboardingController {
   private Environment env;
 
   @GetMapping
-  public ServerDTO getOnboardingPreference() throws TestsigmaException {
+  public ServerDTO getOnboardingPreference() throws MitaException {
     return serverMapper.map(serverService.findOne());
   }
 
   @PostMapping
-  public String post(@RequestBody OnboardingRequest onboardingRequest) throws TestsigmaException {
+  public String post(@RequestBody OnboardingRequest onboardingRequest) throws MitaException {
     onboardingRequest.setApiKey(UUID.randomUUID().toString().replace("-", ""));
     onboardingRequest.setJwtSecret(UUID.randomUUID().toString().replace("-", ""));
     onboardingRequest.setGoogleClientId(env.getProperty("authentication.google.clientId"));
@@ -74,7 +74,7 @@ public class OnboardingController {
   
   @RequestMapping(value = "/otp", method = RequestMethod.POST)
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void getOTP(@RequestBody OnboardingRequest request) throws TestsigmaException {
+  public void getOTP(@RequestBody OnboardingRequest request) throws MitaException {
     updateUsernameAndPassword(request);
     osService.getOTP(request);
   }
@@ -82,19 +82,19 @@ public class OnboardingController {
 
   @RequestMapping(value = "/activate/{otp}", method = RequestMethod.GET)
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void activate(@PathVariable("otp") String otp) throws TestsigmaException {
+  public void activate(@PathVariable("otp") String otp) throws MitaException {
     osService.activate(otp);
     setOnboardingDone();
   }
 
-  public void setOnboardingDone() throws TestsigmaException {
+  public void setOnboardingDone() throws MitaException {
     Server server = serverService.findOne();
     server.setOnboarded(true);
     server.setConsentRequestDone(true);
     serverService.update(server);
   }
 
-  public void updateUsernameAndPassword(OnboardingRequest request) throws TestsigmaException {
+  public void updateUsernameAndPassword(OnboardingRequest request) throws MitaException {
    // additionalProperties.setUserName(request.getUsername());
    // additionalProperties.setPassword(request.getPassword());
     additionalProperties.saveConfig();

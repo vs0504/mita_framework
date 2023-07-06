@@ -1,6 +1,6 @@
 package com.mita.util;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.factory.SchedulerFactory;
 import com.mita.model.ScheduleType;
 import com.mita.schedules.Schedule;
@@ -23,10 +23,10 @@ public class SchedulerService {
     return schedule.getNextSchedule(scheduleTime);
   }
 
-  public void validateScheduleTime(Timestamp scheduleTime) throws TestsigmaException {
+  public void validateScheduleTime(Timestamp scheduleTime) throws MitaException {
     Date nextScheduleDate = new Date(scheduleTime.getTime());
     if (new Timestamp(System.currentTimeMillis()).after(new Timestamp(this.dateFromUTC(nextScheduleDate).getTime()))) {
-      throw new TestsigmaException("Current time is greater than given time");
+      throw new MitaException("Current time is greater than given time");
     }
   }
 

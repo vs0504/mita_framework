@@ -4,8 +4,8 @@ package com.mita.controller;
 
 import com.mita.specification.TestPlanSpecificationsBuilder;
 import com.mita.dto.TestPlanDTO;
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestPlanMapper;
 import com.mita.model.TestDevice;
 import com.mita.model.TestPlan;
@@ -51,7 +51,7 @@ public class TestPlansController {
   }
 
   @GetMapping(value = "/{id}")
-  public TestPlanDTO show(@PathVariable(value = "id") Long id) throws TestsigmaDatabaseException {
+  public TestPlanDTO show(@PathVariable(value = "id") Long id) throws MitaDatabaseException {
     log.info("Get request /test_plans/" + id);
     TestPlan testPlan = this.testPlanService.find(id);
     return this.testPlanMapper.mapTo(testPlan);
@@ -59,7 +59,7 @@ public class TestPlansController {
 
   @PutMapping(value = "/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public TestPlanDTO update(@PathVariable(value = "id") Long id, @RequestBody TestPlanRequest request) throws TestsigmaDatabaseException {
+  public TestPlanDTO update(@PathVariable(value = "id") Long id, @RequestBody TestPlanRequest request) throws MitaDatabaseException {
     log.info("Put request /test_plans/" + id + "  " + request);
     TestPlan testPlan = this.testPlanService.find(id);
     testPlan.setTestDevices(testDeviceService.findByTestPlanId(testPlan.getId()));
@@ -75,7 +75,7 @@ public class TestPlansController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TestPlanDTO create(@RequestBody TestPlanRequest request) throws TestsigmaException {
+  public TestPlanDTO create(@RequestBody TestPlanRequest request) throws MitaException {
     log.info("Post request /test_plans/" + request);
     TestPlan testPlan = this.testPlanMapper.map(request);
     testPlan.setCreatedDate(new Timestamp(System.currentTimeMillis()));
@@ -85,7 +85,7 @@ public class TestPlansController {
 
   @DeleteMapping(value = "/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void destroy(@PathVariable(value = "id") Long id) throws TestsigmaDatabaseException {
+  public void destroy(@PathVariable(value = "id") Long id) throws MitaDatabaseException {
     log.info("Delete request /test_plans/" + id);
     this.testPlanService.destroy(id);
   }

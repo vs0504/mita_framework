@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
 import com.mita.util.HttpClient;
@@ -42,7 +42,7 @@ public class ClickUpService {
   private UserPreferenceService userPreferenceService;
 
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     String listId = mapping.getFields().get("listId").toString();
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
@@ -54,14 +54,14 @@ public class ClickUpService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating ClickUp issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating ClickUp issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(response.getResponseEntity().get("id").textValue());
     mapping.setMisc(String.valueOf(response.getResponseEntity()));
     return mapping;
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     String taskId = mapping.getExternalId();
     payload.put("notify_all", "true");
@@ -70,12 +70,12 @@ public class ClickUpService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking Trello issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking Trello issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws MitaException {
     String comment = "UnLinked from testsigma results [https://app.testsigma.com/#/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName();
     HashMap<String, String> payload = new HashMap<>();
     String taskId = mapping.getExternalId();
@@ -85,7 +85,7 @@ public class ClickUpService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking Trello issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking Trello issue with ::" + mapping.getFields());
     }
     return mapping;
   }
@@ -93,7 +93,7 @@ public class ClickUpService {
 
 
   //Teams
-  public JsonNode teams() throws TestsigmaException {
+  public JsonNode teams() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.clickup.com/api/v2/team", getHeaders(workspaceConfig.getToken()), new TypeReference<JsonNode>() {
     });
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -109,7 +109,7 @@ public class ClickUpService {
   }
 
   //Spaces
-  public JsonNode spaces(String teamId) throws TestsigmaException {
+  public JsonNode spaces(String teamId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.clickup.com/api/v2/team/"+teamId+"/space?archived=false", getHeaders(workspaceConfig.getToken()), new TypeReference<JsonNode>() {
     });
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -125,7 +125,7 @@ public class ClickUpService {
   }
 
   //folders
-  public JsonNode folders(String spaceId) throws TestsigmaException {
+  public JsonNode folders(String spaceId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.clickup.com/api/v2/space/"+spaceId+"/folder?archived=false", getHeaders(workspaceConfig.getToken()), new TypeReference<JsonNode>() {
     });
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -141,7 +141,7 @@ public class ClickUpService {
   }
 
 
-  public JsonNode lists(String folderId) throws TestsigmaException {
+  public JsonNode lists(String folderId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.clickup.com/api/v2/folder/"+folderId+"/list?archived=false", getHeaders(workspaceConfig.getToken()), new TypeReference<JsonNode>() {
     });
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -156,7 +156,7 @@ public class ClickUpService {
     return status;
   }
 
-  public JsonNode tasks(String listId) throws TestsigmaException {
+  public JsonNode tasks(String listId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.clickup.com/api/v2/list/"+listId+"/task?archived=false", getHeaders(workspaceConfig.getToken()), new TypeReference<JsonNode>() {
     });
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -171,7 +171,7 @@ public class ClickUpService {
     return status;
   }
 
-  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws MitaException {
 
     HttpResponse<Map<String, Object>> response = httpClient.get("https://api.clickup.com/api/v2/task/"+mapping.getExternalId(),
       getHeaders(workspaceConfig.getToken()), new TypeReference<Map<String, Object>>() {
@@ -179,7 +179,7 @@ public class ClickUpService {
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssuesList(String projectId) throws TestsigmaException, URISyntaxException {
+  public JsonNode getIssuesList(String projectId) throws MitaException, URISyntaxException {
     String query = "{ project(id: \""+projectId+"\") {issues { nodes { id title identifier description  priority team { id name}  project{id name} createdAt updatedAt } } }}";
     URIBuilder builder = new URIBuilder("https://api.linear.app/graphql");
     builder.setParameter("query", query);
@@ -188,7 +188,7 @@ public class ClickUpService {
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssue(String issueId) throws TestsigmaException, URISyntaxException {
+  public JsonNode getIssue(String issueId) throws MitaException, URISyntaxException {
     String query = "{ issue(id: \""+issueId.replace("\"","")+"\") {  id title identifier description priority team { id name}  project{id name} createdAt updatedAt} }";
     URIBuilder builder = new URIBuilder("https://api.linear.app/graphql");
     builder.setParameter("query", query);
@@ -197,7 +197,7 @@ public class ClickUpService {
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get( "https://api.clickup.com/api/v2/team", getHeaders(testAuth.getToken()), new TypeReference<JsonNode>() {
     });
 

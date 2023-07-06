@@ -1,6 +1,6 @@
 package com.mita.schedulers;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ScheduleTestPlanMapper;
 import com.mita.model.*;
 import com.mita.service.AgentExecutionService;
@@ -55,12 +55,12 @@ public class scheduleTestPlanTask implements Runnable {
   public void run() {
     try {
       this.runSchedules();
-    } catch (TestsigmaException | SQLException e) {
+    } catch (MitaException | SQLException e) {
       log.error(e.getMessage(), e);
     }
   }
 
-  public ResponseEntity<Object> runSchedules() throws TestsigmaException, SQLException {
+  public ResponseEntity<Object> runSchedules() throws MitaException, SQLException {
     Timestamp currentTime = getCurrentUTCTime();
     String message = null;
     Set<Long> runningExecutionIds = new HashSet<Long>();
@@ -119,14 +119,14 @@ public class scheduleTestPlanTask implements Runnable {
     return Timestamp.valueOf(utc.toLocalDateTime());
   }
 
-  private void populateNextInterval(ScheduleTestPlan scheduleTestPlan) throws TestsigmaException {
+  private void populateNextInterval(ScheduleTestPlan scheduleTestPlan) throws MitaException {
     //[TODO] [Pratheepv] Bad way to handle Need to revisit this one
     try {
       Timestamp scheduleTime = schedulerService.getScheduleTime(scheduleTestPlan.getScheduleType(), scheduleTestPlan.getScheduleTime());
       scheduleTestPlan.setScheduleTime(scheduleTime);
     } catch (ParseException e) {
       e.printStackTrace();
-      throw new TestsigmaException("Problem while calculating next interval");
+      throw new MitaException("Problem while calculating next interval");
     }
   }
 }

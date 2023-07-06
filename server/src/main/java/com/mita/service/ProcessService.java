@@ -1,6 +1,6 @@
 package com.mita.service;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.Arrays;
 @Service
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
 public class ProcessService {
-  public void runCommand(String[] command) throws TestsigmaException {
+  public void runCommand(String[] command) throws MitaException {
     try {
       log.info("Running a process command - " + Arrays.toString(command));
 
@@ -37,7 +37,7 @@ public class ProcessService {
       log.info(sb.toString());
 
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage());
+      throw new MitaException(e.getMessage());
     }
   }
 }

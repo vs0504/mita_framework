@@ -147,7 +147,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       .antMatchers("/servers")
       .antMatchers("/auth_config")
       .antMatchers("/onboarding/**")
-      .antMatchers("/local/agents/**");
+      .antMatchers("/local/agents/**")
+      .antMatchers("/deleteFile");
   }
 
   @Override

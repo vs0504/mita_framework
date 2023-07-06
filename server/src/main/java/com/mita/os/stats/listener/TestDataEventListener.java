@@ -2,7 +2,7 @@ package com.mita.os.stats.listener;
 
 import com.mita.event.EventType;
 import com.mita.event.TestDataEvent;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.TestData;
 import com.mita.os.stats.service.TestsigmaOsStatsService;
 import com.mita.service.TestDataProfileService;
@@ -30,7 +30,7 @@ public class TestDataEventListener {
       }else if (event.getEventType() == EventType.UPDATE){
         testsigmaOsStatsService.updateDependencies(event.getEventData().getRenamedColumns(), event.getEventData().getId());
       }
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error(e.getMessage(), e);
     }
   }

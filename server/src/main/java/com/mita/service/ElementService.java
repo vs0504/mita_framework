@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.ElementRepository;
 import com.mita.specification.ElementSpecificationsBuilder;
@@ -159,7 +159,7 @@ public class ElementService extends XMLExportImportService<Element> {
     return element;
   }
 
-  public void delete(Element element) throws TestsigmaException, IOException {
+  public void delete(Element element) throws MitaException, IOException {
     Optional<Integrations> testProjectIntegration = integrationsService.findOptionalByApplication(Integration.TestProjectImport);
     if(testProjectIntegration.isPresent()) {
       Optional<EntityExternalMapping> entityExternalMapping = entityExternalMappingService.

@@ -5,7 +5,7 @@ import com.mita.agent.browsers.AgentBrowser;
 import com.mita.agent.constants.MobileOs;
 import com.mita.agent.exception.AdbCommandExecutionException;
 import com.mita.agent.exception.NativeBridgeException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.services.DriverSessionsService;
 import com.mita.automator.entity.OsBrowserType;
 import com.mita.agent.config.AgentConfig;
@@ -83,7 +83,7 @@ public class AndroidDeviceListener extends DeviceListener implements AndroidDebu
     }
   }
 
-  public void addDeviceListenerCallback() throws TestsigmaException {
+  public void addDeviceListenerCallback() throws MitaException {
     try {
       if (agentConfig.getRegistered().equals(Boolean.FALSE)) {
         log.debug("Skipping agent devices listener callback registration since agent is not registered...");
@@ -93,11 +93,11 @@ public class AndroidDeviceListener extends DeviceListener implements AndroidDebu
       AndroidDebugBridge.addDeviceChangeListener(this);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
-  public void removeDeviceListenerCallback() throws TestsigmaException {
+  public void removeDeviceListenerCallback() throws MitaException {
     try {
       if (agentConfig.getRegistered().equals(Boolean.FALSE)) {
         log.debug("Skipping agent devices listener callback de-registration since agent is not registered...");
@@ -107,7 +107,7 @@ public class AndroidDeviceListener extends DeviceListener implements AndroidDebu
       AndroidDebugBridge.removeDeviceChangeListener(this);
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 

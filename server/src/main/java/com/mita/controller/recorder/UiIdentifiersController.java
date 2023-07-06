@@ -10,7 +10,7 @@ import com.mita.specification.ElementSpecificationsBuilder;
 import com.mita.specification.SearchCriteria;
 import com.mita.dto.ElementDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ElementMapper;
 import com.mita.mapper.recorder.UiIdentifierMapper;
 import com.mita.model.recorder.UiIdentifierDTO;
@@ -118,7 +118,7 @@ public class UiIdentifiersController {
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     @PreAuthorize("hasPermission('FIELD_DEFINITION','FULL_ACCESS')")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable("id") Long id) throws TestsigmaException, IOException {
+    public void delete(@PathVariable("id") Long id) throws MitaException, IOException {
         uiIdentifierService.delete(uiIdentifierService.find(id));
     }
 

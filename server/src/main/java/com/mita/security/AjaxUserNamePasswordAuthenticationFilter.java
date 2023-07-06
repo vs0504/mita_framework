@@ -1,7 +1,7 @@
 
 package com.mita.security;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.AdditionalPropertiesConfig;
 import com.mita.config.URLConstants;
 import com.mita.model.AuthUser;
@@ -68,7 +68,7 @@ public class AjaxUserNamePasswordAuthenticationFilter extends AbstractAuthentica
       authentication = new UsernamePasswordAuthenticationToken(authUser, null,
         authUser.getAuthorities());
     } else {
-      throw new TestsigmaException("Invalid Authentication Type Provided" + authenticationConfig.getAuthenticationType(),
+      throw new MitaException("Invalid Authentication Type Provided" + authenticationConfig.getAuthenticationType(),
         "Invalid Authentication Type Provided" + authenticationConfig.getAuthenticationType());
     }
     CurrentUserService.setCurrentUser(authUser);

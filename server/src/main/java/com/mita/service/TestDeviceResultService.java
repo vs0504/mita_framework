@@ -4,7 +4,7 @@ package com.mita.service;
 
 import com.mita.constants.AutomatorMessages;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.TestDeviceResultRepository;
 import com.mita.dto.EnvironmentEntityDTO;
@@ -237,7 +237,7 @@ public class TestDeviceResultService {
     testDeviceResultRepository.updateEnvironmentConsolidateResult(environmentResultId);
   }
 
-  public void updateEnvironmentConsolidatedResults(TestDeviceResult testDeviceResult) throws TestsigmaException {
+  public void updateEnvironmentConsolidatedResults(TestDeviceResult testDeviceResult) throws MitaException {
     try {
       Integer pendingTestSuiteResultCount = testSuiteResultService
         .countAllByEnvironmentResultIdAndStatusIsNot(testDeviceResult.getId(), StatusConstant.STATUS_COMPLETED);
@@ -267,12 +267,12 @@ public class TestDeviceResultService {
         testDeviceResultRepository.save(testDeviceResult);
       }
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
   public void updateExecutionConsolidatedResults(Long testPlanResultId, Boolean updateMaxStatus)
-    throws TestsigmaException {
+    throws MitaException {
     try {
       TestPlanResult testPlanResult = testPlanResultService.find(testPlanResultId);
       Integer incompleteEnvironments = this.countByTestPlanResultIdAndStatusIsNot(testPlanResultId,
@@ -301,7 +301,7 @@ public class TestDeviceResultService {
         }
       }
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 

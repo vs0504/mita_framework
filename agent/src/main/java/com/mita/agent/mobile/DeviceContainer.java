@@ -4,7 +4,7 @@ package com.mita.agent.mobile;
 
 import com.mita.agent.browsers.AgentBrowser;
 import com.mita.agent.exception.DeviceContainerException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mappers.MobileDeviceMapper;
 import com.mita.automator.AutomatorConfig;
 import com.mita.automator.entity.Browsers;
@@ -141,16 +141,16 @@ public class DeviceContainer {
     }
   }
 
-  public MobileDevice getDevice(String uniqueId) throws TestsigmaException {
+  public MobileDevice getDevice(String uniqueId) throws MitaException {
     if ((uniqueId == null) || !this.deviceMap.containsKey(uniqueId)) {
-      throw new TestsigmaException(String.format("There is no device with unique Id %s in device container", uniqueId));
+      throw new MitaException(String.format("There is no device with unique Id %s in device container", uniqueId));
     }
     return this.deviceMap.get(uniqueId);
   }
 
-  public MobileDevice getDeviceByMuxId(String muxId) throws TestsigmaException {
+  public MobileDevice getDeviceByMuxId(String muxId) throws MitaException {
     if ((muxId == null) || !this.muxDeviceMap.containsKey(muxId)) {
-      throw new TestsigmaException(String.format("There is no device with mux Id %s in device container", muxId));
+      throw new MitaException(String.format("There is no device with mux Id %s in device container", muxId));
     }
     return this.muxDeviceMap.get(muxId);
   }

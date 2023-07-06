@@ -1,6 +1,6 @@
 package com.mita.service;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.ProvisioningProfile;
 import com.mita.model.ProvisioningProfileDevice;
 import com.mita.model.ProvisioningProfileUpload;
@@ -63,7 +63,7 @@ public class ProvisioningProfileUploadService {
     remove(provisioningProfileUploads);
   }
 
-  public void removeEntitiesForProfile(ProvisioningProfile profile) throws TestsigmaException {
+  public void removeEntitiesForProfile(ProvisioningProfile profile) throws MitaException {
     List<ProvisioningProfileUpload> provisioningProfileUploads = findAllByProvisioningProfileId(profile.getId());
     for (ProvisioningProfileUpload provisioningProfileUpload : provisioningProfileUploads) {
       UploadVersion originalUpload = uploadVersionService.find(provisioningProfileUpload.getUploadVersionId());

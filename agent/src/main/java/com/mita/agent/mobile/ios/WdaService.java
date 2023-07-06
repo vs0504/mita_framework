@@ -1,6 +1,6 @@
 package com.mita.agent.mobile.ios;
 
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.automator.http.HttpResponse;
 import com.mita.agent.config.AgentConfig;
 import com.mita.agent.dto.IosWdaResponseDTO;
@@ -37,7 +37,7 @@ public class WdaService {
   private final AgentConfig agentConfig;
   private final WebAppHttpClient httpClient;
 
-  public void installWdaToDevice(MobileDevice device) throws TestsigmaException {
+  public void installWdaToDevice(MobileDevice device) throws MitaException {
     File downloadedWdaFile = null;
     try {
       IosDeviceCommandExecutor iosDeviceCommandExecutor = new IosDeviceCommandExecutor();
@@ -58,11 +58,11 @@ public class WdaService {
       String devicePropertiesJsonString = iosDeviceCommandExecutor.getProcessStreamResponse(p);
       log.info("Output from installing WDA file on the device - " + devicePropertiesJsonString);
       if (devicePropertiesJsonString.contains("ApplicationVerificationFailed") || p.exitValue() == 1) {
-        throw new TestsigmaException("Failed to install WDA on device - " + device.getUniqueId(),
+        throw new MitaException("Failed to install WDA on device - " + device.getUniqueId(),
           "Failed to install WDA on device - " + device.getUniqueId());
       }
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     } finally {
       if ((downloadedWdaFile != null) && downloadedWdaFile.exists()) {
         boolean deleted = downloadedWdaFile.delete();
@@ -73,7 +73,7 @@ public class WdaService {
     }
   }
 
-  public void installXCTestToDevice(MobileDevice device) throws TestsigmaException {
+  public void installXCTestToDevice(MobileDevice device) throws MitaException {
     File downloadedXCTestFile = null;
     try {
       IosDeviceCommandExecutor iosDeviceCommandExecutor = new IosDeviceCommandExecutor();
@@ -89,10 +89,10 @@ public class WdaService {
       String devicePropertiesJsonString = iosDeviceCommandExecutor.getProcessStreamResponse(p);
       log.info("Output from installing XCTest file on the device - " + devicePropertiesJsonString);
       if (p.exitValue() == 1) {
-        throw new TestsigmaException("Failed to install XCTest on device - " + device.getUniqueId());
+        throw new MitaException("Failed to install XCTest on device - " + device.getUniqueId());
       }
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     } finally {
       if ((downloadedXCTestFile != null) && downloadedXCTestFile.exists()) {
         boolean deleted = downloadedXCTestFile.delete();
@@ -103,7 +103,7 @@ public class WdaService {
     }
   }
 
-  public void startWdaOnDevice(MobileDevice device) throws TestsigmaException {
+  public void startWdaOnDevice(MobileDevice device) throws MitaException {
     try {
       log.info("Starting WDA on device - " + device.getName());
       log.info("Checking for any previously started WDA processes on device - " + device.getName());
@@ -152,11 +152,11 @@ public class WdaService {
         checkWDARelayProcessStatus(device);
       }
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
-  private void checkWDAProcessStatus(MobileDevice device) throws TestsigmaException, AutomatorException {
+  private void checkWDAProcessStatus(MobileDevice device) throws MitaException, AutomatorException {
     IosDeviceCommandExecutor iosDeviceCommandExecutor = new IosDeviceCommandExecutor();
 
     if ((device.getWdaProcess() != null) && (device.getWdaProcess().isAlive() || device.getWdaProcess().exitValue() == 0)) {
@@ -165,11 +165,11 @@ public class WdaService {
       return;
     }
     log.info(iosDeviceCommandExecutor.getProcessStreamResponse(device.getWdaProcess()));
-    throw new TestsigmaException("Unable to start WDA Process on device - " + device.getName()
+    throw new MitaException("Unable to start WDA Process on device - " + device.getName()
       , "Unable to start WDA Process on device - " + device.getName());
   }
 
-  private void checkWDARelayProcessStatus(MobileDevice device) throws TestsigmaException, AutomatorException {
+  private void checkWDARelayProcessStatus(MobileDevice device) throws MitaException, AutomatorException {
     IosDeviceCommandExecutor iosDeviceCommandExecutor = new IosDeviceCommandExecutor();
 
     if ((device.getWdaRelayProcess() != null) && device.getWdaRelayProcess().isAlive()) {
@@ -178,18 +178,18 @@ public class WdaService {
       return;
     }
     log.info(iosDeviceCommandExecutor.getProcessStreamResponse(device.getWdaRelayProcess()));
-    throw new TestsigmaException("Unable to start WDA relay process on device - " + device.getName(),
+    throw new MitaException("Unable to start WDA relay process on device - " + device.getName(),
       "Unable to start WDA relay process on device - " + device.getName());
   }
 
-  public void stopWdaOnDevice(MobileDevice device) throws TestsigmaException {
+  public void stopWdaOnDevice(MobileDevice device) throws MitaException {
     log.info("Check and stop any running WDA and WDA relay process on device - " + device.getName());
 
     try {
       stopWdaThreadIfRunning(device);
       stopWdaRelayThreadIfRunning(device);
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 

@@ -4,7 +4,7 @@ package com.mita.agent.controllers;
 
 import com.mita.agent.dto.AgentDeviceDTO;
 import com.mita.agent.exception.DeviceNotConnectedException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mappers.MobileDeviceMapper;
 import com.mita.agent.mobile.DeviceContainer;
 import com.mita.agent.mobile.MobileDevice;
@@ -34,7 +34,7 @@ public class AgentDevicesController {
    */
   @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
   public AgentDeviceDTO show(@PathVariable("unique_id") String uniqueId)
-    throws DeviceNotConnectedException, TestsigmaException {
+    throws DeviceNotConnectedException, MitaException {
     log.info("Received request fetch device details - " + uniqueId);
     MobileDevice mobileDevice = deviceContainer.getDevice(uniqueId);
     if (mobileDevice == null) {

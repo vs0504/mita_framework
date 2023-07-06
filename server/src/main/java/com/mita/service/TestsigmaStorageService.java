@@ -3,7 +3,7 @@ package com.mita.service;
 import com.amazonaws.HttpMethod;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.StorageAccessLevel;
 import com.mita.dto.PreSignedRequestDTO;
@@ -65,7 +65,7 @@ public class TestsigmaStorageService extends StorageService {
         getHeaders(false), new File(filePathFromRoot).getName(), inputStream,
         new TypeReference<>() {
         }, null);
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error("Unable to add file to Mita Storage, filePath:" + filePathFromRoot + " - " + e.getMessage(),
         e);
     }
@@ -87,7 +87,7 @@ public class TestsigmaStorageService extends StorageService {
       response = httpClient.post(getRequestURI() + TS_PRESIGNED_URL_PATH, getHeaders(true), preSignedRequestDTO,
         new TypeReference<>() {
         });
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error("Unable to generate presigned URL - " + e.getMessage(), e);
     }
     if (response != null) {
@@ -115,7 +115,7 @@ public class TestsigmaStorageService extends StorageService {
         log.debug("File exists, generating presigned URL for: " + relativeFilePathFromBase);
         returnURL = Optional.ofNullable(generatePreSignedURL(relativeFilePathFromBase, storageAccessLevel, expiryTimeInMinutes));
       }
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error("Unable to delete file from Storage, filePath: " + relativeFilePathFromBase + " - "
         + e.getMessage(), e);
     }
@@ -143,7 +143,7 @@ public class TestsigmaStorageService extends StorageService {
       httpClient.delete(String.format("%s?key=%s", getRequestURI(), filePathFromRoot),
         getHeaders(true), new TypeReference<>() {
         });
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error("Unable to delete file from Storage, filePath: " + filePathFromRoot + " - "
         + e.getMessage(), e);
     }

@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.repository.TestDeviceRepository;
 import com.mita.repository.TestDeviceSuiteRepository;
 import com.mita.specification.SearchCriteria;
@@ -59,9 +59,9 @@ public class TestDeviceService extends XMLExportImportService<TestDevice> {
     return testDeviceRepository.findByTestPlanId(testPlanId);
   }
 
-  public TestDevice find(Long id) throws TestsigmaDatabaseException {
+  public TestDevice find(Long id) throws MitaDatabaseException {
     return testDeviceRepository.findById(id).orElseThrow(
-      () -> new TestsigmaDatabaseException("Could not find resource with id:" + id));
+      () -> new MitaDatabaseException("Could not find resource with id:" + id));
   }
 
 

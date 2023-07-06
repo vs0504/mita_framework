@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -39,7 +39,7 @@ public class FreshreleaseService {
   @Setter
   private Integrations integrations;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.put("title", mapping.getFields().get("title").toString());
@@ -49,14 +49,14 @@ public class FreshreleaseService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating freshrelease issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating freshrelease issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(response.getResponseEntity().get("issue").get("key").textValue());
     mapping.setMisc(response.getResponseText());
     return mapping;
   }
 
-  public void unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public void unlink(EntityExternalMapping mapping) throws MitaException {
     String project = mapping.getExternalId().split("-")[0];
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
@@ -67,19 +67,19 @@ public class FreshreleaseService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while unlinking freshrelease issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while unlinking freshrelease issue with ::" + mapping.getFields());
     }
   }
 
 
-  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws MitaException {
     String project = mapping.getExternalId().split("-")[0];
     HttpResponse<Map<String, Object>> response = httpClient.get(integrations.getUrl() + "/" + project + "/issues/" + mapping.getExternalId() + "?expand=names,renderedFields", getHeaders(), new TypeReference<Map<String, Object>>() {
     });
     return response.getResponseEntity();
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.putPOJO("content", "Linked to testsigma results [" + applicationConfig.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
@@ -89,12 +89,12 @@ public class FreshreleaseService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking freshrelease issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking freshrelease issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public JsonNode getIssuesList(String projectId, String summary) throws TestsigmaException {
+  public JsonNode getIssuesList(String projectId, String summary) throws MitaException {
     if (summary == null)
       summary = "";
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/" + projectId + "/issues?query_hash[0][condition]=title&query_hash[0][operator]=contains&query_hash[0][value]=" + summary, getHeaders(), new TypeReference<JsonNode>() {
@@ -102,14 +102,14 @@ public class FreshreleaseService {
     return response.getResponseEntity();
   }
 
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/projects", getHeaders(), new TypeReference<JsonNode>() {
     });
 
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     Header authentication = new BasicHeader(HttpHeaders.AUTHORIZATION, "Token " + testAuth.getToken());
     List<Header> headers = Lists.newArrayList(contentType, authentication);
@@ -123,7 +123,7 @@ public class FreshreleaseService {
     return status;
   }
 
-  public JsonNode issueTypes(String project) throws TestsigmaException {
+  public JsonNode issueTypes(String project) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/" + project + "/issue_types", getHeaders(), new TypeReference<JsonNode>() {
     });
 

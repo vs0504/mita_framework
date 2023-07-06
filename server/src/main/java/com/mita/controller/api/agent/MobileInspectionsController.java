@@ -1,7 +1,7 @@
 package com.mita.controller.api.agent;
 
 import com.mita.dto.MobileInspectionDTO;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.mapper.MobileInspectionMapper;
 import com.mita.model.MobileInspection;
 import com.mita.service.MobileInspectionService;
@@ -24,7 +24,7 @@ public class MobileInspectionsController {
   @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
   public MobileInspectionDTO update(@PathVariable("uuid") String uniqueId,
                                     @PathVariable("id") Long mobileInspectionId,
-                                    @RequestBody MobileInspectionRequest request) throws TestsigmaDatabaseException {
+                                    @RequestBody MobileInspectionRequest request) throws MitaDatabaseException {
     log.info("put request api/agents/" + uniqueId + "/mobile_inspections/" + mobileInspectionId + ": " + request);
     MobileInspection mobileInspection = this.mobileInspectionService.find(mobileInspectionId);
     this.mobileInspectionMapper.merge(request, mobileInspection);

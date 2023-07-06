@@ -5,7 +5,7 @@ package com.mita.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.mita.exception.IntegrationNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.util.HttpResponse;
 import com.mita.util.HttpClient;
@@ -52,7 +52,7 @@ public class PlatformsService {
   private final TestsigmaOSConfigService testsigmaOSConfigService;
 
   public List<Platform> getSupportedPlatforms(WorkspaceType workspaceType,
-                                              TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                              TestPlanLabType testPlanLabType) throws MitaException {
 
     if (testPlanLabType != TestPlanLabType.PrivateGrid) {
       HttpResponse<List<Platform>> response = httpClient.get(getSupportedPlatformsUrl(
@@ -72,7 +72,7 @@ public class PlatformsService {
 
   public List<PlatformOsVersion> getPlatformOsVersions(Platform platform,
                                                        WorkspaceType workspaceType,
-                                                       TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                       TestPlanLabType testPlanLabType) throws MitaException {
 
     HttpResponse<List<PlatformOsVersion>> response = httpClient.get(getPlatformOsVersionsUrl(
       platform, workspaceType, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -86,7 +86,7 @@ public class PlatformsService {
 
   public PlatformOsVersion getPlatformOsVersion(Platform platform, String osVersion,
                                                 WorkspaceType workspaceType,
-                                                TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                TestPlanLabType testPlanLabType) throws MitaException {
 
     HttpResponse<PlatformOsVersion> response = httpClient.get(getPlatformOsVersionUrl(platform,
       osVersion, workspaceType, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -99,7 +99,7 @@ public class PlatformsService {
   }
 
   public PlatformOsVersion getPlatformOsVersion(Long platformOsVersionId,
-                                                TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                TestPlanLabType testPlanLabType) throws MitaException {
 
     HttpResponse<PlatformOsVersion> response = httpClient.get(getPlatformOsVersionUrl(platformOsVersionId,
         testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -114,7 +114,7 @@ public class PlatformsService {
 
   public List<Browsers> getPlatformSupportedBrowsers(Platform platform, String osVersion,
                                                      TestPlanLabType testPlanLabType)
-    throws TestsigmaException {
+    throws MitaException {
     if (testPlanLabType!=TestPlanLabType.PrivateGrid) {
       HttpResponse<List<Browsers>> response = httpClient.get(getBrowsersNamesUrl(platform,
               osVersion, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -132,7 +132,7 @@ public class PlatformsService {
 
   public List<PlatformBrowserVersion> getPlatformBrowsers(Platform platform, String osVersion,
                                                           Browsers browserName,
-                                                          TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                          TestPlanLabType testPlanLabType) throws MitaException {
 
     if (testPlanLabType != TestPlanLabType.PrivateGrid) {
       HttpResponse<List<PlatformBrowserVersion>> response = httpClient.get(getBrowsersUrl(
@@ -151,7 +151,7 @@ public class PlatformsService {
 
   public PlatformBrowserVersion getPlatformBrowserVersion(Platform platform, String osVersion,
                                                           Browsers browserName, String browserVersion,
-                                                          TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                          TestPlanLabType testPlanLabType) throws MitaException {
 
     HttpResponse<PlatformBrowserVersion> response = httpClient.get(getBrowserUrl(platform,
       osVersion, browserName.toString(), browserVersion, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -164,7 +164,7 @@ public class PlatformsService {
   }
 
   public PlatformBrowserVersion getPlatformBrowserVersion(Long platformBrowserVersionId,
-                                                          TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                          TestPlanLabType testPlanLabType) throws MitaException {
 
     HttpResponse<PlatformBrowserVersion> response = httpClient.get(getBrowserUrl(platformBrowserVersionId,
         testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -178,7 +178,7 @@ public class PlatformsService {
 
   public List<PlatformScreenResolution> getPlatformScreenResolutions(Platform platform, String osVersion,
                                                                      TestPlanLabType testPlanLabType)
-    throws TestsigmaException {
+    throws MitaException {
 
     HttpResponse<List<PlatformScreenResolution>> response = httpClient.get(getScreenResolutionsUrl(
       platform, osVersion, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -192,7 +192,7 @@ public class PlatformsService {
 
   public PlatformScreenResolution getPlatformScreenResolution(Long platformScreenResolutionId,
                                                               TestPlanLabType testPlanLabType)
-    throws TestsigmaException {
+    throws MitaException {
 
     HttpResponse<PlatformScreenResolution> response = httpClient.get(getScreenResolutionUrl(
       platformScreenResolutionId, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
@@ -205,14 +205,14 @@ public class PlatformsService {
   }
 
   public List<PlatformDevice> getPlatformDevices(Platform platform, String osVersion,
-                                                 TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                 TestPlanLabType testPlanLabType) throws MitaException {
     List<String> osVersions = new ArrayList<>();
     osVersions.add(osVersion);
     return getPlatformDevices(platform, osVersions, testPlanLabType);
   }
 
   public List<PlatformDevice> getPlatformDevices(Platform platform, List<String> osVersions,
-                                                 TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                                 TestPlanLabType testPlanLabType) throws MitaException {
     HttpResponse<List<PlatformDevice>> response = httpClient.get(getDevicesUrl(platform,
       osVersions, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
     });
@@ -224,7 +224,7 @@ public class PlatformsService {
   }
 
   public PlatformDevice getPlatformDevice(Platform platform, String osVersion, String deviceName,
-                                          TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                          TestPlanLabType testPlanLabType) throws MitaException {
     HttpResponse<PlatformDevice> response = httpClient.get(getDeviceUrl(platform,
       osVersion, deviceName, testPlanLabType), getHeaders(testPlanLabType), new TypeReference<>() {
     });
@@ -236,7 +236,7 @@ public class PlatformsService {
   }
 
   public PlatformDevice getPlatformDevice(Long platformDeviceId,
-                                          TestPlanLabType testPlanLabType) throws TestsigmaException {
+                                          TestPlanLabType testPlanLabType) throws MitaException {
     HttpResponse<PlatformDevice> response = httpClient.get(getDeviceUrl(platformDeviceId, testPlanLabType),
       getHeaders(testPlanLabType), new TypeReference<>() {
       });
@@ -252,11 +252,11 @@ public class PlatformsService {
     return hybridPlatformService.getDriverPath(platform.name(), browserVersion, browsers, versionFolder);
   }
 
-  public void closePlatformSession(TestPlanLabType testPlanLabType) throws TestsigmaException {
+  public void closePlatformSession(TestPlanLabType testPlanLabType) throws MitaException {
     if (testPlanLabType == TestPlanLabType.Hybrid) {
       hybridPlatformService.closePlatformSession();
     } else {
-      throw new TestsigmaException("Execution Lab Type " + testPlanLabType + " Not Supported");
+      throw new MitaException("Execution Lab Type " + testPlanLabType + " Not Supported");
     }
   }
 

@@ -3,7 +3,7 @@
 package com.mita.service;
 
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.dto.WebDriverSettingsDTO;
 import com.mita.factory.DriverSettingsServiceFactory;
 import com.mita.model.*;
@@ -30,7 +30,7 @@ public class WebDriverSettingsService {
   private final TestDeviceService testDeviceService;
 
   public WebDriverSettingsDTO getWebDriverSettings(WebDriverSettingsRequest webDriverSettingsRequest) throws SQLException,
-          TestsigmaException, IOException {
+          MitaException, IOException {
     TestDevice testDevice = new TestDevice();
     WorkspaceType workspaceType = webDriverSettingsRequest.getWorkspaceType();
 
@@ -71,14 +71,14 @@ public class WebDriverSettingsService {
 
   public WebDriverSettingsDTO getDriverCapabilities(TestDevice testDevice,
                                                     WorkspaceType workspaceType, TestPlanLabType testPlanLabType)
-    throws SQLException, TestsigmaException, IOException {
+    throws SQLException, MitaException, IOException {
     DriverSettingsServiceFactory driverSettingsServiceFactory = new DriverSettingsServiceFactory(webApplicationContext);
     DriverSettingsService driverSettingsService = driverSettingsServiceFactory.driverSettingsService(testPlanLabType);
     return driverSettingsService.driverSettings(testDevice, workspaceType, testPlanLabType,
       driverSettingsService.getLabDetails(), webApplicationContext);
   }
 
-  public WebDriverSettingsDTO getCapabilities(long id) throws TestsigmaException, IOException, SQLException {
+  public WebDriverSettingsDTO getCapabilities(long id) throws MitaException, IOException, SQLException {
     TestDeviceResult testDeviceResult = testDeviceResultService.find(id);
     TestDevice testDevice = testDeviceService.find(testDeviceResult.getTestDeviceId());
     WorkspaceType workspaceType = testDeviceResult.getTestDevice()

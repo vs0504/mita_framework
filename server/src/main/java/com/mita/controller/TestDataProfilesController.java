@@ -5,7 +5,7 @@ package com.mita.controller;
 import com.mita.specification.TestDataProfileSpecificationsBuilder;
 import com.mita.dto.TestDataProfileDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaValidationException;
+import com.mita.exception.MitaValidationException;
 import com.mita.mapper.TestDataProfileMapper;
 import com.mita.model.TestData;
 import com.mita.service.TestDataProfileService;
@@ -85,7 +85,7 @@ public class TestDataProfilesController {
   @PreAuthorize("hasPermission('TEST_DATA','WRITE')")
   @ResponseStatus(HttpStatus.ACCEPTED)
   public List<Object> importFromXls(
-          @RequestParam(value = "file") MultipartFile file) throws TestsigmaValidationException, IOException {
+          @RequestParam(value = "file") MultipartFile file) throws MitaValidationException, IOException {
     Workbook workBook = ReadExcel.getExcelWorkBook(file);
     return service.importFieldNames(workBook);
   }

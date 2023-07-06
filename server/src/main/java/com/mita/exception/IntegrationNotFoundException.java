@@ -1,7 +1,7 @@
 
 package com.mita.exception;
 
-public class IntegrationNotFoundException extends TestsigmaWebException {
+public class IntegrationNotFoundException extends MitaWebException {
 
   /**
    * @param errorCode

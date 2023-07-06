@@ -3,7 +3,7 @@ package com.mita.service;
 import com.mita.constants.MessageConstants;
 import com.mita.exception.ExceptionErrorCodes;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaValidationException;
+import com.mita.exception.MitaValidationException;
 import com.mita.model.TestData;
 import com.mita.model.TestDataSet;
 import com.mita.util.RowAdapter;
@@ -46,7 +46,7 @@ public class TestDataImportService implements RowAdapter {
         return filedNames;
     }
 
-    public static Map<String, Integer> getFirstSheetFieldIdMap(List<String> fieldNames, Collection<List<Object>> columnNameList) throws TestsigmaValidationException {
+    public static Map<String, Integer> getFirstSheetFieldIdMap(List<String> fieldNames, Collection<List<Object>> columnNameList) throws MitaValidationException {
         Map<String, Integer> nameIndexMap = new HashMap<>();
         for (List<Object> columnNames : columnNameList) {
             for (int j = 0; j < fieldNames.size(); j++) {
@@ -69,7 +69,7 @@ public class TestDataImportService implements RowAdapter {
                 }
             }
             message = StringUtils.substring(message, 0, message.length() - 1);
-            throw new TestsigmaValidationException(ExceptionErrorCodes.FIELD_DEFINITION_COLUMONS_NOT_FOUND, message);
+            throw new MitaValidationException(ExceptionErrorCodes.FIELD_DEFINITION_COLUMONS_NOT_FOUND, message);
         }
         return nameIndexMap;
     }
@@ -85,7 +85,7 @@ public class TestDataImportService implements RowAdapter {
         testDataSetList = new ArrayList<>();
     }
 
-    public Object getRowObjects(Map<String, Integer> defaultColumnNameIndexMap, List<Object> currentRowDataList, List<Object> columnNames) throws TestsigmaValidationException {
+    public Object getRowObjects(Map<String, Integer> defaultColumnNameIndexMap, List<Object> currentRowDataList, List<Object> columnNames) throws MitaValidationException {
         Collection<Integer> indexes = defaultColumnNameIndexMap.values();
         String name = currentRowDataList.get(defaultColumnNameIndexMap.get(filedNames.get(0))).toString();
         String description = currentRowDataList.get(defaultColumnNameIndexMap.get(filedNames.get(1))).toString();

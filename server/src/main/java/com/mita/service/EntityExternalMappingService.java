@@ -3,7 +3,7 @@
 package com.mita.service;
 
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.repository.EntityExternalMappingRepository;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.EntityType;
@@ -56,7 +56,7 @@ public class EntityExternalMappingService {
   }
 
   public EntityExternalMapping create(EntityExternalMapping mapping)
-    throws TestsigmaException, IOException, URISyntaxException {
+    throws MitaException, IOException, URISyntaxException {
     Integrations config = this.applicationConfigService.find(mapping.getApplicationId());
     mapping.setApplication(config);
     if(mapping.getEntityType() == EntityType.TEST_CASE_RESULT) {
@@ -104,7 +104,7 @@ public class EntityExternalMappingService {
     return this.repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Missing with id" + id));
   }
 
-  public void destroy(EntityExternalMapping mapping) throws TestsigmaException, IOException {
+  public void destroy(EntityExternalMapping mapping) throws MitaException, IOException {
     if (mapping.getApplication().getWorkspace().isJira()) {
       jiraService.setIntegrations(mapping.getApplication());
       jiraService.unlink(mapping);
@@ -147,7 +147,7 @@ public class EntityExternalMappingService {
     return this.repository.save(mapping);
   }
 
-  public EntityExternalMapping fetch(Long id) throws TestsigmaException, IOException {
+  public EntityExternalMapping fetch(Long id) throws MitaException, IOException {
     EntityExternalMapping mapping = this.find(id);
     jiraService.setIntegrations(mapping.getApplication());
     if (mapping.getApplication().getWorkspace().isJira())

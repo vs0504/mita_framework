@@ -5,16 +5,16 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Data
-public class TestsigmaException extends Exception {
+public class MitaException extends Exception {
   private String errorCode;
   private String message;
   private String details;
   private String displayMessage;
 
-  public TestsigmaException() {
+  public MitaException() {
   }
 
-  public TestsigmaException(String errorCode) {
+  public MitaException(String errorCode) {
     super(errorCode);
     this.errorCode = errorCode;
     this.message = errorCode;
@@ -22,7 +22,7 @@ public class TestsigmaException extends Exception {
     log.error(errorCode);
   }
 
-  public TestsigmaException(String errorCode, Exception ex) {
+  public MitaException(String errorCode, Exception ex) {
     super(errorCode, ex);
     this.errorCode = errorCode;
     this.message = errorCode;
@@ -30,14 +30,14 @@ public class TestsigmaException extends Exception {
     log.error(ex.getMessage(), ex);
   }
 
-  public TestsigmaException(Exception ex) {
+  public MitaException(Exception ex) {
     super(ex);
     this.message = ex.getMessage();
     this.displayMessage = ex.getLocalizedMessage();
     log.error(ex.getMessage(), ex);
   }
 
-  public TestsigmaException(String errorCode, String message) {
+  public MitaException(String errorCode, String message) {
     super(message);
     this.errorCode = errorCode;
     this.message = message;
@@ -46,7 +46,7 @@ public class TestsigmaException extends Exception {
     log.error("Message : " + message);
   }
 
-  public TestsigmaException(String errorCode, String message, String details) {
+  public MitaException(String errorCode, String message, String details) {
     this.errorCode = errorCode;
     this.message = message;
     this.displayMessage = message;

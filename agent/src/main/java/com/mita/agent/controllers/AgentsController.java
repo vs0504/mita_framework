@@ -5,7 +5,7 @@ package com.mita.agent.controllers;
 import com.mita.agent.config.AgentConfig;
 import com.mita.agent.constants.AgentOs;
 import com.mita.agent.dto.AgentDTO;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.init.WrapperConnector;
 import com.mita.agent.mobile.DeviceContainer;
 import com.mita.agent.mobile.android.AndroidDeviceListener;
@@ -74,7 +74,7 @@ public class AgentsController {
       } else {
         log.warn("No matching agent with the UUID found...");
       }
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error(e.getMessage(), e);
     } finally {
       WrapperConnector.getInstance().shutdown();

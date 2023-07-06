@@ -1,7 +1,7 @@
 package com.mita.service;
 
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.StorageServiceFactory;
 import com.mita.model.StorageAccessLevel;
 import com.mita.model.ProvisioningProfile;
@@ -60,12 +60,12 @@ public class CertificateService {
       unzipFiles(response, csrOutput, privateKeyOutPut);
       log.info("csr and pem generated");
     } else {
-      throw new TestsigmaException("Error while generating csr");
+      throw new MitaException("Error while generating csr");
     }
 
   }
 
-  public void writeCRT(File cer, File crtOutput) throws IOException, TestsigmaException {
+  public void writeCRT(File cer, File crtOutput) throws IOException, MitaException {
     log.info("Generating CRT....");
     MultipartEntityBuilder builder = MultipartEntityBuilder.create();
     builder.addPart("certificate", new FileBody(cer, ContentType.DEFAULT_BINARY));
@@ -75,12 +75,12 @@ public class CertificateService {
       writeResponseToFile(response, crtOutput);
       log.info("crt generated");
     } else {
-      throw new TestsigmaException("Error while generating CRT");
+      throw new MitaException("Error while generating CRT");
     }
 
   }
 
-  public void writePem(File crt, File pemOutput) throws IOException, TestsigmaException {
+  public void writePem(File crt, File pemOutput) throws IOException, MitaException {
     log.info("Generating Certificate PEM....");
     MultipartEntityBuilder builder = MultipartEntityBuilder.create();
     builder.addPart("certificate", new FileBody(crt, ContentType.DEFAULT_BINARY));
@@ -91,7 +91,7 @@ public class CertificateService {
       log.info("Private key for certificate(CRT) updated successfully");
     } else {
       log.error("Error while updating private key for CRT");
-      throw new TestsigmaException("Error while updating private key for CRT");
+      throw new MitaException("Error while updating private key for CRT");
     }
   }
 

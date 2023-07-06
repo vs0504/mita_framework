@@ -1,7 +1,7 @@
 package com.mita.service;
 
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.repository.ProvisioningProfileRepository;
 import com.mita.config.StorageServiceFactory;
 import com.mita.model.ProvisioningProfile;
@@ -81,7 +81,7 @@ public class ProvisioningProfileService {
     return provisioningProfile;
   }
 
-  public ProvisioningProfile update(ProvisioningProfile provisioningProfile) throws TestsigmaException {
+  public ProvisioningProfile update(ProvisioningProfile provisioningProfile) throws MitaException {
     try {
       MultipartFile cer = provisioningProfile.getCer();
       MultipartFile provFile = provisioningProfile.getProvisioningProfile();
@@ -112,13 +112,13 @@ public class ProvisioningProfileService {
         ReSignTaskFactory.getInstance().startTask(reSignTask);
       }
     } catch (IOException e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
     return provisioningProfile;
   }
 
   private void checkIfDevicesIsAlreadyProvisioned(List<String> deviceUDIDs, ProvisioningProfile provisioningProfile)
-    throws TestsigmaException {
+    throws MitaException {
     List<ProvisioningProfileDevice> conflictingDevices = provisioningProfileDeviceService
       .findAllByDeviceUDIdInAndProvisioningProfileIdNot(deviceUDIDs, provisioningProfile.getId());
     if (conflictingDevices.size() > 0) {
@@ -126,12 +126,12 @@ public class ProvisioningProfileService {
         .map(ProvisioningProfileDevice::getDeviceUDId).collect(Collectors.toList());
       String errorMsg = "These devices are already provisioned through difference provisioning profile"
         + conflictingDeviceUDIDs + " Devices with multiple provisioning profiles are not allowed.";
-      throw new TestsigmaException(errorMsg, errorMsg);
+      throw new MitaException(errorMsg, errorMsg);
     }
   }
 
   private void removeProvisionedDevicesNotInProvisioningProfile(List<String> deviceUDIDs, ProvisioningProfile provisioningProfile)
-    throws TestsigmaException {
+    throws MitaException {
     List<ProvisioningProfileDevice> existingDevices = provisioningProfileDeviceService
       .findAllByProvisioningProfileId(provisioningProfile.getId());
     if (existingDevices.size() > 0) {
@@ -149,7 +149,7 @@ public class ProvisioningProfileService {
         if (testDeviceServices.size() > 0) {
           List<Long> existingExecutionIds = testDeviceServices.stream()
             .map(TestDevice::getTestPlanId).collect(Collectors.toList());
-          throw new TestsigmaException("There are bellow devices removed from provision profile but have executions ::"
+          throw new MitaException("There are bellow devices removed from provision profile but have executions ::"
             + existingExecutionIds);
         }
         provisioningProfileDeviceService.deleteAllByDeviceUDIDIn(existingDeviceUDIDs);
@@ -159,7 +159,7 @@ public class ProvisioningProfileService {
   }
 
   private void parseDeviceInfoFromProvisioningProfile(File tempProvFile, ProvisioningProfile provisioningProfile)
-    throws TestsigmaException, IOException {
+    throws MitaException, IOException {
     List<String> deviceUDIDs = profileParserService.parseDevices(tempProvFile);
     String teamId = profileParserService.getTeamId(tempProvFile);
     log.info("Identified devices from provisioning profile - " + deviceUDIDs);
@@ -171,7 +171,7 @@ public class ProvisioningProfileService {
     provisioningProfileDeviceService.create(deviceUDIDs, provisioningProfile);
   }
 
-  private void updateCRT(MultipartFile cer, ProvisioningProfile provisioningProfile) throws TestsigmaException {
+  private void updateCRT(MultipartFile cer, ProvisioningProfile provisioningProfile) throws MitaException {
     try {
       String profilePathPrefix = certificateService.s3Prefix(provisioningProfile.getId());
       String certificateLocalName = provisioningProfile.getId()
@@ -196,7 +196,7 @@ public class ProvisioningProfileService {
       certificateService.writePem(crt, pem);
       storageServiceFactory.getStorageService().addFile(certificateS3Name + CertificateService.PEM_EXTENSION, pem);
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 

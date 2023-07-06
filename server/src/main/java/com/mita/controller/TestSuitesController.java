@@ -5,7 +5,7 @@ package com.mita.controller;
 import com.mita.specification.TestSuiteSpecificationsBuilder;
 import com.mita.dto.TestSuiteDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestSuiteMapper;
 import com.mita.model.TestSuite;
 import com.mita.service.TestSuiteService;
@@ -53,7 +53,7 @@ public class TestSuitesController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public TestSuiteDTO create(@RequestBody TestSuiteRequest request) throws TestsigmaException {
+  public TestSuiteDTO create(@RequestBody TestSuiteRequest request) throws MitaException {
     TestSuite testSuite = this.testSuiteMapper.map(request);
     testSuite.setCreatedDate(new Timestamp(Calendar.getInstance().getTimeInMillis()));
     testSuite = this.testSuiteService.create(testSuite);
@@ -62,7 +62,7 @@ public class TestSuitesController {
 
   @PutMapping(value = "/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public TestSuiteDTO update(@PathVariable(value = "id") Long id, @RequestBody TestSuiteRequest request) throws TestsigmaException {
+  public TestSuiteDTO update(@PathVariable(value = "id") Long id, @RequestBody TestSuiteRequest request) throws MitaException {
     TestSuite testSuite = this.testSuiteService.find(id);
     Long preRequisiteId = testSuite.getPreRequisite();
     testSuiteMapper.merge(request, testSuite);

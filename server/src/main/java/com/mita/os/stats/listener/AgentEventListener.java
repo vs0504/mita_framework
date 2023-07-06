@@ -2,7 +2,7 @@ package com.mita.os.stats.listener;
 
 import com.mita.event.AgentEvent;
 import com.mita.event.EventType;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.Agent;
 import com.mita.os.stats.service.TestsigmaOsStatsService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ public class AgentEventListener {
       } else if (event.getEventType() == EventType.DELETE) {
         testsigmaOsStatsService.sendAgentStats(event.getEventData(), com.mita.os.stats.event.EventType.DELETE);
       }
-    } catch (TestsigmaException e) {
+    } catch (MitaException e) {
       log.error(e.getMessage(), e);
     }
   }

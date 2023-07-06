@@ -3,7 +3,7 @@
 package com.mita.agent.controllers;
 
 import com.mita.agent.dto.DriverSessionDTO;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.request.DriverSessionRequest;
 import com.mita.agent.services.AgentService;
 import com.mita.agent.services.DriverSessionsService;
@@ -57,7 +57,7 @@ public class DriverSessionsController {
         throw new AutomatorException(e.getMessage(), e);
       }
     } else {
-      throw new TestsigmaException("Failed creating driver session: mobileSessionId is NULL");
+      throw new MitaException("Failed creating driver session: mobileSessionId is NULL");
     }
   }
 

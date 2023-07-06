@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.repository.TagRepository;
 import com.mita.repository.TestPlanRepository;
 import com.mita.specification.SearchCriteria;
@@ -53,12 +53,12 @@ public class TestPlanService extends XMLExportImportService<TestPlan> {
     return testPlanRepository.findById(id);
   }
 
-  public TestPlan find(Long id) throws TestsigmaDatabaseException {
-    return testPlanRepository.findById(id).orElseThrow(() -> new TestsigmaDatabaseException(
+  public TestPlan find(Long id) throws MitaDatabaseException {
+    return testPlanRepository.findById(id).orElseThrow(() -> new MitaDatabaseException(
       "Could not find resource with id:" + id));
   }
 
-  public TestPlan findById(Long id) throws TestsigmaDatabaseException {
+  public TestPlan findById(Long id) throws MitaDatabaseException {
     return testPlanRepository.findById(id).orElse(null);
   }
 
@@ -95,7 +95,7 @@ public class TestPlanService extends XMLExportImportService<TestPlan> {
     return update(testPlan);
   }
 
-  public void destroy(Long id) throws TestsigmaDatabaseException {
+  public void destroy(Long id) throws MitaDatabaseException {
     TestPlan testPlan = find(id);
     this.testPlanRepository.delete(testPlan);
     publishEvent(testPlan, EventType.DELETE);

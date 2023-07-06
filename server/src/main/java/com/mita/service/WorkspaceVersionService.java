@@ -7,7 +7,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
+import com.mita.exception.MitaDatabaseException;
 import com.mita.repository.WorkspaceVersionRepository;
 import com.mita.specification.SearchCriteria;
 import com.mita.specification.SearchOperation;
@@ -138,7 +138,7 @@ public class WorkspaceVersionService extends XMLExportImportService<WorkspaceVer
     return this.workspaceVersionRepository.findByWorkspaceIdAndVersionName(workspaceId, versionName);
   }
 
-  public WorkspaceVersion copy(WorkspaceVersion version, Long versionId) throws ResourceNotFoundException, TestsigmaDatabaseException {
+  public WorkspaceVersion copy(WorkspaceVersion version, Long versionId) throws ResourceNotFoundException, MitaDatabaseException {
     WorkspaceVersion originalVersion = find(versionId);
     WorkspaceVersion copiedVersion = workspaceVersionMapper.copy(originalVersion);
     copiedVersion.setVersionName(version.getVersionName());

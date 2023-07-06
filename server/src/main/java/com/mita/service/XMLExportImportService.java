@@ -204,7 +204,7 @@ public abstract class XMLExportImportService<T> {
         }
     }
 
-    public File copyZipFileToTemp(MultipartFile uploadedFile) throws TestsigmaException {
+    public File copyZipFileToTemp(MultipartFile uploadedFile) throws MitaException {
         try {
             String fileName = uploadedFile.getOriginalFilename().replaceAll("\\s+", "_");
             String fileBaseName = FilenameUtils.getBaseName(fileName);
@@ -218,11 +218,11 @@ public abstract class XMLExportImportService<T> {
             return tempFile;
         } catch (Exception e) {
             log.error(e.getMessage(), e);
-            throw new TestsigmaException(e.getMessage(), e);
+            throw new MitaException(e.getMessage(), e);
         }
     }
 
-    public void uploadImportFileToStorage(File uploadedFile, BackupDetail backupDetail) throws TestsigmaException {
+    public void uploadImportFileToStorage(File uploadedFile, BackupDetail backupDetail) throws MitaException {
 
         try {
             StringBuilder storageFilePath = new StringBuilder().append("/backup/").append(backupDetail.getName());
@@ -351,11 +351,11 @@ public abstract class XMLExportImportService<T> {
         }
         return mapToXMLDTOList(list);
     }
-    public List<Object> importFieldNames(Workbook workbook) throws TestsigmaValidationException, UnsupportedEncodingException {
+    public List<Object> importFieldNames(Workbook workbook) throws MitaValidationException, UnsupportedEncodingException {
         if (workbook.getNumberOfSheets() >= 1){
             Sheet sheet = workbook.getSheetAt(0);
             if(isRowsLimitExceeded(sheet)){
-                throw new TestsigmaValidationException(ExceptionErrorCodes.MSG_ROWS_TOO_MANY);
+                throw new MitaValidationException(ExceptionErrorCodes.MSG_ROWS_TOO_MANY);
             }
         }
         Collection<List<Object>> fieldNames = ReadExcel.getExelFieldNames(workbook).values();

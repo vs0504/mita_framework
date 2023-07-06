@@ -10,7 +10,7 @@ import com.mita.dto.TestCaseCoverageSummaryDTO;
 import com.mita.dto.TestCaseStatusBreakUpDTO;
 import com.mita.dto.TestCaseTypeBreakUpDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestCaseMapper;
 import com.mita.util.HttpClient;
 import com.mita.web.request.TestCaseCopyRequest;
@@ -77,21 +77,21 @@ public class TestCasesController {
   }
 
   @RequestMapping(method = RequestMethod.POST)
-  public TestCaseDTO create(@RequestBody @Valid TestCaseRequest testCaseRequest) throws TestsigmaException, SQLException {
+  public TestCaseDTO create(@RequestBody @Valid TestCaseRequest testCaseRequest) throws MitaException, SQLException {
     log.debug("POST /test_cases with request:" + testCaseRequest);
     TestCase testCase = testCaseService.create(testCaseRequest);
     return testCaseMapper.mapDTO(testCase);
   }
 
   @PostMapping(path = "/copy")
-  public TestCaseDTO copy(@RequestBody @Valid TestCaseCopyRequest testCaseRequest) throws TestsigmaException, SQLException {
+  public TestCaseDTO copy(@RequestBody @Valid TestCaseCopyRequest testCaseRequest) throws MitaException, SQLException {
     log.debug("POST /test_cases/copy with request:" + testCaseRequest);
     TestCase testCase = testCaseService.copy(testCaseRequest);
     return testCaseMapper.mapDTO(testCase);
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-  public TestCaseDTO show(@PathVariable("id") Long id) throws TestsigmaException {
+  public TestCaseDTO show(@PathVariable("id") Long id) throws MitaException {
     TestCase testCase = testCaseService.find(id);
     TestCaseDTO testCaseDTO = testCaseMapper.mapTo(testCase);
     testCaseDTO.setTags(tagService.list(TagType.TEST_CASE, id));
@@ -104,7 +104,7 @@ public class TestCasesController {
   @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
   @ResponseBody
   public TestCaseDTO update(@PathVariable("id") Long id,
-                            @RequestBody TestCaseRequest testCase) throws TestsigmaException, SQLException, CloneNotSupportedException {
+                            @RequestBody TestCaseRequest testCase) throws MitaException, SQLException, CloneNotSupportedException {
     log.debug("PUT /test_cases/" + id + "  with request:" + testCase);
     TestCase testcase = testCaseService.update(testCase, id);
     return testCaseMapper.mapDTO(testcase);
@@ -170,7 +170,7 @@ public class TestCasesController {
   }
 
   @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-  public void destroy(@PathVariable("id") Long id) throws TestsigmaException, IOException {
+  public void destroy(@PathVariable("id") Long id) throws MitaException, IOException {
     testCaseService.destroy(id);
   }
 

@@ -1,7 +1,7 @@
 package com.mita.step.processors;
 
 import com.mita.constants.MessageConstants;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.model.TestDataSet;
 import com.mita.dto.TestCaseEntityDTO;
@@ -33,7 +33,7 @@ public class ForLoopStepProcessor extends StepProcessor {
   }
 
   public void processLoop(List<TestStepDTO> testStepDTOS, List<Long> loopIds)
-    throws TestsigmaException, CloneNotSupportedException {
+    throws MitaException, CloneNotSupportedException {
     if (testStepDTOS != null) {
       loadLoop(testStepDTO, testStepDTOS);
       this.attachTestDataProfileStepId(testStepDTOS);
@@ -162,7 +162,7 @@ public class ForLoopStepProcessor extends StepProcessor {
     } else {
       String errorMessage = MessageConstants.getMessage(
         MessageConstants.MSG_UNKNOWN_TEST_DATA_LOOP, testCaseEntityDTO.getTestCaseName());
-      throw new TestsigmaException(errorMessage);
+      throw new MitaException(errorMessage);
     }
   }
 }

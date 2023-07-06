@@ -1,6 +1,6 @@
 package com.mita.step.processors;
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.Element;
 import com.mita.model.TestDataSet;
 import com.mita.model.TestStepType;
@@ -27,7 +27,7 @@ public class WhileLoopStepProcessor extends StepProcessor {
   }
 
   public void processWhileLoop(List<TestStepDTO> testStepDTOS, List<Long> loopIds)
-    throws TestsigmaException, CloneNotSupportedException {
+    throws MitaException, CloneNotSupportedException {
 
     loadLoop(testStepDTO, testStepDTOS);
     List<TestCaseStepEntityDTO> entityList = new ArrayList<>();

@@ -9,7 +9,7 @@ import com.mita.dto.AgentExecutionDTO;
 import com.mita.dto.AgentWebServerConfigDTO;
 import com.mita.dto.EnvironmentEntityDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.AgentMapper;
 import com.mita.model.*;
 import com.mita.service.AgentService;
@@ -88,7 +88,7 @@ public class AgentsController {
 
 
   @RequestMapping(path = "/certificate", method = RequestMethod.GET)
-  public AgentWebServerConfigDTO getWebServerCertificate() throws TestsigmaException {
+  public AgentWebServerConfigDTO getWebServerCertificate() throws MitaException {
     HttpResponse<AgentWebServerConfigDTO> response = httpClient.get(testsigmaOSConfigService.getUrl() +
       URLConstants.TESTSIGMA_OS_PUBLIC_CERTIFICATE_URL, getHeaders(), new TypeReference<>() {
     });
@@ -99,13 +99,13 @@ public class AgentsController {
   public String getExecutablePath(@PathVariable("uuid") String uniqueId,
                                   @RequestParam("browserName") String browserName,
                                   @RequestParam("browserVersion") String browserVersion
-  ) throws TestsigmaException {
+  ) throws MitaException {
     log.info(String.format("Request received for get executable path for browser - %s | version - %s | uuid - %s",
       browserName, browserVersion, uniqueId));
     Agent agent = agentService.findByUniqueId(uniqueId);
     Browsers browser = Browsers.getBrowser(browserName);
     if (browser == null) {
-      throw new TestsigmaException("Browser - " + browserName + " is not supported");
+      throw new MitaException("Browser - " + browserName + " is not supported");
     }
 
     PlatformBrowserVersion platformBrowserVersion =
@@ -114,7 +114,7 @@ public class AgentsController {
         browserVersion, TestPlanLabType.Hybrid);
 
     if (platformBrowserVersion == null) {
-      throw new TestsigmaException("Cant find browser with details. Browser Name - " + browserName
+      throw new MitaException("Cant find browser with details. Browser Name - " + browserName
         + ", Browser Version - " + browserVersion + ", Platform - " + agent.getOsType().getPlatform());
     }
 

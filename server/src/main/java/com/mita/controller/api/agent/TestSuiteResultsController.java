@@ -3,8 +3,8 @@
 package com.mita.controller.api.agent;
 
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestSuiteResultMapper;
 import com.mita.service.TestSuiteResultService;
 import com.mita.web.request.TestSuiteResultRequest;
@@ -28,7 +28,7 @@ public class TestSuiteResultsController {
   @RequestMapping(method = RequestMethod.PUT)
   public ResponseEntity<String> update(@PathVariable("id") Long id,
                                        @RequestBody TestSuiteResultRequest testSuiteResultRequest)
-    throws TestsigmaException {
+    throws MitaException {
     testSuiteResultService.updateResult(testSuiteResultRequest);
     return new ResponseEntity<>(HttpStatus.OK);
   }
@@ -36,7 +36,7 @@ public class TestSuiteResultsController {
   @RequestMapping(path = "/result", method = RequestMethod.PUT)
   public ResponseEntity<String> updateResult(@PathVariable("id") Long id,
                                              @RequestBody TestSuiteResultRequest testCaseGroupResultRequest)
-    throws TestsigmaDatabaseException, ResourceNotFoundException {
+    throws MitaDatabaseException, ResourceNotFoundException {
     testSuiteResultService.updateResultData(testCaseGroupResultRequest);
     return new ResponseEntity<String>(HttpStatus.OK);
   }

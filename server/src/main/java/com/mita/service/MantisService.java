@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -43,7 +43,7 @@ public class MantisService {
   @Setter
   private Integrations integrations;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.put("summary", mapping.getFields().get("summary").toString());
@@ -58,13 +58,13 @@ public class MantisService {
     });
     if (response.getStatusCode() != HttpStatus.SC_CREATED) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Mantis issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Mantis issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(String.valueOf(response.getResponseEntity().get("issue").get("id")));
     return mapping;
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     ObjectNode noteNode = jnf.objectNode();
@@ -77,12 +77,12 @@ public class MantisService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking Mantis issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking Mantis issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     ObjectNode noteNode = jnf.objectNode();
@@ -95,31 +95,31 @@ public class MantisService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking Mantis issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking Mantis issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public JsonNode getIssuesList(String projectId) throws TestsigmaException {
+  public JsonNode getIssuesList(String projectId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/rest/issues?project_id=" + projectId, getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
-  public JsonNode getIssue(Long issueId) throws TestsigmaException {
+  public JsonNode getIssue(Long issueId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/rest/issues/" + issueId, getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/rest/projects/", getHeaders(), new TypeReference<JsonNode>() {
     });
 
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     Header authentication = new BasicHeader(HttpHeaders.AUTHORIZATION, testAuth.getToken());
     List<Header> headers = Lists.newArrayList(contentType, authentication);

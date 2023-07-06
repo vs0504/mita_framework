@@ -1,7 +1,7 @@
 package com.mita.service;
 
 import com.amazonaws.HttpMethod;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.config.URLConstants;
 import com.mita.model.StorageAccessLevel;
@@ -149,7 +149,7 @@ public class OnPremiseStorageService extends StorageService {
   }
 
   @Override
-  public String downloadToLocal(String relativeFilePathFromBase, StorageAccessLevel storageAccessLevel) throws TestsigmaException {
+  public String downloadToLocal(String relativeFilePathFromBase, StorageAccessLevel storageAccessLevel) throws MitaException {
     return getRootDirectory() + File.separator + relativeFilePathFromBase;
   }
 

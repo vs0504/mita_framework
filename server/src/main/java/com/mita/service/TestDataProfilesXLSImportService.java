@@ -1,6 +1,6 @@
 package com.mita.service;
 
-import com.mita.exception.TestsigmaValidationException;
+import com.mita.exception.MitaValidationException;
 import com.mita.util.ReadExcel;
 import com.mita.util.XLSUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class TestDataProfilesXLSImportService extends XLSImportService {
         Collection<List<Object>> columnNames = ReadExcel.getExelFieldNames(workBook).values();
         try {
             testDataProfileColumnNameIndexMap = TestDataImportService.getFirstSheetFieldIdMap(TestDataImportService.getFiledNames(), columnNames);
-        } catch (TestsigmaValidationException e) {
+        } catch (MitaValidationException e) {
             log.error(e.getMessage(), e);
             incorrectColumnErrors(Arrays.asList(e.getMessage().split(",")));
             return;

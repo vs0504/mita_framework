@@ -3,7 +3,7 @@ package com.mita.service;
 
 import com.mita.constants.TSCapabilityType;
 import com.mita.exception.IntegrationNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.dto.WebDriverSettingsDTO;
 import com.mita.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class HybridDriverSettingsService extends DriverSettingsService {
                                              TestPlanLabType testPlanLabType,
                                              Integrations integrations,
                                              WebApplicationContext webApplicationContext)
-    throws IOException, TestsigmaException, SQLException {
+    throws IOException, MitaException, SQLException {
     WebDriverSettingsDTO webDriverSettings = new WebDriverSettingsDTO();
     List<WebDriverCapability> webDriverCapabilities = getCapabilities(testDevice, workspaceType,
         testPlanLabType, integrations, webApplicationContext);
@@ -42,7 +42,7 @@ public class HybridDriverSettingsService extends DriverSettingsService {
   public void setMobileCapabilities(TestDevice testDevice, WorkspaceType workspaceType,
                                     Integrations integrations,
                                     WebDriverSettingsDTO webDriverSettings)
-    throws TestsigmaException, MalformedURLException {
+    throws MitaException, MalformedURLException {
     List<WebDriverCapability> capabilities = new ArrayList<>();
     AgentDevice agentDevice = agentDeviceService.find(testDevice.getDeviceId());
     capabilities.add(new WebDriverCapability(TSCapabilityType.PLATFORM_VERSION, agentDevice.getPlatformOsVersion()));

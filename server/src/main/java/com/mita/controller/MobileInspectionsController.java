@@ -3,8 +3,8 @@ package com.mita.controller;
 
 import com.mita.specification.MobileInspectionSpecificationBuilder;
 import com.mita.dto.MobileInspectionDTO;
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.MobileInspectionMapper;
 import com.mita.model.MobileInspection;
 import com.mita.model.MobileInspectionStatus;
@@ -44,7 +44,7 @@ public class MobileInspectionsController {
   }
 
   @GetMapping(value = "/{id}")
-  public MobileInspectionDTO show(@PathVariable(value = "id") Long id) throws TestsigmaDatabaseException {
+  public MobileInspectionDTO show(@PathVariable(value = "id") Long id) throws MitaDatabaseException {
     log.info("Get request /mobile_inspections/" + id);
     MobileInspection mobileInspection = this.mobileInspectionService.find(id);
     return mobileInspectionMapper.mapDTO(mobileInspection);
@@ -52,7 +52,7 @@ public class MobileInspectionsController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public MobileInspectionDTO create(@RequestBody MobileInspectionRequest request) throws TestsigmaException, IOException, SQLException {
+  public MobileInspectionDTO create(@RequestBody MobileInspectionRequest request) throws MitaException, IOException, SQLException {
     log.info("Post request /mobile_inspections/" + request);
     MobileInspection mobileInspection = this.mobileInspectionMapper.map(request);
     mobileInspection.setCreatedDate(new Timestamp(System.currentTimeMillis()));
@@ -64,7 +64,7 @@ public class MobileInspectionsController {
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public MobileInspectionDTO update(@PathVariable("id") Long id, @RequestBody MobileInspectionRequest request) throws TestsigmaException {
+  public MobileInspectionDTO update(@PathVariable("id") Long id, @RequestBody MobileInspectionRequest request) throws MitaException {
     log.info("Update request /mobile_inspections/" + id + " with request" + request);
     if (request.getStatus() == MobileInspectionStatus.FINISHED) {
       return mobileInspectionService.closeSession(id);

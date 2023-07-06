@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -39,7 +39,7 @@ public class YoutrackService {
   @Setter
   private Integrations integrations;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     ObjectNode project = jnf.objectNode();
@@ -52,14 +52,14 @@ public class YoutrackService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Youtrack issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Youtrack issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(response.getResponseEntity().get("id").asText());
     mapping.setMisc(response.getResponseText());
     return mapping;
   }
 
-  public void unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public void unlink(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.put("text", "Unlinked from testsigma results [" + applicationConfig.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
@@ -69,12 +69,12 @@ public class YoutrackService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while unlinking Youtrack issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while unlinking Youtrack issue with ::" + mapping.getFields());
     }
   }
 
 
-  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public Map<String, Object> fetchIssue(EntityExternalMapping mapping) throws MitaException {
 
     HttpResponse<Map<String, Object>> response = httpClient.get(integrations.getUrl()
         + "/api/issues/" + mapping.getExternalId() + "?fields=id,idReadable,summary,description,reporter(login,name),created,updated",
@@ -84,7 +84,7 @@ public class YoutrackService {
   }
 
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     JsonNodeFactory jnf = JsonNodeFactory.instance;
     ObjectNode payload = jnf.objectNode();
     payload.put("text", "Linked from testsigma results [" + applicationConfig.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
@@ -94,31 +94,31 @@ public class YoutrackService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while linking Youtrack issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while linking Youtrack issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public JsonNode getIssuesList() throws TestsigmaException {
+  public JsonNode getIssuesList() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() + "/api/issues?fields=id,idReadable,summary,description",
       getHeaders(), new TypeReference<JsonNode>() {
       });
     return response.getResponseEntity();
   }
 
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get(integrations.getUrl() +
       "/api/admin/projects?fields=id,name,shortName", getHeaders(), new TypeReference<JsonNode>() {
     });
 
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while fetching the projects ");
+      throw new MitaException("Problem while fetching the projects ");
     }
     return response.getResponseEntity();
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     Header contentType = new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json");
     Header authentication = new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + testAuth.getToken());
     List<Header> headers = Lists.newArrayList(contentType, authentication);

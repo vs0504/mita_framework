@@ -1,7 +1,7 @@
 package com.mita.service;
 
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.repository.MobileInspectionRepository;
 import com.mita.dto.MobileInspectionDTO;
 import com.mita.mapper.MobileInspectionMapper;
@@ -30,8 +30,8 @@ public class MobileInspectionService {
   private final PlatformsService platformsService;
   private final TestDeviceResultService testDeviceResultService;
 
-  public MobileInspection find(Long id) throws TestsigmaDatabaseException {
-    return mobileInspectionRepository.findById(id).orElseThrow(() -> new TestsigmaDatabaseException("Mobile Inspection not found with" + id));
+  public MobileInspection find(Long id) throws MitaDatabaseException {
+    return mobileInspectionRepository.findById(id).orElseThrow(() -> new MitaDatabaseException("Mobile Inspection not found with" + id));
   }
 
   public MobileInspection create(MobileInspection mobileInspection) {
@@ -50,7 +50,7 @@ public class MobileInspectionService {
     return this.mobileInspectionRepository.findAllByLastActiveAtBeforeAndStatusIn(lastActiveAt, statusTypes);
   }
 
-  public MobileInspectionDTO closeSession(Long id) throws TestsigmaException {
+  public MobileInspectionDTO closeSession(Long id) throws MitaException {
     log.info("Closing Mobile inspector session with id - " + id);
     MobileInspection mobileInspection = find(id);
     mobileInspection.setLastActiveAt(new Timestamp(System.currentTimeMillis()));

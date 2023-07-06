@@ -4,7 +4,7 @@ package com.mita.agent.mobile.ios;
 
 
 import com.mita.agent.exception.DeviceContainerException;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.mobile.ios.libs.LibIMobileDevice;
 import com.mita.agent.mobile.MobileDevice;
 import com.sun.jna.Pointer;
@@ -36,21 +36,21 @@ public class DeviceEventCallback implements LibIMobileDevice.idevice_event_cb_t 
           onDevicePaired(uuid);
           break;
         default:
-          throw new TestsigmaException("event type " + event + "not recognized.");
+          throw new MitaException("event type " + event + "not recognized.");
       }
     } catch (Exception e) {
       log.error(e.getMessage(), e);
     }
   }
 
-  public void onDeviceAdded(String uuid) throws TestsigmaException, DeviceContainerException {
+  public void onDeviceAdded(String uuid) throws MitaException, DeviceContainerException {
     MobileDevice mobileDevice = iosDeviceListener.getRealMobileDevice(uuid);
     mobileDevice.setIsOnline(true);
     mobileDevice.setIsEmulator(false);
     iosDeviceListener.addDevice(mobileDevice);
   }
 
-  public void onDeviceRemoved(String uuid) throws TestsigmaException, DeviceContainerException {
+  public void onDeviceRemoved(String uuid) throws MitaException, DeviceContainerException {
     MobileDevice mobileDevice = iosDeviceListener.getRealMobileDevice(uuid);
     mobileDevice.setIsOnline(false);
     mobileDevice.setIsEmulator(false);
@@ -58,7 +58,7 @@ public class DeviceEventCallback implements LibIMobileDevice.idevice_event_cb_t 
     System.out.println("Removed: " + uuid);
   }
 
-  public void onDevicePaired(String uuid) throws TestsigmaException, DeviceContainerException {
+  public void onDevicePaired(String uuid) throws MitaException, DeviceContainerException {
     MobileDevice mobileDevice = iosDeviceListener.getRealMobileDevice(uuid);
     mobileDevice.setIsOnline(true);
     mobileDevice.setIsEmulator(false);

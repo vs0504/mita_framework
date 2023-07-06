@@ -1,7 +1,7 @@
 package com.mita.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.repository.ServerRepository;
 import com.mita.config.ApplicationConfig;
 import com.mita.config.URLConstants;
@@ -31,9 +31,9 @@ public class ServerService {
   private final TestsigmaOSConfigService testsigmaOSConfigService;
   private final Environment env;
 
-  public Server findOne() throws TestsigmaException {
+  public Server findOne() throws MitaException {
     return this.serverRepository.findAll().stream().findFirst().orElseThrow(
-      () -> new TestsigmaException("Server Details Are Missing"));
+      () -> new MitaException("Server Details Are Missing"));
   }
 
   private boolean shouldSync(Server server) {

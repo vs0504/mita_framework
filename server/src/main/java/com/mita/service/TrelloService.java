@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.EntityExternalMapping;
 import com.mita.model.Integrations;
@@ -37,7 +37,7 @@ public class TrelloService {
   @Setter
   private Integrations applicationConfig;
 
-  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping addIssue(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("name", mapping.getFields().get("name").toString());
     payload.put("desc", mapping.getFields().get("description").toString());
@@ -46,52 +46,52 @@ public class TrelloService {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while creating Trello issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while creating Trello issue with ::" + mapping.getFields());
     }
     mapping.setExternalId(String.valueOf(response.getResponseEntity().get("id")).replace("\"", ""));
     return mapping;
   }
 
-  public EntityExternalMapping link(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping link(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("text", "Linked to testsigma results [" + config.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
     HttpResponse<JsonNode> response = httpClient.post("https://api.trello.com/1/cards/" + mapping.getExternalId() + "/actions/comments?key=" + applicationConfig.getPassword() + "&token=" + applicationConfig.getToken(), getHeaders(), payload, new TypeReference<JsonNode>() {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while Linking Trello issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while Linking Trello issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
-  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws TestsigmaException {
+  public EntityExternalMapping unlink(EntityExternalMapping mapping) throws MitaException {
     HashMap<String, String> payload = new HashMap<>();
     payload.put("text", "Unlinked from testsigma results [" + config.getServerUrl() + "/ui/td/test_case_results/" + mapping.getTestCaseResult().getId() + "]  :: " + mapping.getTestCaseResult().getTestCase().getName());
     HttpResponse<JsonNode> response = httpClient.post("https://api.trello.com/1/cards/" + mapping.getExternalId() + "/actions/comments?key=" + applicationConfig.getPassword() + "&token=" + applicationConfig.getToken(), getHeaders(), payload, new TypeReference<JsonNode>() {
     });
     if (response.getStatusCode() != HttpStatus.SC_OK) {
       log.error(response.getResponseText());
-      throw new TestsigmaException("Problem while UnLinking Trello issue with ::" + mapping.getFields());
+      throw new MitaException("Problem while UnLinking Trello issue with ::" + mapping.getFields());
     }
     return mapping;
   }
 
   //card
-  public JsonNode getIssue(String cardId) throws TestsigmaException {
+  public JsonNode getIssue(String cardId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.trello.com/1/cards/" + cardId + "?key=" + applicationConfig.getPassword() + "&token=" + applicationConfig.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
   //cards
-  public JsonNode getIssuesList(String listId) throws TestsigmaException {
+  public JsonNode getIssuesList(String listId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.trello.com/1/lists/" + listId + "/cards?key=" + applicationConfig.getPassword() + "&token=" + applicationConfig.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
     return response.getResponseEntity();
   }
 
   //lists
-  public JsonNode getIssueTypes(String boardId) throws TestsigmaException {
+  public JsonNode getIssueTypes(String boardId) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.trello.com/1/boards/" + boardId + "/lists?key=" + applicationConfig.getPassword() + "&token=" + applicationConfig.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
 
@@ -99,7 +99,7 @@ public class TrelloService {
   }
 
   //boards
-  public JsonNode projects() throws TestsigmaException {
+  public JsonNode projects() throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.trello.com/1/members/me/boards?key=" + applicationConfig.getPassword() + "&token=" + applicationConfig.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
     JsonNodeFactory jnf = JsonNodeFactory.instance;
@@ -114,7 +114,7 @@ public class TrelloService {
     return status;
   }
 
-  public JsonNode testIntegration(IntegrationsRequest testAuth) throws TestsigmaException {
+  public JsonNode testIntegration(IntegrationsRequest testAuth) throws MitaException {
     HttpResponse<JsonNode> response = httpClient.get("https://api.trello.com/1/members/me/boards?key=" + testAuth.getPassword() + "&token=" + testAuth.getToken(), getHeaders(), new TypeReference<JsonNode>() {
     });
 

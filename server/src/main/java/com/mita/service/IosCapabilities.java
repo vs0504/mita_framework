@@ -2,7 +2,7 @@ package com.mita.service;
 
 
 import com.mita.constants.TSCapabilityType;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +19,7 @@ public class IosCapabilities extends MobileCapabilities {
   @Override
   public void setTestsigmaLabCapabilities(TestDevice testDevice,
                                           Integrations integrations, List<WebDriverCapability> capabilities)
-    throws TestsigmaException {
+    throws MitaException {
     if (testDevice.getAppPathType() != null)
       setTestsigmaLabAppCapability(testDevice, testDevice.getAppPathType(),
               integrations, capabilities);
@@ -27,7 +27,7 @@ public class IosCapabilities extends MobileCapabilities {
 
   public void setHybridAppCapability(TestDevice testDevice, AppPathType appPathType,
                                      List<WebDriverCapability> capabilities)
-    throws TestsigmaException {
+    throws MitaException {
     if (AppPathType.UPLOADS == appPathType) {
       capabilities.add(new WebDriverCapability(TSCapabilityType.APP,
         getIosResignedPresignedUrlFromUpload(testDevice)));
@@ -44,7 +44,7 @@ public class IosCapabilities extends MobileCapabilities {
                                     Integrations integrations,
                                     List<WebDriverCapability> capabilities,
                                     TestPlanLabType testPlanLabType)
-    throws TestsigmaException {
+    throws MitaException {
     capabilities.add(new WebDriverCapability(TSCapabilityType.AUTOMATION_NAME, TSCapabilityType.XCUI_TEST));
     capabilities.add(new WebDriverCapability(TSCapabilityType.WDA_URL, TSCapabilityType.WDA_URL_VALUE));
     if (testDevice.getAppPathType() != null)
@@ -52,7 +52,7 @@ public class IosCapabilities extends MobileCapabilities {
   }
 
   private String getIosResignedPresignedUrlFromUpload(TestDevice testDevice)
-    throws TestsigmaException {
+    throws MitaException {
     Upload upload = uploadService.find(Long.valueOf(testDevice.getAppUploadId()));
     UploadVersion uploadVersion = testDevice.getAppUploadVersionId() == null ? upload.getLatestVersion() : uploadVersionService.find(testDevice.getAppUploadVersionId());
 
@@ -68,7 +68,7 @@ public class IosCapabilities extends MobileCapabilities {
   }
 
   private String getIosResignedPresignedUrlFromPath(TestDevice testDevice)
-    throws TestsigmaException {
+    throws MitaException {
     String publicURLString = testDevice.getAppBundleId();
     if (StringUtils.isEmpty(publicURLString) && StringUtils.isNotEmpty(testDevice.getAppUrl())) {
       publicURLString = testDevice.getAppUrl();
@@ -85,12 +85,12 @@ public class IosCapabilities extends MobileCapabilities {
     return publicURLString;
   }
 
-  public void setFileName(String appRemoteUrl) throws TestsigmaException {
+  public void setFileName(String appRemoteUrl) throws MitaException {
     try {
       URL url = new URL(appRemoteUrl);
       this.fileName = FilenameUtils.getName(url.getPath());
     } catch (MalformedURLException ex) {
-      throw new TestsigmaException(ex);
+      throw new MitaException(ex);
     }
   }
 }

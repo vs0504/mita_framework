@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.mita.exception.ResourceNotFoundException;
 import com.mita.exception.TestProjectImportException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.service.UploadVersionService;
 import com.mita.service.ZipFileService;
 import com.mita.web.request.testproject.TestProjectYamlRequest;
@@ -35,7 +35,7 @@ public class TestProjectImportService {
     private final ZipFileService zipFileService;
     private final UploadVersionService uploadVersionService;
 
-    public void yamlImport(MultipartFile file) throws IOException, TestsigmaException {
+    public void yamlImport(MultipartFile file) throws IOException, MitaException {
         File tempFile = uploadVersionService.copyUploadToTempFile(file);
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)

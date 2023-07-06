@@ -174,8 +174,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     return new ResponseEntity<>(apiError, headers, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
   }
 
-  @ExceptionHandler({TestsigmaException.class})
-  public ResponseEntity<Object> handleTestsigmaException(final TestsigmaException ex, final WebRequest request) {
+  @ExceptionHandler({MitaException.class})
+  public ResponseEntity<Object> handleTestsigmaException(final MitaException ex, final WebRequest request) {
     logger.error(ex.getMessage(), ex);
     final APIErrorDTO apiError = new APIErrorDTO();
     apiError.setError(ex.getLocalizedMessage());

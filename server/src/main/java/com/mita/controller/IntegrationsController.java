@@ -7,8 +7,8 @@ import com.mita.specification.IntegrationsSpecificationsBuilder;
 import com.mita.dto.IntegrationsDTO;
 import com.mita.dto.JiraProjectDTO;
 import com.mita.exception.IntegrationNotFoundException;
-import com.mita.exception.TestsigmaDatabaseException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaDatabaseException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.IntegrationsMapper;
 import com.mita.model.Integrations;
 import com.mita.web.request.IntegrationsRequest;
@@ -55,7 +55,7 @@ public class IntegrationsController {
   @RequestMapping(method = RequestMethod.POST)
   public IntegrationsDTO create(
     @RequestBody IntegrationsRequest integrationsRequest, HttpServletRequest request)
-    throws TestsigmaDatabaseException {
+    throws MitaDatabaseException {
 
     Integrations config = integrationsService.create(integrationsRequest);
     return mapper.map(config);
@@ -65,7 +65,7 @@ public class IntegrationsController {
   public IntegrationsDTO update(
     @RequestBody IntegrationsRequest integrationsRequest,
     @PathVariable("configId") Long configId)
-    throws IntegrationNotFoundException, TestsigmaDatabaseException {
+    throws IntegrationNotFoundException, MitaDatabaseException {
     Integrations config = integrationsService.update(integrationsRequest,
       configId);
     return mapper.map(config);
@@ -96,70 +96,70 @@ public class IntegrationsController {
 
 
   @GetMapping(path = "/{id}/jira_projects")
-  public List<JiraProjectDTO> jiraFields(@PathVariable("id") Long id, @Nullable @RequestParam("projectId") String projectId, @Nullable @RequestParam("issueType") String issueType) throws TestsigmaException, EncoderException {
+  public List<JiraProjectDTO> jiraFields(@PathVariable("id") Long id, @Nullable @RequestParam("projectId") String projectId, @Nullable @RequestParam("issueType") String issueType) throws MitaException, EncoderException {
     Integrations applicationConfig = this.integrationsService.find(id);
     this.jiraService.setIntegrations(applicationConfig);
     return this.jiraService.getIssueFields(projectId, issueType);
   }
 
   @GetMapping(path = "/{id}/search_jira_issues")
-  public JsonNode searchIssues(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project, @NotNull @RequestParam("issueType") String issueType, @Nullable @RequestParam("summary") String summary) throws TestsigmaException {
+  public JsonNode searchIssues(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project, @NotNull @RequestParam("issueType") String issueType, @Nullable @RequestParam("summary") String summary) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     this.jiraService.setIntegrations(applicationConfig);
     return this.jiraService.getIssuesList(project, issueType, summary);
   }
 
   @GetMapping(path = "/{id}/freshrelease_projects")
-  public JsonNode fetchFRProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchFRProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     freshreleaseService.setIntegrations(applicationConfig);
     return freshreleaseService.projects();
   }
 
   @GetMapping(path = "/{id}/freshrelease_issue_types")
-  public JsonNode fetchFRProjectIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws TestsigmaException {
+  public JsonNode fetchFRProjectIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     freshreleaseService.setIntegrations(applicationConfig);
     return freshreleaseService.issueTypes(project);
   }
 
   @GetMapping(path = "/{id}/search_freshrelease_issues")
-  public JsonNode searchFreshReleaseIssues(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project, @Nullable @RequestParam("title") String title) throws TestsigmaException {
+  public JsonNode searchFreshReleaseIssues(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project, @Nullable @RequestParam("title") String title) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     this.jiraService.setIntegrations(applicationConfig);
     return this.freshreleaseService.getIssuesList(project, title);
   }
 
   @GetMapping(path = "/{id}/mantis_projects")
-  public JsonNode fetchMantisProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchMantisProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     mantisService.setIntegrations(applicationConfig);
     return mantisService.projects();
   }
 
   @GetMapping(path = "/{id}/search_mantis_issues")
-  public JsonNode fetchMantisIssues(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws TestsigmaException {
+  public JsonNode fetchMantisIssues(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     mantisService.setIntegrations(applicationConfig);
     return mantisService.getIssuesList(project);
   }
 
   @GetMapping(path = "/{id}/search_mantis_issue/{issueId}")
-  public JsonNode fetchMantisIssue(@PathVariable("id") Long id, @PathVariable("issueId") Long issueId) throws TestsigmaException {
+  public JsonNode fetchMantisIssue(@PathVariable("id") Long id, @PathVariable("issueId") Long issueId) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     mantisService.setIntegrations(applicationConfig);
     return mantisService.getIssue(issueId);
   }
 
   @GetMapping(path = "/{id}/azure_projects")
-  public JsonNode fetchAzureProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchAzureProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     azureService.setApplicationConfig(applicationConfig);
     return azureService.projects();
   }
 
   @GetMapping(path = "/{id}/azure_issue_types")
-  public JsonNode fetchAzureProjectIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws TestsigmaException, EncoderException {
+  public JsonNode fetchAzureProjectIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws MitaException, EncoderException {
     Integrations applicationConfig = this.integrationsService.find(id);
     azureService.setApplicationConfig(applicationConfig);
     return azureService.issueTypes(project);
@@ -167,26 +167,26 @@ public class IntegrationsController {
 
   @GetMapping(path = "/{id}/search_azure_issues")
   public JsonNode searchAzureIssues(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project,
-                                    @NotNull @RequestParam("issueType") String issueType, @Nullable @RequestParam("title") String title) throws TestsigmaException {
+                                    @NotNull @RequestParam("issueType") String issueType, @Nullable @RequestParam("title") String title) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     this.azureService.setApplicationConfig(applicationConfig);
     return this.azureService.getIssuesList(project, issueType, title);
   }
 
   @GetMapping(path = "/{id}/get_azure_issues")
-  public JsonNode getAzureIssuesData(@PathVariable("id") Long id, @NotNull @RequestParam("ids") String issueIds) throws TestsigmaException {
+  public JsonNode getAzureIssuesData(@PathVariable("id") Long id, @NotNull @RequestParam("ids") String issueIds) throws MitaException {
     return this.azureService.fetchIssuesData(issueIds);
   }
 
   @GetMapping(path = "/{id}/backlog_projects")
-  public JsonNode fetchBackLogProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchBackLogProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     backLogService.setIntegrations(applicationConfig);
     return backLogService.projects();
   }
 
   @GetMapping(path = "/{id}/search_backlog_issue_types")
-  public JsonNode fetchBackLogIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") Long project) throws TestsigmaException {
+  public JsonNode fetchBackLogIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") Long project) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     backLogService.setIntegrations(applicationConfig);
     return backLogService.getIssueTypes(project);
@@ -197,35 +197,35 @@ public class IntegrationsController {
                                      @NotNull @RequestParam("project") Long project,
                                      @NotNull @RequestParam("issueTypeId") Long issueTypeId,
                                      @NotNull @RequestParam("priorityId") Long priorityId,
-                                     @RequestParam(value = "keyword", required = false) String keyword) throws TestsigmaException {
+                                     @RequestParam(value = "keyword", required = false) String keyword) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     backLogService.setIntegrations(applicationConfig);
     return backLogService.getIssuesList(project, issueTypeId, priorityId, keyword);
   }
 
   @GetMapping(path = "/{id}/search_backlog_issue")
-  public JsonNode fetchBackLogIssue(@PathVariable("id") Long id, @NotNull @RequestParam("issueId") Long issueId) throws TestsigmaException {
+  public JsonNode fetchBackLogIssue(@PathVariable("id") Long id, @NotNull @RequestParam("issueId") Long issueId) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     backLogService.setIntegrations(applicationConfig);
     return backLogService.getIssue(issueId);
   }
 
   @GetMapping(path = "/{id}/search_backlog_priorities")
-  public JsonNode fetchBackLogPriorities(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchBackLogPriorities(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     backLogService.setIntegrations(applicationConfig);
     return backLogService.getPriorities();
   }
 
   @GetMapping(path = "/{id}/zepel_projects")
-  public JsonNode fetchZepelProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchZepelProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     zepelService.setIntegrations(applicationConfig);
     return zepelService.projects();
   }
 
   @GetMapping(path = "/{id}/search_zepel_issue_types")
-  public JsonNode fetchZepelIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws TestsigmaException {
+  public JsonNode fetchZepelIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     zepelService.setIntegrations(applicationConfig);
     return zepelService.getIssueTypes(project);
@@ -234,28 +234,28 @@ public class IntegrationsController {
   @GetMapping(path = "/{id}/search_zepel_issues")
   public JsonNode fetchZepelIssues(@PathVariable("id") Long id,
                                    @NotNull @RequestParam("project") String project,
-                                   @NotNull @RequestParam("issueTypeId") String issueTypeId) throws TestsigmaException {
+                                   @NotNull @RequestParam("issueTypeId") String issueTypeId) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     zepelService.setIntegrations(applicationConfig);
     return zepelService.getIssuesList(project, issueTypeId);
   }
 
   @GetMapping(path = "/{id}/youtrack_projects")
-  public JsonNode fetchYoutrackProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchYoutrackProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     youtrackService.setIntegrations(applicationConfig);
     return youtrackService.projects();
   }
 
   @GetMapping(path = "/{id}/search_youtrack_issues")
-  public JsonNode searchYoutrackIssues(@PathVariable("id") Long id, @Nullable @RequestParam("title") String title) throws TestsigmaException {
+  public JsonNode searchYoutrackIssues(@PathVariable("id") Long id, @Nullable @RequestParam("title") String title) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     this.youtrackService.setIntegrations(applicationConfig);
     return this.youtrackService.getIssuesList();
   }
 
   @GetMapping(path = "/{id}/bugzilla_projects")
-  public JsonNode fetchBugZillaProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchBugZillaProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     bugZillaService.setIntegrations(applicationConfig);
     return bugZillaService.projects();
@@ -265,28 +265,28 @@ public class IntegrationsController {
   public JsonNode fetchBugZillaIssues(@PathVariable("id") Long id,
                                       @NotNull @RequestParam("project") String project,
                                       @NotNull @RequestParam("issueType") String issueType,
-                                      @NotNull @RequestParam("version") String version) throws TestsigmaException {
+                                      @NotNull @RequestParam("version") String version) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     bugZillaService.setIntegrations(applicationConfig);
     return bugZillaService.getIssuesList(project, issueType, version);
   }
 
   @GetMapping(path = "/{id}/search_bugzilla_issue/{issueId}")
-  public JsonNode fetchBugZillaIssue(@PathVariable("id") Long id, @PathVariable("issueId") Long issueId) throws TestsigmaException {
+  public JsonNode fetchBugZillaIssue(@PathVariable("id") Long id, @PathVariable("issueId") Long issueId) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     bugZillaService.setIntegrations(applicationConfig);
     return bugZillaService.getIssue(issueId);
   }
 
   @GetMapping(path = "/{id}/trello_projects")
-  public JsonNode fetchTrelloProjects(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchTrelloProjects(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     trelloService.setApplicationConfig(applicationConfig);
     return trelloService.projects();
   }
 
   @GetMapping(path = "/{id}/search_trello_issue_types")
-  public JsonNode fetchTrelloIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws TestsigmaException {
+  public JsonNode fetchTrelloIssueTypes(@PathVariable("id") Long id, @NotNull @RequestParam("project") String project) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     trelloService.setApplicationConfig(applicationConfig);
     return trelloService.getIssueTypes(project);
@@ -294,7 +294,7 @@ public class IntegrationsController {
 
   @GetMapping(path = "/{id}/search_trello_issues")
   public JsonNode fetchTrelloIssues(@PathVariable("id") Long id,
-                                    @NotNull @RequestParam("issueTypeId") String issueTypeId) throws TestsigmaException {
+                                    @NotNull @RequestParam("issueTypeId") String issueTypeId) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     trelloService.setApplicationConfig(applicationConfig);
     return trelloService.getIssuesList(issueTypeId);
@@ -302,21 +302,21 @@ public class IntegrationsController {
 
   @GetMapping(path = "/{id}/search_trello_issue")
   public JsonNode fetchTrelloIssue(@PathVariable("id") Long id,
-                                   @NotNull @RequestParam("issueId") String issueId) throws TestsigmaException {
+                                   @NotNull @RequestParam("issueId") String issueId) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     trelloService.setApplicationConfig(applicationConfig);
     return trelloService.getIssue(issueId);
   }
 
   @GetMapping(path = "/{id}/linear_teams")
-  public JsonNode fetchLinearTeams(@PathVariable("id") Long id) throws TestsigmaException, URISyntaxException {
+  public JsonNode fetchLinearTeams(@PathVariable("id") Long id) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     linearService.setIntegrations(applicationConfig);
     return linearService.teams();
   }
 
   @GetMapping(path = "/{id}/search_linear_projects")
-  public JsonNode fetchLinearProjects(@PathVariable("id") Long id, @NotNull @RequestParam("teamId") String teamId) throws TestsigmaException, URISyntaxException {
+  public JsonNode fetchLinearProjects(@PathVariable("id") Long id, @NotNull @RequestParam("teamId") String teamId) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     linearService.setIntegrations(applicationConfig);
     return linearService.projects(teamId);
@@ -324,7 +324,7 @@ public class IntegrationsController {
 
   @GetMapping(path = "/{id}/search_linear_issues")
   public JsonNode fetchLinearIssues(@PathVariable("id") Long id,
-                                    @NotNull @RequestParam("projectId") String projectId) throws TestsigmaException, URISyntaxException {
+                                    @NotNull @RequestParam("projectId") String projectId) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     linearService.setIntegrations(applicationConfig);
     return linearService.getIssuesList(projectId);
@@ -332,105 +332,105 @@ public class IntegrationsController {
 
   @GetMapping(path = "/{id}/search_linear_issue")
   public JsonNode fetchLinearIssue(@PathVariable("id") Long id,
-                                   @NotNull @RequestParam("issueId") String issueId) throws TestsigmaException, URISyntaxException {
+                                   @NotNull @RequestParam("issueId") String issueId) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     linearService.setIntegrations(applicationConfig);
     return linearService.getIssue(issueId);
   }
 
   @PostMapping(path = "/test_linear_integration")
-  public JsonNode testLinearAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException, IOException, URISyntaxException {
+  public JsonNode testLinearAuth(@RequestBody IntegrationsRequest config) throws MitaException, IOException, URISyntaxException {
     return linearService.testIntegration(config);
   }
 
 
   @GetMapping(path = "/{id}/clickup_tasks")
-  public JsonNode fetchClickUpTasks(@PathVariable("id") Long id, @NotNull @RequestParam("listId") String listId) throws TestsigmaException, URISyntaxException {
+  public JsonNode fetchClickUpTasks(@PathVariable("id") Long id, @NotNull @RequestParam("listId") String listId) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     clickUpService.setWorkspaceConfig(applicationConfig);
     return clickUpService.tasks(listId);
   }
 
   @GetMapping(path = "/{id}/clickup_lists")
-  public JsonNode fetchClickUpLists(@PathVariable("id") Long id, @NotNull @RequestParam("folderId") String folderId) throws TestsigmaException, URISyntaxException {
+  public JsonNode fetchClickUpLists(@PathVariable("id") Long id, @NotNull @RequestParam("folderId") String folderId) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     clickUpService.setWorkspaceConfig(applicationConfig);
     return clickUpService.lists(folderId);
   }
 
   @GetMapping(path = "/{id}/clickup_folders")
-  public JsonNode fetchClickUpFolders(@PathVariable("id") Long id, @NotNull @RequestParam("spaceId") String spaceId) throws TestsigmaException, URISyntaxException {
+  public JsonNode fetchClickUpFolders(@PathVariable("id") Long id, @NotNull @RequestParam("spaceId") String spaceId) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     clickUpService.setWorkspaceConfig(applicationConfig);
     return clickUpService.folders(spaceId);
   }
 
   @GetMapping(path = "/{id}/clickup_spaces")
-  public JsonNode fetchClickUpSpaces(@PathVariable("id") Long id, @NotNull @RequestParam("teamId") String teamId) throws TestsigmaException, URISyntaxException {
+  public JsonNode fetchClickUpSpaces(@PathVariable("id") Long id, @NotNull @RequestParam("teamId") String teamId) throws MitaException, URISyntaxException {
     Integrations applicationConfig = this.integrationsService.find(id);
     clickUpService.setWorkspaceConfig(applicationConfig);
     return clickUpService.spaces(teamId);
   }
 
   @GetMapping(path = "/{id}/clickup_teams")
-  public JsonNode fetchClickUpTeams(@PathVariable("id") Long id) throws TestsigmaException {
+  public JsonNode fetchClickUpTeams(@PathVariable("id") Long id) throws MitaException {
     Integrations applicationConfig = this.integrationsService.find(id);
     clickUpService.setWorkspaceConfig(applicationConfig);
     return clickUpService.teams();
   }
 
   @PostMapping(path = "/test_clickup_integration")
-  public JsonNode testClickUpAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException, IOException, URISyntaxException {
+  public JsonNode testClickUpAuth(@RequestBody IntegrationsRequest config) throws MitaException, IOException, URISyntaxException {
     return clickUpService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_youtrack_integration")
-  public JsonNode testYtAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testYtAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return youtrackService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_azure_integration")
-  public JsonNode testAzureAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testAzureAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return azureService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_mantis_integration")
-  public JsonNode testMantisAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testMantisAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return mantisService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_zepel_integration")
-  public JsonNode testZepelAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testZepelAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return zepelService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_jira_integration")
-  public JsonNode testJiraAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testJiraAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return jiraService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_freshrelease_integration")
-  public JsonNode testFRAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testFRAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return freshreleaseService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_backlog_integration")
-  public JsonNode testBacklogAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testBacklogAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return backLogService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_bugzilla_integration")
-  public JsonNode testBugzillaAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testBugzillaAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return bugZillaService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_privategrid_integration")
-  public JsonNode testPrivateGridAuth(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testPrivateGridAuth(@RequestBody IntegrationsRequest config) throws MitaException {
     return privateGridService.testIntegration(config);
   }
 
   @PostMapping(path = "/test_xraycloud_integration")
-  public JsonNode testXrayIntegration(@RequestBody IntegrationsRequest config) throws TestsigmaException {
+  public JsonNode testXrayIntegration(@RequestBody IntegrationsRequest config) throws MitaException {
     return xrayCloudService.testIntegration(config);
   }
 

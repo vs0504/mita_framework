@@ -2,7 +2,7 @@ package com.mita.os.stats.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.mita.config.URLConstants;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.service.ServerService;
 import com.mita.service.TestsigmaOSConfigService;
 import com.mita.util.HttpClient;
@@ -25,7 +25,7 @@ public class TestsigmaOsServerDetailsService {
   private final TestsigmaOSConfigService osConfigService;
   private final ServerService serverService;
 
-  public String[] getTestsigmaLabIPs() throws TestsigmaException {
+  public String[] getTestsigmaLabIPs() throws MitaException {
     HttpResponse<String[]> response = httpClient.get(osConfigService.getUrl() + URLConstants.TESTSIGMA_OS_TESTSIGMA_LAB_IP_URL
       , getHeaders(), new TypeReference<>() {
       });

@@ -1,7 +1,7 @@
 package com.mita.controller;
 
 import com.mita.dto.ServerDTO;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ServerMapper;
 import com.mita.model.Server;
 import com.mita.service.ServerService;
@@ -23,14 +23,14 @@ public class ServersController {
   private final ServerMapper serverMapper;
 
   @GetMapping
-  public ServerDTO show() throws TestsigmaException {
+  public ServerDTO show() throws MitaException {
     Server server = serverService.findOne();
     return serverMapper.map(server);
   }
 
   @PutMapping()
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public ServerDTO update(@RequestBody ServerRequest request) throws TestsigmaException {
+  public ServerDTO update(@RequestBody ServerRequest request) throws MitaException {
     Server server = serverService.findOne();
     serverMapper.merge(request, server);
     serverService.update(server);

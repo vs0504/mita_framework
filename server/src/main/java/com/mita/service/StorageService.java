@@ -1,7 +1,7 @@
 package com.mita.service;
 
 
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.model.StorageAccessLevel;
 import com.mita.model.StorageType;
@@ -56,7 +56,7 @@ public abstract class StorageService {
     return storageConfig.getStorageType();
   }
 
-  public String downloadToLocal(String relativeFilePathFromBase, StorageAccessLevel storageAccessLevel) throws TestsigmaException {
+  public String downloadToLocal(String relativeFilePathFromBase, StorageAccessLevel storageAccessLevel) throws MitaException {
     return downloadFromRemoteUrl(generatePreSignedURL(relativeFilePathFromBase, storageAccessLevel).toString());
   }
 
@@ -67,7 +67,7 @@ public abstract class StorageService {
     return FileUtils.readFileToByteArray(new File(preSignedURL));
   }
 
-  public String downloadFromRemoteUrl(String appRemoteUrl) throws TestsigmaException {
+  public String downloadFromRemoteUrl(String appRemoteUrl) throws MitaException {
     InputStream appInputStream = null;
     FileOutputStream appOutputStream = null;
     try {
@@ -86,7 +86,7 @@ public abstract class StorageService {
       return appLocalPath;
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     } finally {
       try {
         if (appInputStream != null)
@@ -98,12 +98,12 @@ public abstract class StorageService {
     }
   }
 
-  public String getFileName(String appRemoteUrl) throws TestsigmaException {
+  public String getFileName(String appRemoteUrl) throws MitaException {
     try {
       URL url = new URL(appRemoteUrl);
       return FilenameUtils.getName(url.getPath());
     } catch (MalformedURLException ex) {
-      throw new TestsigmaException(ex);
+      throw new MitaException(ex);
     }
   }
 

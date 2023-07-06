@@ -5,7 +5,7 @@ package com.mita.controller;
 import com.mita.specification.ProvisioningProfilesBuilder;
 import com.mita.dto.ProvisioningProfileDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.ProvisioningProfileMapper;
 import com.mita.model.ProvisioningProfile;
 import com.mita.model.ProvisioningProfileDevice;
@@ -72,7 +72,7 @@ public class ProvisioningProfilesController {
   @ResponseStatus(HttpStatus.ACCEPTED)
   public ProvisioningProfileDTO update(@PathVariable(value = "id") Long id,
                                        @ModelAttribute ProvisioningProfileRequest request)
-    throws TestsigmaException {
+    throws MitaException {
     log.info("Put request /settings/provisioning_profiles/" + id + " data:" + request);
     ProvisioningProfile profile = this.service.find(id);
     this.mapper.merge(profile, request);

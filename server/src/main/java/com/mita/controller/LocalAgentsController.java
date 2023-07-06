@@ -2,7 +2,7 @@ package com.mita.controller;
 
 import com.mita.config.ApplicationConfig;
 import com.mita.exception.NotLocalAgentRegistrationException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.Agent;
 import com.mita.service.AgentService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ public class LocalAgentsController {
 
   @RequestMapping(path = "/register/{hostName}", method = RequestMethod.GET)
   public void registerAgent(@PathVariable("hostName") String hostName, HttpServletRequest request)
-    throws TestsigmaException {
+    throws MitaException {
     if(request.getServerName().equals("localhost") && !applicationConfig.getIsDockerEnv()) {
       Agent agent = new Agent();
       agent.setTitle(hostName);

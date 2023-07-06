@@ -2,7 +2,7 @@ package com.mita.service;
 
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.TestPlanLabType;
 import com.mita.model.Integrations;
 import com.mita.model.TestDevice;
@@ -20,7 +20,7 @@ public abstract class Capabilities {
   public List<WebDriverCapability> getCapabilities(TestDevice testDevice,
                                                    Integrations integrations,
                                                    TestPlanLabType testPlanLabType)
-    throws TestsigmaException, IOException {
+    throws MitaException, IOException {
     List<WebDriverCapability> capabilities = new ArrayList<>();
     setDesiredCapabilities(testDevice, capabilities);
     setPlatformSpecificCapabilities(testDevice, testPlanLabType, integrations, capabilities);
@@ -46,7 +46,7 @@ public abstract class Capabilities {
                                                  TestPlanLabType testPlanLabType,
                                                  Integrations integrations,
                                                  List<WebDriverCapability> capabilities)
-    throws TestsigmaException {
+    throws MitaException {
     switch (testPlanLabType) {
       case TestsigmaLab:
       case PrivateGrid:
@@ -64,10 +64,10 @@ public abstract class Capabilities {
                                              Integrations integrations,
                                              List<WebDriverCapability> capabilities,
                                              TestPlanLabType testPlanLabType)
-    throws TestsigmaException;
+    throws MitaException;
 
   public abstract void setTestsigmaLabCapabilities(TestDevice testDevice,
                                                    Integrations integrations,
-                                                   List<WebDriverCapability> capabilities) throws TestsigmaException;
+                                                   List<WebDriverCapability> capabilities) throws MitaException;
 
 }

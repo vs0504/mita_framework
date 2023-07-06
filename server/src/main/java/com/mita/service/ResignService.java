@@ -2,7 +2,7 @@ package com.mita.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.collect.Lists;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.StorageServiceFactory;
 import com.mita.config.URLConstants;
 import com.mita.model.ProvisioningProfile;
@@ -54,7 +54,7 @@ public class ResignService {
   private final StorageServiceFactory storageServiceFactory;
   private final TestsigmaOSConfigService testsigmaOSConfigService;
 
-  public void reSignWda(ProvisioningProfile profile) throws TestsigmaException, MalformedURLException {
+  public void reSignWda(ProvisioningProfile profile) throws MitaException, MalformedURLException {
     ArrayList<Header> headers = new ArrayList<>();
     headers.add(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));
     HttpResponse<String> response = httpClient.get(testsigmaOSConfigService.getUrl() +
@@ -79,7 +79,7 @@ public class ResignService {
     }
   }
 
-  public void reSignUpload(ProvisioningProfile profile, UploadVersion uploadVersion) throws TestsigmaException {
+  public void reSignUpload(ProvisioningProfile profile, UploadVersion uploadVersion) throws MitaException {
     log.info(String.format("Resigning Upload [%s] - [%s] file for provisioning profile [%s] - [%s]",
             uploadVersion.getId(), uploadVersion.getName(), profile.getId(), profile.getName()));
 
@@ -97,12 +97,12 @@ public class ResignService {
       }
     } catch (MalformedURLException e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
   public void resignPublicUrlApp(ProvisioningProfile profile, String presignedAppUrl, String resignedPathSuffix)
-    throws TestsigmaException {
+    throws MitaException {
     log.info(String.format("Resigning App [%s] - [%s] file for provisioning profile [%s] - [%s]",
       presignedAppUrl, resignedPathSuffix, profile.getId(), profile.getName()));
     try {
@@ -111,11 +111,11 @@ public class ResignService {
       File resignedIpa = resignUsingFiles(profile, ipaName, new URL(presignedAppUrl));
       storageServiceFactory.getStorageService().addFile(resignedPathSuffix, resignedIpa);
     } catch (Exception e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
-  public void reSignForAllProfiles(UploadVersion upload, List<ProvisioningProfile> profiles) throws TestsigmaException {
+  public void reSignForAllProfiles(UploadVersion upload, List<ProvisioningProfile> profiles) throws MitaException {
     provisioningProfileUploadService.removeEntitiesForUpload(upload);
     for (ProvisioningProfile profile : profiles) {
       reSignUpload(profile, upload);
@@ -124,7 +124,7 @@ public class ResignService {
   }
 
   public void reSignAllUploads(ProvisioningProfile profile, List<UploadVersion> uploadVersions)
-    throws TestsigmaException {
+    throws MitaException {
     provisioningProfileUploadService.removeEntitiesForProfile(profile);
     for (UploadVersion uploadVersion : uploadVersions) {
       try {
@@ -136,7 +136,7 @@ public class ResignService {
     }
   }
 
-  public URL commonWdaRealDeviceS3Path() throws TestsigmaException {
+  public URL commonWdaRealDeviceS3Path() throws MitaException {
     ArrayList<Header> headers = new ArrayList<>();
     headers.add(new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json"));
     HttpResponse<String> response = httpClient.get(testsigmaOSConfigService.getUrl() +
@@ -145,7 +145,7 @@ public class ResignService {
     try {
       return new URL(response.getResponseEntity());
     } catch (MalformedURLException e) {
-      throw new TestsigmaException(e.getMessage(), e);
+      throw new MitaException(e.getMessage(), e);
     }
   }
 
@@ -156,7 +156,7 @@ public class ResignService {
   }
 
   public File resignUsingFiles(ProvisioningProfile profile, String name, URL ipaUrl)
-    throws TestsigmaException {
+    throws MitaException {
     File ipa = new File(ThreadContext.get("X-Request-Id") + "_" + name + ".ipa");
     try {
       certificateService.setPreSignedURLs(profile);
@@ -188,13 +188,13 @@ public class ResignService {
       }
     } catch (Exception e) {
       log.error(e.getMessage(), e);
-      throw new TestsigmaException(e);
+      throw new MitaException(e);
     }
     return ipa;
   }
 
   public void resignUsingUrls(ProvisioningProfile profile, String name, URL ipaUrl, URL resignedIpaUrl)
-    throws TestsigmaException {
+    throws MitaException {
     certificateService.setPreSignedURLs(profile);
 
     ResignRequestUsingUrlsDTO resignRequestUsingUrlsDTO = new ResignRequestUsingUrlsDTO();
@@ -213,7 +213,7 @@ public class ResignService {
 
     log.info("Resign Service Response - " + response);
     if (response.getStatusCode() >= 300) {
-      throw new TestsigmaException(String.format("Exception while re-signing the " + name + " ipa file [%s] - [%s]"
+      throw new MitaException(String.format("Exception while re-signing the " + name + " ipa file [%s] - [%s]"
         , response.getStatusCode(), response.getStatusMessage()));
     }
   }

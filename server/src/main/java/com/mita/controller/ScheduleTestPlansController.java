@@ -5,7 +5,7 @@ package com.mita.controller;
 import com.mita.specification.ScheduleTestPlanSpecificationsBuilder;
 import com.mita.dto.ScheduleTestPlanDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.factory.SchedulerFactory;
 import com.mita.mapper.ScheduleTestPlanMapper;
 import com.mita.model.ScheduleTestPlan;
@@ -55,7 +55,7 @@ public class ScheduleTestPlansController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ScheduleTestPlanDTO create(@RequestBody ScheduleTestPlanRequest request) throws TestsigmaException {
+  public ScheduleTestPlanDTO create(@RequestBody ScheduleTestPlanRequest request) throws MitaException {
     log.info("Create request /schedule_test_plans/" + request);
     ScheduleTestPlan scheduleTestPlan = this.mapper.map(request);
     ScheduleTestPlan entity = mapper.map(request);
@@ -68,7 +68,7 @@ public class ScheduleTestPlansController {
 
   @PutMapping("/{id}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public ScheduleTestPlanDTO update(@PathVariable("id") Long id, @RequestBody ScheduleTestPlanRequest request) throws TestsigmaException {
+  public ScheduleTestPlanDTO update(@PathVariable("id") Long id, @RequestBody ScheduleTestPlanRequest request) throws MitaException {
     log.info("Update request /schedule_test_plans/" + id + request);
     ScheduleTestPlan scheduleTestPlan = this.service.find(id);
     this.mapper.merge(request, scheduleTestPlan);

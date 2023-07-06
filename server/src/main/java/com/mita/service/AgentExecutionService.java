@@ -15,7 +15,7 @@ import com.mita.dto.*;
 import com.mita.exception.ExceptionErrorCodes;
 import com.mita.exception.IntegrationNotFoundException;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.config.ApplicationConfig;
 import com.mita.config.StorageServiceFactory;
 import com.mita.mapper.*;
@@ -129,40 +129,40 @@ public class AgentExecutionService {
 
   // ################################################ BEFORE START  ###################################################
 
-  private void beforeStart() throws TestsigmaException {
+  private void beforeStart() throws MitaException {
     checkAlreadyRunning();
   }
 
-  private void checkAlreadyRunning() throws TestsigmaException {
+  private void checkAlreadyRunning() throws MitaException {
     checkIfAlreadyHasAnotherRun();
     checkIfAlreadyHasReRunParentId();
   }
 
-  public void checkIfAlreadyHasReRunParentId() throws TestsigmaException {
+  public void checkIfAlreadyHasReRunParentId() throws MitaException {
     if (this.getParentTestPlanResultId() != null) {
       boolean ReRunParentIdAlreadyExsists = this.testPlanResultService.findByReRunParentId(this.getParentTestPlanResultId());
       if (ReRunParentIdAlreadyExsists) {
         log.info(String.format("Execution [%s] cannot be executed as its rerun parent id [%d] already exists", this.testPlan.getId(),
           testPlanResult.getReRunParentId()));
-        throw new TestsigmaException(AutomatorMessages.RE_RUN_PARENT_ID_ALREADY_EXSISTS);
+        throw new MitaException(AutomatorMessages.RE_RUN_PARENT_ID_ALREADY_EXSISTS);
       }
     }
 
   }
 
-  private void checkIfAlreadyHasAnotherRun() throws TestsigmaException {
+  private void checkIfAlreadyHasAnotherRun() throws MitaException {
     TestPlanResult testPlanResult = this.testPlanResultService.findByTestPlanIdAndStatusIsNot(this.testPlan.getId(),
       StatusConstant.STATUS_COMPLETED);
     if (testPlanResult != null) {
       log.info(String.format("Execution [%s] is already running and is in status %s ", this.testPlan.getId(),
         testPlanResult.getStatus()));
-      throw new TestsigmaException(AutomatorMessages.EXECUTION_ALREADY_RUNNING);
+      throw new MitaException(AutomatorMessages.EXECUTION_ALREADY_RUNNING);
     }
   }
 
   // ############################################ RESULT ENTRIES CREATION #############################################
 
-  private void populateResultEntries(boolean setLastRunId) throws TestsigmaException {
+  private void populateResultEntries(boolean setLastRunId) throws MitaException {
     TestPlanResult testPlanResult = createTestPlanResult();
     populateLastRunId(testPlanResult, setLastRunId);
     this.setTestPlanResult(testPlanResult);
@@ -178,7 +178,7 @@ public class AgentExecutionService {
       this.setTestPlan(testPlanService.update((TestPlan) testPlan));
   }
 
-  private void populateEnvironmentResults(TestPlanResult testPlanResult) throws TestsigmaException {
+  private void populateEnvironmentResults(TestPlanResult testPlanResult) throws MitaException {
     List<TestDevice> testDevices =
       testDeviceService.findByTestPlanIdAndDisable(this.getTestPlan().getId(), Boolean.FALSE);
     for (TestDevice testDevice : testDevices) {
@@ -192,7 +192,7 @@ public class AgentExecutionService {
   }
 
   private void populateTestSuiteResults(TestDeviceResult testDeviceResult, TestDevice testDevice)
-    throws TestsigmaException {
+    throws MitaException {
     List<AbstractTestSuite> testSuites = this.testSuiteService.findAllByTestDeviceId(testDeviceResult.getTestDeviceId());
     for (AbstractTestSuite testSuite : testSuites) {
       log.info("Populate TestSuite result for suite:" + testSuite.getName());
@@ -208,7 +208,7 @@ public class AgentExecutionService {
   }
 
   private void populateTestCaseResults(AbstractTestSuite testSuite, TestSuiteResult testSuiteResult,
-                                       TestDeviceResult testDeviceResult) throws TestsigmaException {
+                                       TestDeviceResult testDeviceResult) throws MitaException {
     List<TestCase> testCases = this.testCaseService.findAllBySuiteId(testSuiteResult.getSuiteId());
     int testDataStartIndex;
     for (TestCase testCase : testCases) {
@@ -276,7 +276,7 @@ public class AgentExecutionService {
                                                  TestCase testCase,
                                                  TestDeviceResult testDeviceResult,
                                                  TestSuiteResult testSuiteResult,
-                                                 TestCaseResult parentTestCaseResult) throws TestsigmaException {
+                                                 TestCaseResult parentTestCaseResult) throws MitaException {
     log.info("Creating Data driven TestcaseResult for testcase:" + testCase.getName());
     TestPlanResult testPlanResult = testPlanResultService.find(testDeviceResult.getTestPlanResultId());
     isDataDrivenRerun = testDeviceResult.getReRunParentId() != null;
@@ -314,7 +314,7 @@ public class AgentExecutionService {
                                               TestCase testCase,
                                               TestDeviceResult testDeviceResult,
                                               TestSuiteResult testSuiteResult,
-                                              TestCaseResult parentTestCaseResult) throws TestsigmaException {
+                                              TestCaseResult parentTestCaseResult) throws MitaException {
     log.info("Creating TestcaseResult for:" + testCase);
     checkForDataDrivenIntegrity(testCase);
     TestCaseResult testCaseResult = new TestCaseResult();
@@ -438,7 +438,7 @@ public class AgentExecutionService {
   }
 
   private TestDeviceResult createEnvironmentResult(TestPlanResult testPlanResult,
-                                                   TestDevice testDevice) throws TestsigmaException {
+                                                   TestDevice testDevice) throws MitaException {
     TestDeviceResult testDeviceResult = new TestDeviceResult();
     TestPlanResult parentExecutionResult = testPlanResultService.getFirstParentResult(testPlanResult);
     if (getIsReRun() && (parentExecutionResult.getId() != null)) {
@@ -537,18 +537,18 @@ public class AgentExecutionService {
     return testPlanResultService.create(testPlanResult);
   }
 
-  private void checkForDataDrivenIntegrity(TestCase testCase) throws TestsigmaException {
+  private void checkForDataDrivenIntegrity(TestCase testCase) throws MitaException {
     TestData testData = testCase.getTestData();
     if (testData == null && testCase.getIsDataDriven()) {
       String errorMessage = MessageConstants.getMessage(
         MessageConstants.MSG_UNKNOWN_TEST_DATA_DATA_DRIVEN_CASE,
         testCase.getName()
       );
-      throw new TestsigmaException(errorMessage);
+      throw new MitaException(errorMessage);
     }
   }
 
-  private TestDeviceSettings getExecutionTestDeviceSettings(TestDevice testDevice) throws TestsigmaException {
+  private TestDeviceSettings getExecutionTestDeviceSettings(TestDevice testDevice) throws MitaException {
     TestDeviceSettings settings = new TestDeviceSettings();
     TestPlanLabType exeLabType = testDevice.getTestPlanLabType();
 
@@ -785,7 +785,7 @@ public class AgentExecutionService {
     } catch (Exception e) {
       log.error(e.getMessage(), e);
       String message = "Error while pushing environment to agent - " + e.getMessage();
-      throw new TestsigmaException(message, message);
+      throw new MitaException(message, message);
     }
   }
 
@@ -801,11 +801,11 @@ public class AgentExecutionService {
     }
   }
 
-  public void checkTestCaseIsInReadyState(TestCase testCase) throws TestsigmaException {
+  public void checkTestCaseIsInReadyState(TestCase testCase) throws MitaException {
     if (!testCase.getStatus().equals(TestCaseStatus.READY) && testPlan.getEntityType()=="TEST_PLAN") {
       String message = testCase.getIsStepGroup() ? MessageConstants.getMessage(MessageConstants.STEP_GROUP_NOT_READY, testCase.getName()) :
         MessageConstants.TESTCASE_NOT_READY;
-      throw new TestsigmaException(message, message);
+      throw new MitaException(message, message);
     }
   }
 
@@ -990,11 +990,11 @@ public class AgentExecutionService {
     afterStop();
   }
 
-  private void beforeStop() throws TestsigmaException {
+  private void beforeStop() throws MitaException {
     TestPlanResult testPlanResult = this.testPlanResultService.findByTestPlanIdAndStatusIsNot(this.testPlan.getId(),
       StatusConstant.STATUS_COMPLETED);
     if (testPlanResult == null) {
-      throw new TestsigmaException("No Queued executions for test plan - " + this.getTestPlan().getName());
+      throw new MitaException("No Queued executions for test plan - " + this.getTestPlan().getName());
     }
     this.setTestPlanResult(testPlanResult);
   }
@@ -1105,7 +1105,7 @@ public class AgentExecutionService {
           AddonNaturalTextAction addonNaturalTextAction = addonNaturalTextActionService.findById(testStepDTO.getAddonActionId());
           Addon addon = addonService.findById(addonNaturalTextAction.getAddonId());
           if (addon.getStatus() == AddonStatus.DRAFT) {
-            throw new TestsigmaException(MessageConstants.DRAFT_PLUGIN_ALLOWED_IN_HYBRID_ONLY,
+            throw new MitaException(MessageConstants.DRAFT_PLUGIN_ALLOWED_IN_HYBRID_ONLY,
               MessageConstants.DRAFT_PLUGIN_ALLOWED_IN_HYBRID_ONLY);
           }
         }
@@ -1269,7 +1269,7 @@ public class AgentExecutionService {
   }
 
   private void setPlatformDetails(TestDevice testDevice, TestDeviceSettings settings,
-                                  TestPlanLabType testPlanLabType, Agent agent,EnvironmentEntityDTO environmentEntityDTO) throws TestsigmaException {
+                                  TestPlanLabType testPlanLabType, Agent agent,EnvironmentEntityDTO environmentEntityDTO) throws MitaException {
 
     populatePlatformOsDetails(testDevice, settings, testPlanLabType, agent);
 
@@ -1280,7 +1280,7 @@ public class AgentExecutionService {
 
   protected void populatePlatformOsDetails(TestDevice testDevice, TestDeviceSettings settings,
                                            TestPlanLabType testPlanLabType, Agent agent)
-    throws TestsigmaException {
+    throws MitaException {
     PlatformOsVersion platformOsVersion = null;
 
     if (testPlanLabType == TestPlanLabType.Hybrid) {
@@ -1310,7 +1310,7 @@ public class AgentExecutionService {
 
   protected void populatePlatformBrowserDetails(TestDevice testDevice, TestDeviceSettings settings,
                                                 TestPlanLabType testPlanLabType, Agent agent,EnvironmentEntityDTO environmentEntityDTO)
-    throws TestsigmaException {
+    throws MitaException {
 
 
     PlatformBrowserVersion platformBrowserVersion = null;
@@ -1345,7 +1345,7 @@ public class AgentExecutionService {
 
   private void matchHybridBrowserVersion(Agent agent1, PlatformBrowserVersion platformBrowserVersion,
                                          TestDevice testDevice, Browsers browser,EnvironmentEntityDTO environmentEntityDTO)
-    throws TestsigmaException {
+    throws MitaException {
     if ((agent1 != null) && (platformBrowserVersion != null)) {
       Agent agent = agentService.find(agent1.getId());
       for (AgentBrowser agentBrowser : agent.getBrowserList()) {
@@ -1499,7 +1499,7 @@ public class AgentExecutionService {
   private void createTestCaseDataDrivenReRunResult(TestPlanResult result, List<TestDataSet> testDataSets,
                                                    TestCase testCase, AbstractTestSuite testSuite,
                                                    TestDeviceResult environmentResult, TestSuiteResult testSuiteResult,
-                                                   TestCaseResult parentTestCaseResult) throws DataIntegrityViolationException, TestsigmaException {
+                                                   TestCaseResult parentTestCaseResult) throws DataIntegrityViolationException, MitaException {
     if(ReRunType.runAllIterations(result.getReRunType())){
       log.info("Fetching all iteration re run list of test case result id - " + parentTestCaseResult.getReRunParentId());
       dataDrivenResultsReRunList = this.testCaseDataDrivenResultService.findAllByTestCaseResultId(parentTestCaseResult.getReRunParentId());
@@ -1521,7 +1521,7 @@ public class AgentExecutionService {
   private void createTestCaseIterationResult(List<TestDataSet> testDataSets, TestDataSet testDataSet,
                                              TestCase testCase, AbstractTestSuite testSuite,
                                              TestDeviceResult environmentResult, TestSuiteResult testSuiteResult,
-                                             TestCaseResult parentTestCaseResult) throws DataIntegrityViolationException, TestsigmaException {
+                                             TestCaseResult parentTestCaseResult) throws DataIntegrityViolationException, MitaException {
     testCase.setIsDataDriven(false);
     testCase.setTestDataStartIndex(testDataSets.indexOf(testDataSet));
     log.info("Populating DataDrivenTestcaseResult for test data set - " + testDataSet);

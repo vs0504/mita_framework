@@ -8,7 +8,7 @@ import com.mita.model.Integration;
 import com.mita.model.Integrations;
 import com.mita.specification.EntityExternalMappingsBuilder;
 import com.mita.dto.EntityExternalMappingDTO;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.EntityExternalMappingMapper;
 import com.mita.service.EntityExternalMappingService;
 import com.mita.service.IntegrationsService;
@@ -51,20 +51,20 @@ public class EntityExternalMappingsController {
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void destroy(@PathVariable("id") Long id) throws IOException, TestsigmaException {
+    public void destroy(@PathVariable("id") Long id) throws IOException, MitaException {
         EntityExternalMapping mapping = this.externalMappingService.find(id);
         externalMappingService.destroy(mapping);
     }
 
     @GetMapping(path = "/{id}")
-    public EntityExternalMappingDTO show(@PathVariable("id") Long id) throws IOException, TestsigmaException {
+    public EntityExternalMappingDTO show(@PathVariable("id") Long id) throws IOException, MitaException {
         EntityExternalMapping mapping = this.externalMappingService.fetch(id);
         return mapper.mapToDTO(mapping);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EntityExternalMappingDTO create(@RequestBody EntityExternalMappingRequest request) throws IOException, URISyntaxException, TestsigmaException {
+    public EntityExternalMappingDTO create(@RequestBody EntityExternalMappingRequest request) throws IOException, URISyntaxException, MitaException {
         EntityExternalMapping mapping = mapper.map(request);
         mapping = externalMappingService.create(mapping);
         return mapper.mapToDTO(mapping);

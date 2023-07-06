@@ -4,7 +4,7 @@ import com.mita.specification.TestStepSpecificationsBuilder;
 import com.mita.dto.RestStepResponseDTO;
 import com.mita.dto.TestStepDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.TestStepMapper;
 import com.mita.mapper.recorder.TestStepRecorderMapper;
 import com.mita.mapper.recorder.UiIdentifierMapper;
@@ -78,7 +78,7 @@ public class TestStepsRecorderController {
 
     @PutMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public TestStepRecorderDTO update(@PathVariable(value = "id") Long id, @RequestBody TestStepRecorderRequest request) throws TestsigmaException {
+    public TestStepRecorderDTO update(@PathVariable(value = "id") Long id, @RequestBody TestStepRecorderRequest request) throws MitaException {
         log.debug("PUT /os_recorder/test_steps with id::" + id + " request::" + request);
         TestStep testStep = this.service.find(id);
         TestStepRecorderDTO testStepRecorderDTO;
@@ -117,7 +117,7 @@ public class TestStepsRecorderController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public TestStepRecorderDTO create(@RequestBody TestStepRecorderRequest request) throws TestsigmaException {
+    public TestStepRecorderDTO create(@RequestBody TestStepRecorderRequest request) throws MitaException {
         log.debug("POST /os_recorder/test_steps with request::" + request);
         TestStepRecorderDTO testStepRecorderDTO;
         TestStepDTO testStepDTO;
@@ -191,7 +191,7 @@ public class TestStepsRecorderController {
 
     @PutMapping(value = "/bulk_update")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public List<TestStepRecorderDTO> bulkUpdate( @RequestBody List<TestStepRecorderRequest> requests) throws TestsigmaException {
+    public List<TestStepRecorderDTO> bulkUpdate( @RequestBody List<TestStepRecorderRequest> requests) throws MitaException {
         log.debug("PUT /os_recorder/bulk_update");
         List<TestStepRecorderDTO> testStepRecorderDTOS = new ArrayList<>();
         for(TestStepRecorderRequest request : requests) {

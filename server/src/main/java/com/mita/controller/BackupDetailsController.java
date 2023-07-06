@@ -4,7 +4,7 @@ package com.mita.controller;
 
 import com.mita.dto.BackupDetailDTO;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.mapper.BackupDetailMapper;
 import com.mita.model.BackupDetail;
 import com.mita.service.BackupDetailService;
@@ -55,7 +55,7 @@ public class BackupDetailsController {
 
   @RequestMapping(method = RequestMethod.POST, value = "/test_project", consumes = {"multipart/form-data"})
   public void createTestProjectImport(@RequestPart ExternalImportRequest request,
-                                      @RequestPart(name = "file", required = false) MultipartFile file) throws IOException, TestsigmaException {
+                                      @RequestPart(name = "file", required = false) MultipartFile file) throws IOException, MitaException {
     if(request.isYamlImport())
       testProjectImportService.yamlImport(file);
     projectImportService.createBackupDetailEntry(file);
@@ -73,7 +73,7 @@ public class BackupDetailsController {
   }
 
   @PostMapping(path ="/export")
-  public void backup(@RequestBody BackupRequest request) throws IOException, TestsigmaException {
+  public void backup(@RequestBody BackupRequest request) throws IOException, MitaException {
     service.export(request);
   }
 

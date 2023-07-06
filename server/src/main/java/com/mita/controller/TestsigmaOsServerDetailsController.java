@@ -2,7 +2,7 @@ package com.mita.controller;
 
 import com.mita.config.ApplicationConfig;
 import com.mita.dto.ServerDetailsDTO;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.os.stats.service.TestsigmaOsServerDetailsService;
 import com.mita.service.TestsigmaOSConfigService;
 import com.mita.util.NetworkUtil;
@@ -23,7 +23,7 @@ public class TestsigmaOsServerDetailsController {
   private final ApplicationConfig applicationConfig;
 
   @GetMapping
-  public ServerDetailsDTO get() throws TestsigmaException {
+  public ServerDetailsDTO get() throws MitaException {
     ServerDetailsDTO serverDetails = new ServerDetailsDTO();
     serverDetails.setServerVersion(applicationConfig.getServerVersion());
     serverDetails.setServerIp(NetworkUtil.getCurrentIpAddress());

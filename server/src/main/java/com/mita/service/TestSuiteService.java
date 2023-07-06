@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mita.exception.ResourceNotFoundException;
-import com.mita.exception.TestsigmaException;
+import com.mita.exception.MitaException;
 import com.mita.model.*;
 import com.mita.repository.SuiteTestCaseMappingRepository;
 import com.mita.repository.TagRepository;
@@ -81,7 +81,7 @@ public class TestSuiteService extends XMLExportImportService<TestSuite> {
         "TestSuite Resource not found with id:" + id));
   }
 
-  public TestSuite create(TestSuite testSuite) throws TestsigmaException {
+  public TestSuite create(TestSuite testSuite) throws MitaException {
     List<String> tagNames = testSuite.getTags();
     List<Long> testCaseIds = testSuite.getTestCaseIds();
     testSuite.setTags(tagNames);
@@ -96,7 +96,7 @@ public class TestSuiteService extends XMLExportImportService<TestSuite> {
     return testSuite;
   }
 
-  public TestSuite update(TestSuite testSuite) throws TestsigmaException {
+  public TestSuite update(TestSuite testSuite) throws MitaException {
     List<Long> testCaseIds = testSuite.getTestCaseIds();
     List<String> tagNames = testSuite.getTags();
     List<Long> prereq = new ArrayList<>();
@@ -116,15 +116,15 @@ public class TestSuiteService extends XMLExportImportService<TestSuite> {
     this.suiteMappingService.handlePreRequisiteChange(testSuite);
   }
 
-  private void validatePreRequisiteIsValid(TestSuite testSuite, List<Long> preReqList) throws TestsigmaException {
+  private void validatePreRequisiteIsValid(TestSuite testSuite, List<Long> preReqList) throws MitaException {
     Long preRequsiteId = testSuite.getPreRequisite();
     if (preRequsiteId != null) {
       if (preReqList.size() > 5) {
         log.debug("Testsuite Prerequisite hierarchy is more than 5,Prerequisite IDs:" + preReqList);
-        throw new TestsigmaException("Prerequisite hierarchy crossed the allowed limit of 5");
+        throw new MitaException("Prerequisite hierarchy crossed the allowed limit of 5");
       } else if (preReqList.contains(testSuite.getPreRequisite())) {
         log.debug("Cyclic dependency for Testsuite prerequisites found for Testsuite:" + testSuite);
-        throw new TestsigmaException("Prerequisite to the Testsuite is not valid. This prerequisite causes cyclic dependencies for Testsuites.");
+        throw new MitaException("Prerequisite to the Testsuite is not valid. This prerequisite causes cyclic dependencies for Testsuites.");
       }
       preReqList.add(preRequsiteId);
       TestSuite preReqTestSuite = find(preRequsiteId);

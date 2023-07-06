@@ -1,7 +1,7 @@
 package com.mita.agent.schedulers;
 
 import com.mita.agent.config.AgentConfig;
-import com.mita.agent.exception.TestsigmaException;
+import com.mita.agent.exception.MitaException;
 import com.mita.agent.http.WebAppHttpClient;
 import com.mita.agent.mobile.MobileAutomationServerService;
 import com.mita.agent.mobile.DeviceContainer;
@@ -75,7 +75,7 @@ public abstract class BaseScheduler {
     skip = true;
     try {
       agentConfig.removeConfig();
-    } catch (TestsigmaException ex) {
+    } catch (MitaException ex) {
       log.error(e.getMessage(), e);
     }
   }
