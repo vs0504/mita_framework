@@ -1978,7 +1978,7 @@
   "message.onboarding.otp.send_failure": "Problem while sending OTP",
   "message.onboarding.otp.activate_failure": "Problem while activating account",
   "message.onboarding.otp_resent": "OTP Resent to your Email",
-  "login_form.sign_in_to_testsigma": "Sign in to your account",
+  "login_form.sign_in_to_mita": "Sign in to your account",
   "login_form.be_a_part_of": "Be a part of",
   "login_form.testsigma_community": "The Mita Community",
   "login_form.connect": "Connect!",
