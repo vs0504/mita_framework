@@ -22,6 +22,7 @@
     <app-toggle-search-button
       (searchAction)="search($event)"></app-toggle-search-button>
     <button
+      *ngIf="permissionsObj.CREATE_ENVIRONMENTS"
       [routerLink]="['/td', versionId, 'environments','new']"
       class="theme-btn-primary ml-14 "
       [translate]="'btn.common.create'">
@@ -78,12 +79,14 @@
       </div>
       <div class="ts-col-15 text-center action-icons my-auto">
         <a
+          *ngIf="permissionsObj.EDIT_ENVIRONMENT"
           data-placement="bottom"
           [matTooltip]="'pagination.edit' | translate"
           href="javascript:void(0)"
           [routerLink]="[ environment.id ,'edit']"
           class="fa-pencil-on-paper action-icon"></a>
         <a
+          *ngIf="permissionsObj.DELETE_ENVIRONMENT"
           data-placement="bottom" (click)="checkForLinkedTestPlans(environment.id)"
           [matTooltip]="'pagination.delete' | translate"
           href="javascript:void(0)"

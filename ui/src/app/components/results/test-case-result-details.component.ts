@@ -71,6 +71,7 @@ export class TestCaseResultDetailsComponent extends BaseComponent implements OnI
   public userPreference:UserPreference;
   public runResultEntityType: EntityType = EntityType.RUN_RESULT;
   public version:WorkspaceVersion;
+  public permissionsObj: any;
 
   readonly STEPS = 'steps';
   readonly STEPS_CURRENT = 'steps_current';
@@ -117,6 +118,7 @@ export class TestCaseResultDetailsComponent extends BaseComponent implements OnI
   }
 
   ngOnInit() {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.activeTab = this.STEPS;
     this.route.params.subscribe((params: Params) => {
       this.pushToParent(this.route, params);

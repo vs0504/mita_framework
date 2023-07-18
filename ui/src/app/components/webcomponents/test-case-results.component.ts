@@ -42,6 +42,7 @@ export class TestCaseResultsComponent extends BaseComponent implements OnInit {
   public runResultEntityType: EntityType = EntityType.RUN_RESULT;
   @ViewChild('searchMachineInput') searchMachineInput: ElementRef;
   inputValue: any;
+  public permissionsObj: any;
 
   constructor(
     private testCaseResultService: TestCaseResultService,
@@ -54,6 +55,7 @@ export class TestCaseResultsComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.testCaseResultsDataSource = new InfiniteScrollableDataSource(this.testCaseResultService, "iteration:null,testPlanResultId:" + this.testPlanResult.id);
   }
 

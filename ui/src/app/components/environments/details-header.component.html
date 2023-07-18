@@ -18,12 +18,14 @@
             </div>
           <div class="d-flex align-items-baseline ml-auto">
             <button
+              *ngIf="permissionsObj.EDIT_ENVIRONMENT"
               class="btn icon-btn"
               [matTooltip]="'pagination.edit' | translate"
               [routerLink]="['/td', this.versionId, 'environments', environment?.id, 'edit']">
               <i class="fa-pencil-on-paper"></i>
             </button>
             <button
+              *ngIf="permissionsObj.DELETE_ENVIRONMENT"
               class="btn icon-btn"
               (click)="checkForLinkedTestPlans()"
               [matTooltip]="'pagination.delete' | translate">

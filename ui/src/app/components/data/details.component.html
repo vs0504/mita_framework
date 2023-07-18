@@ -18,12 +18,14 @@
             </div>
           <div class="details-page-buttons">
             <button
+              *ngIf="permissionsObj.EDIT_TEST_DATA_PROFILE"
               class="btn icon-btn"
               [matTooltip]="'pagination.edit' | translate"
               [routerLink]="['/td', 'data', testDataId, 'edit']">
               <i class="fa-pencil-on-paper"></i>
             </button>
             <button
+              *ngIf="permissionsObj.DELETE_TEST_DATA_PROFILE"
               class="btn icon-btn" (click)="fetchLinkedCases()"
               [matTooltip]="'pagination.delete' | translate">
               <i class="fa-trash-thin"></i>
