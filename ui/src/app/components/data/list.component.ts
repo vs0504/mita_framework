@@ -32,7 +32,7 @@ export class ListComponent extends BaseComponent implements OnInit {
   public sortByColumns = ['testDataName', 'createdDate', 'updatedDate'];
   public sortedBy: string = 'testDataName';
   public direction: string = ",asc";
-  public selectAll: Boolean = false;
+  public selectAll: Boolean = false; 
   public selectedDataProfiles = [];
   public fetchingCompleted: Boolean = false;
   public isFiltered: Boolean = false;

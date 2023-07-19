@@ -25,6 +25,7 @@ export class DetailsHeaderComponent extends BaseComponent implements OnInit {
   public environmentId: number;
   public environment: Environment;
   versionId: Number;
+  public permissionsObj: any;
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -40,6 +41,7 @@ export class DetailsHeaderComponent extends BaseComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.versionId = this.route.snapshot.queryParams['v'];
     this.environmentId = this.route.snapshot.params.environmentId;
     this.route.snapshot.params = {...this.route.snapshot.params, ...{v: this.versionId}};

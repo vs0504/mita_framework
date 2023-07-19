@@ -24,6 +24,8 @@ export class DetailsComponent extends BaseComponent implements OnInit {
   public versionId: number;
   public testDataId: number;
   public isFetchCompleted: Boolean;
+  public permissionsObj: any;
+
 
   constructor(
     public authGuard: AuthenticationGuard,
@@ -46,6 +48,7 @@ export class DetailsComponent extends BaseComponent implements OnInit {
   }
 
   private fetchTestData() {
+    this.permissionsObj = JSON.parse(sessionStorage.getItem('permissions'));
     this.testDataService.show(this.testDataId).subscribe(testData1 => {
       if(testData1.isMigrated) {
         testData1.data = null;
