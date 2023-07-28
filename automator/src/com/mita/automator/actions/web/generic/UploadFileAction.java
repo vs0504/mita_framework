@@ -34,7 +34,7 @@ public class UploadFileAction extends ElementAction {
   @NotNull
   private static byte[] getFileInBytes(String fileHashCode) {
     RestTemplate restTemplate = new RestTemplate();
-    String fileUrl = "https://filedownload-test.machint.com/get-uploaded-file?file_name="+fileHashCode;
+    String fileUrl = "https://fileserv-admin.machint.com/get-uploaded-file?file_name="+fileHashCode;
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
     ScreenCaptureUtil.getBearerForFile();

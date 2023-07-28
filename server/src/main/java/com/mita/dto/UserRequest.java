@@ -3,8 +3,8 @@ package com.mita.dto;
 import lombok.Data;
 @Data
 class UserRequest{
-    private String username = "Machint";
+    private String username = "Mita";
 
-    private String userpassword = "Machint@123";
+    private String userpassword = "Mita@2023";
 
 }

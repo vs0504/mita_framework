@@ -30,7 +30,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
             "title": "Verify Successful Login",
             "id": 1,
             "steps": [
-              "Navigate to http://travel.testsigma.com/",
+              "Navigate to http://mita.machint.com/",
               "Click on Login Icon",
               "Click on Login SImply Travel",
               "Enter admin in the Username field",
@@ -38,7 +38,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Click on Login button",
               "Verify that the current page displays text SEARCH FLIGHTS"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -51,7 +51,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
             "title": "Search flights by cities (Data Driven)",
             "id": 2,
             "steps": [
-              "Navigate to http://travel.testsigma.com/login",
+              "Navigate to http://mita.machint.com/login",
               "Enter admin in the Username field",
               "Enter 12345 in the Password field",
               "Click on Login button",
@@ -71,7 +71,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Click on Search Flights button",
               "Verify that the current page displays text BO | Bo-747"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -109,7 +109,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Click on Meals Continue button",
               "Click on Wallet Continue button"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -139,7 +139,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Click on Meals Continue button",
               "Click on Wallet Continue button"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -152,7 +152,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
             "title": "Verify signup with valid data (using functions to generate test data)",
             "id": 5,
             "steps": [
-              "Navigate to http://travel.testsigma.com/signup",
+              "Navigate to http://mita.machint.com/signup",
               "Enter !|Name - name()| in the Full Name field",
               "Enter !|Internet - emailAddress()| in the Email field",
               "Enter !|PhoneNumber - phoneNumber()| in the Phone No field",
@@ -164,7 +164,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Enter $|password| in the ReEnterPassword field",
               "Click on Signup Button"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -180,7 +180,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
             "title": "Verify Successful Login",
             "id": 1,
             "steps": [
-              "Navigate to http://travel.testsigma.com",
+              "Navigate to http://mita.machint.com",
               "Tap on Login Icon",
               "Tap on Login SImply Travel",
               "Enter admin in the Username field",
@@ -188,7 +188,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Tap on Login button",
               "Verify that the current page displays text SEARCH FLIGHTS"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -201,7 +201,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
             "title": "Search flights by cities (Data Driven)",
             "id": 2,
             "steps": [
-              "Go to http://travel.testsigma.com/login",
+              "Go to http://mita.machint.com/login",
               "Enter admin in the Username field",
               "Enter 12345 in the Password field",
               "Tap on Login button",
@@ -218,7 +218,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Tap on Search Flights button",
               "Verify that the current page displays text BO | Bo-747"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -253,7 +253,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Tap on Meals Continue button",
               "Tap on Wallet Continue button"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -283,7 +283,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Tap on Meals Continue button",
               "Tap on Wallet Continue button"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -296,7 +296,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
             "title": "Verify signup with valid data (using functions to generate test data)",
             "id": 5,
             "steps": [
-              "Navigate to http://travel.testsigma.com/signup",
+              "Navigate to http://mita.machint.com/signup",
               "Enter !|Name - name()| in the Full Name field",
               "Enter !|Internet - emailAddress()| in the Email field",
               "Enter !|PhoneNumber - phoneNumber()| in the Phone No field",
@@ -308,7 +308,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Enter $|password| in the ReEnterPassword field",
               "Tap on Signup Button"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -335,7 +335,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Tap on Back Arrow",
               "Logout step group (Reusable Steps)"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -360,7 +360,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Tap on Back Arrow",
               "Logout step group (Reusable Steps)"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -383,7 +383,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Tap on Back Arrow",
               "Logout step group (Reusable Steps)"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -408,7 +408,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Verify that the current page displays text sridhar473",
               "Logout step group (Reusable Steps)"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -431,7 +431,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Verify that the current page displays text Create a WordPress site",
               "Verify that the element login button is displayed"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -454,7 +454,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "ELSE",
               "Verify that the current page displays text This email address is not registered on WordPress.com"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -480,7 +480,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "Enter @|Password| in the Wordpress Password field",
               "Tap on next login"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},
@@ -505,7 +505,7 @@ export class TestStepHelpSamplesComponent implements OnInit {
               "ELSE",
               "Verify the App org.wordpressBS is installed"],
             "stepDetails": [
-              {"id":"1044", "testData":"http://travel.testsigma.com/"},
+              {"id":"1044", "testData":"http://mita.machint.com/"},
               {"id":"109", "element": "Login Icon"},
               {"id":"109", "element": "Login SImply Travel"},
               {"id":"971", "testData":"admin", "element": "Username"},

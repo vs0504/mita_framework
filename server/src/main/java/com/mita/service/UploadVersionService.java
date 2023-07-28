@@ -55,6 +55,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.sql.Timestamp;
+import java.time.Clock;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -130,7 +131,7 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
 
   public byte[] getFileInBytes(String fileHashCode) {
     RestTemplate restTemplate = new RestTemplate();
-    String fileUrl = "https://filedownload-test.machint.com/get-uploaded-file?file_name="+fileHashCode;
+    String fileUrl = "https://fileserv-admin.machint.com/get-uploaded-file?file_name="+fileHashCode;
     HttpHeaders headers = new HttpHeaders();
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_OCTET_STREAM));
     headers.add("Authorization",getBearerForFile());
@@ -187,7 +188,8 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
   public String uploadToStorageUsingPython(File uploadedFile, UploadVersion uploadVersion) {
     String fileKey = "";
     try {
-      String url = "https://fileupload-test.machint.com/file-upload";
+    //  String url = "https://fileupload-test.machint.com/file-upload";
+      String url = "https://fileserv-admin.machint.com/file-upload";
       HttpHeaders headers = new HttpHeaders();
       headers.setContentType(MediaType.MULTIPART_FORM_DATA);
       headers.set("Authorization",getBearerForFile());
@@ -196,11 +198,12 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
 
       formData.add("file", new FileSystemResource(uploadedFile));
       formData.add("uploadedBy","Machint");
-      formData.add("generatedDate",new Date());
+    //  formData.add("generatedDate",new Date());
       formData.add("status","1");
       formData.add("requestid","23576598");
       formData.add("requestsrc","UI");
-      formData.add("requesttype","image");
+      formData.add("requesttype","File Upload");
+      formData.add("project_name","mita");
       HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(formData,headers);
       Map response = restTemplate.postForObject(url, entity, Map.class);
       System.out.println("response--->"+response);
@@ -220,7 +223,8 @@ public class UploadVersionService extends XMLExportImportService<UploadVersion> 
   }
 
   public String getBearerForFile() {
-    String url = "https://fileupload-test.machint.com/login";
+   // String url = "https://fileupload-test.machint.com/login";
+    String url = "https://fileserv-admin.machint.com/login";
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
     UserRequestDto userRequestDto = new UserRequestDto();
